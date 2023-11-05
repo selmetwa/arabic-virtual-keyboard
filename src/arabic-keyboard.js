@@ -1,8 +1,8 @@
-import { LitElement, html, css } from 'lit';
-import { button_groups } from './constants/button_groups.js';
-import { numberFactory, isNumber } from './helpers/number.js';
-import { deleteFromTextInput, deleteSelectedText } from './helpers/delete.js';
-import './button-group.js';
+import { LitElement, html, css } from "lit";
+import { button_groups } from "./constants/button_groups.js";
+import { numberFactory, isNumber } from "./helpers/number.js";
+import { handleDeleteText, deleteSelectedText } from "./helpers/delete.js";
+import { getSelectedText } from "./helpers/getSelectedText.js";
 
 class ArabicKeyboard extends LitElement {
   static get properties() {
@@ -14,11 +14,13 @@ class ArabicKeyboard extends LitElement {
 
   constructor() {
     super();
+    this.textarea = null;
     this.buttonGroups = button_groups;
-    this.textValue = '';
+    this.textValue = "";
+    this.selectedText = "";
   }
 
-  static styles = css `
+  static styles = css`
     :host {
       --gap: 6px;
       --columns: 10;
@@ -31,6 +33,7 @@ class ArabicKeyboard extends LitElement {
       max-width: 700px;
       outline: 1px solid black;
       padding: 16px;
+      font-family: sans-serif;
 
       .textarea {
         width: 100%;
@@ -44,83 +47,120 @@ class ArabicKeyboard extends LitElement {
         flex-direction: column;
         align-items: center;
         gap: 8px;
-  
+
         .space {
           width: 100%;
         }
       }
     }
+
+    .button_group {
+      display: grid;
+      grid-template-columns: repeat(var(--columns), 1fr);
+      gap: var(--gap);
+
+      .button_wrapper {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+
+        .label {
+          direction: ltr;
+        }
+      }
+    }
+
+    .rtl {
+      margin-top: 10px;
+      direction: rtl;
+    }
+
+    .button {
+      font-size: var(--font-size);
+    }
   `;
 
-  getCursorPositionInRTL(textarea) {
-    const cursorPosition = textarea.value.length - textarea.selectionStart;
-    return cursorPosition;
+  firstUpdated() {
+    this.textarea = this.shadowRoot.querySelector("textarea");
+  }
+
+  /**
+   * @typedef {Object} stateObject
+   * @property {string} selectedText - The selected text as a string.
+   * @property {string} textValue - The text as a string.
+   * @property {number} cursorPosition - The cursor position as a number.
+   */
+
+  /**
+   * @param {stateObject} object
+   */
+  updateState(object) {
+    const { textValue, selectedText, cursorPosition } = object;
+
+    if (typeof textValue === "string") {
+      this.textValue = textValue;
+    }
+
+    if (typeof selectedText === "string") {
+      this.selectedText = selectedText;
+    }
+
+    if (typeof cursorPosition === "number") {
+      this.textarea.setSelectionRange(cursorPosition, cursorPosition);
+    }
   }
 
   handleKeyChange(event) {
     const inputType = event.inputType;
 
     // Handle Delete
-    if (inputType === 'deleteContentBackward') {
+    if (inputType === "deleteContentBackward") {
       if (!!this.selectedText) {
-        const newTextValue = deleteSelectedText(this.textValue, this.selectedText)
-        this.selectedText = '';
-        return this.textValue = newTextValue;
+        return this.updateState({ 
+          textValue: deleteSelectedText(this.textValue, this.selectedText),
+          selectedText: "",
+        });
       }
 
-      const textarea = this.shadowRoot.querySelector('textarea');
-      // const cursorPosition = this.getCursorPositionInRTL(textarea);
-      const cursorPosition = textarea.selectionStart;
-
-      if (cursorPosition < this.textValue.length - 1) {
-        const valueBeforeCursor = this.textValue.substring(0, cursorPosition);
-        const valueAfterCursor = this.textValue.substring(cursorPosition + 1);
-        const a = deleteFromTextInput(valueAfterCursor)
-        console.log({valueBeforeCursor, valueAfterCursor, cursorPosition, a})
-        this.textValue = valueBeforeCursor + a;
-        textarea.selectionStart = cursorPosition;
-        textarea.selectionEnd = cursorPosition;
-      }
+      const { newText, cursorPosition } = handleDeleteText(this.textarea);
+      return this.updateState({
+        textValue: newText,
+        cursorPosition,
+      });
     }
 
     // Handle Insertion
-    if (inputType === 'insertText') {
+    if (inputType === "insertText") {
       const eventData = event.data;
 
       if (isNumber(eventData)) {
-        const arabicNumber = numberFactory(eventData)
-        this.textValue = this.textValue += arabicNumber;
+        return this.updateState({ 
+          textValue: this.textValue += numberFactory(eventData),
+        });
       }
     }
   }
 
   handleClick(event) {
     const eventObject = event.target.value;
-    const buttonType = eventObject && eventObject.split('_')[0];
-    const buttonValue = eventObject && eventObject.split('_')[1];
+    const buttonType = eventObject && eventObject.split("_")[0];
+    const buttonValue = eventObject && eventObject.split("_")[1];
 
-    if (buttonType === 'number') {
-      const arabicNumber = numberFactory(buttonValue)
-      this.textValue = this.textValue += arabicNumber;
+    if (buttonType === "number") {
+      this.updateState({
+        textValue: this.textValue += numberFactory(buttonValue),
+      })
     }
   }
 
   updateSelectedText() {
-    const textarea = this.shadowRoot.querySelector('textarea');
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    
-    if (start !== end) {
-      this.selectedText = textarea.value.substring(start, end);
-    } else {
-      this.selectedText = '';
-    }
+    return this.updateState({ selectedText: getSelectedText(this.textarea) });
   }
 
   render() {
-      return html `
+    return html`
       <section class="wrapper">
-        <textarea 
+        <textarea
           class="textarea"
           rows="5"
           cols="10"
@@ -128,22 +168,32 @@ class ArabicKeyboard extends LitElement {
           @select="${this.updateSelectedText}"
           .value=${this.textValue}
         >
-        ${this.textValue}
         </textarea>
         <div class="keyboard">
           ${this.buttonGroups.map((buttonGroup) => {
             const { buttons, type } = buttonGroup;
-            return (
-              html`
-                <button-group 
-                  .buttons=${buttons} 
-                  .buttonType=${type} 
-                  .handleClick=${this.handleClick}
-                  .handleKeyChange=${this.handleKeyChange}
-                >
-                </button-group>
-              `
-            )
+            return html`
+              <h3>${type}</h3>
+              <div class="button_group ${type === "number" ? "ltr" : "rtl"}">
+                ${buttons.map(
+                  (button) =>
+                    html`
+                      <div class="button_wrapper">
+                        <label class="label">${button.label}</label>
+                        <button
+                          value="${type}_${button.en}"
+                          type="button"
+                          class="button"
+                          title="${button.title}"
+                          @click="${this.handleClick}"
+                        >
+                          ${button.ar}
+                        </button>
+                      </div>
+                    `
+                )}
+              </div>
+            `;
           })}
           <button class="space">Space</button>
         </div>
@@ -152,4 +202,4 @@ class ArabicKeyboard extends LitElement {
   }
 }
 
-customElements.define('arabic-keyboard', ArabicKeyboard);
+customElements.define("arabic-keyboard", ArabicKeyboard);
