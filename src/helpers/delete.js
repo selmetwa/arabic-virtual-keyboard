@@ -1,15 +1,14 @@
-function reverseString(str) {
-  return str.split("").reverse().join("");
-}
 
 /**
- * @param {string} textInput - The current text input we want to delete from.
- * @returns {string} newTextValue - The new text input after deleting.
+ * 
+ * @param {HTMLTextAreaElement} textarea 
+ * @returns {string} newText - The new text after deleting.
+ * @returns {number} cursorPosition - The new cursor position after deleting.
  */
-export const deleteFromTextInput = (textInput) => {
-  console.log('textInput', textInput)
-  const str = reverseString(textInput);
-  return str?.substring(0, textInput.length - 1) || '';
+export const handleDeleteText = (textarea) => {
+  const cursorPosition = textarea.selectionStart;
+  const newText = textarea.value.substring(0, cursorPosition) + textarea.value.substring(textarea.selectionEnd);
+  return { cursorPosition, newText };
 }
 
 /**
