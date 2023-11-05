@@ -1,8 +1,10 @@
 import { LitElement, html, css } from "lit";
+
 import { button_groups } from "./constants/button_groups.js";
 import { numberFactory, isNumber } from "./helpers/number.js";
 import { handleDeleteText, deleteSelectedText } from "./helpers/delete.js";
 import { getSelectedText } from "./helpers/getSelectedText.js";
+import { isLetter, letterFactory } from "./helpers/letter.js";
 
 class ArabicKeyboard extends LitElement {
   static get properties() {
@@ -40,6 +42,7 @@ class ArabicKeyboard extends LitElement {
         direction: rtl;
         resize: none;
         text-align: right;
+        font-size: var(--font-size);
       }
 
       .keyboard {
@@ -131,11 +134,17 @@ class ArabicKeyboard extends LitElement {
 
     // Handle Insertion
     if (inputType === "insertText") {
-      const eventData = event.data;
+      const inputCharacter = event.data;
 
-      if (isNumber(eventData)) {
+      if (isNumber(inputCharacter)) {
         return this.updateState({ 
-          textValue: this.textValue += numberFactory(eventData),
+          textValue: this.textValue += numberFactory(inputCharacter),
+        });
+      }
+
+      if (isLetter(inputCharacter)) {
+        return this.updateState({
+          textValue: this.textValue += letterFactory(inputCharacter),
         });
       }
     }
