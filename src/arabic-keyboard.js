@@ -180,20 +180,23 @@ class ArabicKeyboard extends LitElement {
   render() {
     return html`
       <section class="wrapper">
-        <textarea
-          class="textarea"
-          rows="5"
-          cols="10"
-          @input=${this.handleKeyChange}
-          @select="${this.updateSelectedText}"
-          .value=${this.textValue}
-        >
-        </textarea>
+        <label>
+          <textarea
+            aria-label="Text Area"
+            type="text"
+            class="textarea"
+            rows="5"
+            cols="10"
+            @input=${this.handleKeyChange}
+            @select="${this.updateSelectedText}"
+            .value=${this.textValue}
+          >
+          </textarea>
+        </label>
         <div class="keyboard">
           ${this.buttonGroups.map((buttonGroup) => {
             const { buttons, type } = buttonGroup;
             return html`
-              <h3>${type}</h3>
               <div class="button_group ${type === "number" ? "ltr" : "rtl"}">
                 ${buttons.map(
                   (button) =>
