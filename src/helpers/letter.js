@@ -20,7 +20,12 @@ export const isLetter = (character) => {
  * @returns {string} arabicLetter - The arabic letter.
  */
 export const letterFactory = (englishLetter) => {
-  const letterObject = alphabet.find((obj) => obj.en === englishLetter);
+  const letterObject = alphabet.find((obj) => obj.label.includes(englishLetter));
   const arabicLetter = letterObject && letterObject.ar;
+
+  if (!arabicLetter) {
+    return '';
+  }
+
   return arabicLetter;
 };
