@@ -4,7 +4,7 @@ import { button_groups } from "./constants/button_groups.js";
 import { numberFactory, isNumber } from "./helpers/number.js";
 import { handleDeleteText, deleteSelectedText } from "./helpers/delete.js";
 import { getSelectedText } from "./helpers/getSelectedText.js";
-import { isLetter, letterFactory } from "./helpers/letter.js";
+import { isLetter, letterFactory, specialLetterFactory } from "./helpers/letter.js";
 
 class ArabicKeyboard extends LitElement {
   static get properties() {
@@ -88,14 +88,12 @@ class ArabicKeyboard extends LitElement {
   }
 
   /**
-   * @typedef {Object} stateObject
-   * @property {string} selectedText - The selected text as a string.
-   * @property {string} textValue - The text as a string.
-   * @property {number} cursorPosition - The cursor position as a number.
-   */
-
-  /**
-   * @param {stateObject} object
+   * @description Updates the state of the component.
+   * @param {{
+   *  selectedText: string,
+   *  textValue: string,
+   *  cursorPosition: number
+   * }} object - Object containing updated values.
    */
   updateState(object) {
     const { textValue, selectedText, cursorPosition } = object;
@@ -135,6 +133,7 @@ class ArabicKeyboard extends LitElement {
     // Handle Insertion
     if (inputType === "insertText") {
       const inputCharacter = event.data;
+
       if (isNumber(inputCharacter)) {
         return this.updateState({ 
           textValue: this.textValue += numberFactory(inputCharacter),
@@ -142,6 +141,13 @@ class ArabicKeyboard extends LitElement {
       }
 
       if (isLetter(inputCharacter)) {
+        // Handle Letters with no 1-1 english equivalent
+        if (inputCharacter === "'") {
+          return this.updateState({
+            textValue: specialLetterFactory(this.textValue),
+          });
+        }
+
         return this.updateState({
           textValue: this.textValue += letterFactory(inputCharacter),
         });
@@ -161,7 +167,6 @@ class ArabicKeyboard extends LitElement {
     }
 
     if (buttonType === "alphabet") {
-      console.log(buttonValue);
       this.updateState({
         textValue: this.textValue += letterFactory(buttonValue),
       })
