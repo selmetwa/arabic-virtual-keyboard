@@ -135,7 +135,6 @@ class ArabicKeyboard extends LitElement {
     // Handle Insertion
     if (inputType === "insertText") {
       const inputCharacter = event.data;
-
       if (isNumber(inputCharacter)) {
         return this.updateState({ 
           textValue: this.textValue += numberFactory(inputCharacter),
@@ -158,6 +157,13 @@ class ArabicKeyboard extends LitElement {
     if (buttonType === "number") {
       this.updateState({
         textValue: this.textValue += numberFactory(buttonValue),
+      })
+    }
+
+    if (buttonType === "alphabet") {
+      console.log(buttonValue);
+      this.updateState({
+        textValue: this.textValue += letterFactory(buttonValue),
       })
     }
   }
@@ -188,9 +194,9 @@ class ArabicKeyboard extends LitElement {
                   (button) =>
                     html`
                       <div class="button_wrapper">
-                        <label class="label">${button.label}</label>
+                        <label class="label">${button.label[0]}</label>
                         <button
-                          value="${type}_${button.en}"
+                          value="${type}_${button.label[0]}"
                           type="button"
                           class="button"
                           title="${button.title}"
