@@ -13,7 +13,6 @@ export const isLetter = (character) => {
   return englishLetters.includes(character && character.toLowerCase());
 }
 
-
 /**
  * Function to return the corresponding arabic letter based on the english letter input.
  * @param {string} englishLetter - The english letter to be converted to arabic.

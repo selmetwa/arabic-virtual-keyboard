@@ -161,13 +161,13 @@ class ArabicKeyboard extends LitElement {
     const buttonValue = eventObject && eventObject.split("_")[1];
 
     if (buttonType === "number") {
-      this.updateState({
+      return this.updateState({
         textValue: this.textValue += numberFactory(buttonValue),
       })
     }
 
     if (buttonType === "alphabet") {
-      this.updateState({
+      return this.updateState({
         textValue: this.textValue += letterFactory(buttonValue),
       })
     }
