@@ -1,188 +1,186 @@
-export const alphabet = [
-  {
+export const alphabet = [{
     "ar": 'Delete',
     "en": 'Delete',
-    'label': 'Delete',
+    'label': ['Delete'],
     'title': 'Delete'
   },
   {
     'ar': 'ا',
     'en': 'a',
-    'label': 'a',
+    'label': ['a', 'A'],
     'title': 'Alif, corresponding to the letter A in English'
   },
   {
     'ar': 'ب',
     'en': 'b',
-    'label': 'b',
+    'label': ['b', 'B', 'p', 'P'],
     'title': 'Ba, corresponding to the letter B in English'
   },
   {
     'ar': 'ت',
     'en': 't',
-    'label': 't',
+    'label': ['t'],
     'title': 'Ta, corresponding to the letter T in English'
   },
   {
     'ar': 'ث',
     'en': "th",
-    'label': "t'",
+    'label': ["t'"],
     'title': "Tha, corresponding to the sound TH in English"
   },
   {
     'ar': 'ج',
     'en': 'j',
-    'label': 'j',
+    'label': ['j', 'J'],
     'title': 'Jim, corresponding to the letter J in English'
   },
   {
     'ar': 'ح',
     'en': 'H',
-    'label': 'H',
+    'label': ['H'],
     'title': 'Ha, does not have a corresponding sound in English'
   },
   {
     "ar": 'خ',
     'en': "kh",
-    'label': "H'",
+    'label': ["H'", "x", 'X'], // TODO: handle all english inputs gracefully
     'title': "Kha, does not have a corresponding sound in English"
   },
   {
     "ar": 'د',
     'en': "d",
-    'label': "d",
+    'label': ["d"],
     'title': "Dal, corresponding to the letter D in English"
   },
   {
     "ar": 'ذ',
     'en': "dh",
-    'label': "d'",
+    'label': ["d'"],
     'title': "Dhal, does not have a corresponding sound in Englishh"
   },
   {
     "ar": 'ر',
     'en': "r",
-    'label': "r",
+    'label': ["r", 'R'],
     'title': "Ra, corresponding to the letter R in English"
   },
   {
     "ar": 'ز',
     'en': "z",
-    'label': "z",
+    'label': ["z"],
     'title': "Zayn, corresponding to the letter Z in English"
   },
   {
     "ar": 'س',
     'en': "s",
-    'label': "s",
+    'label': ["s", 'c', 'C'],
     'title': "Sin, corresponding to the letter S in English"
   },
   {
     "ar": 'ش',
     "en": "sh",
-    'label': "s'",
+    'label': ["s'"],
     'title': "Shin, does not have a corresponding sound in English"
   },
   {
     "ar": 'ص',
     'en': "S",
-    'label': "S",
+    'label': ["S"],
     'title': "Sad, does not have a corresponding sound in English"
   },
   {
     "ar": 'ض',
     'en': "D",
-    'label': "D",
+    'label': ["D"],
     'title': "Dad, does not have a corresponding sound in English"
   },
   {
     "ar": 'ط',
     'en': "T",
-    'label': "T",
+    'label': ["T"],
     'title': "Ta, does not have a corresponding sound in English"
   },
   {
     "ar": 'ظ',
     'en': "Z",
-    'label': "Z",
+    'label': ["Z"],
     'title': "Zha, does not have a corresponding sound in English"
   },
   {
     "ar": 'ع',
     'en': "g",
-    'label': "g",
+    'label': ["g", 'G'],
     'title': "Ayn, does not have a corresponding sound in English"
   },
   {
     "ar": 'غ',
     'en': "gh",
-    'label': "g'",
+    'label': ["g'", "G'"],
     'title': "Ghayn, does not have a corresponding sound in English"
   },
   {
     'ar': 'ف',
     'en': "f",
-    'label': "f",
+    'label': ["f", 'F', 'v', 'V'],
     'title': "Fa, corresponding to the letter F in English"
   },
   {
     "ar": 'ق',
     'en': "q",
-    'label': "q",
+    'label': ["q", 'Q'],
     'title': "Qaf, does not have a corresponding sound in English"
   },
   {
     "ar": 'ك',
     'en': "k",
-    'label': "k",
+    'label': ["k", 'K'],
     'title': "Kaf, corresponding to the letter K in English"
   },
   {
     "ar": 'ل',
     'en': "l",
-    'label': "l",
+    'label': ["l", 'L'],
     'title': "Lam, corresponding to the letter L in English"
   },
   {
     "ar": 'م',
     'en': "m",
-    'label': "m",
+    'label': ["m", 'M'],
     'title': "Mim, corresponding to the letter M in English"
   },
   {
     "ar": 'ن',
     'en': "n",
-    'label': "n",
+    'label': ["n", 'N'],
     'title': "Nun, corresponding to the letter N in English"
   },
   {
     'ar': 'ه',
     'en': "h",
-    'label': "h",
+    'label': ["h"],
     'title': "Ha, corresponding to the letter H in English"
   },
   {
     'ar': 'و',
     'en': "w",
-    'label': "w",
+    'label': ["w", 'W', "o", "O", 'u', 'U'],
     'title': "Waw, corresponding to the letter W in English"
   },
   {
     "ar": 'ي',
     'en': "y",
-    'label': "y",
+    'label': ["y", "Y", "i", "I", 'e', 'E'],
     'title': "Ya, corresponding to the letter Y in English"
   },
   {
     "ar": 'ء',
     'en': "-",
-    'label': "-",
+    'label': ["-"],
     'title': "Hamza, glottal stop"
   },
 ]
 
-export const diacritics = [
-  {
+export const diacritics = [{
     "ar": '\u064E',
     'en': '=a',
     'label': '=a',
@@ -232,8 +230,7 @@ export const diacritics = [
   },
 ]
 
-export const numbers = [
-  {
+export const numbers = [{
     'ar': '\u0660',
     'en': '0',
     'label': '0',
@@ -295,8 +292,7 @@ export const numbers = [
   },
 ]
 
-export const special_letters_and_punctuation = [
-  {
+export const special_letters_and_punctuation = [{
     'ar': 'ئ',
     'en': 'y==',
     'label': 'y==',
