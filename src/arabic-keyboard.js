@@ -108,6 +108,7 @@ class ArabicKeyboard extends LitElement {
 
     if (typeof cursorPosition === "number") {
       this.textarea.setSelectionRange(cursorPosition, cursorPosition);
+      this.textarea.focus();
     }
   }
 
@@ -117,7 +118,7 @@ class ArabicKeyboard extends LitElement {
     // Handle Delete
     if (inputType === "deleteContentBackward") {
       if (!!this.selectedText) {
-        return this.updateState({ 
+        return this.updateState({
           textValue: deleteSelectedText(this.textValue, this.selectedText),
           selectedText: "",
         });
@@ -131,12 +132,17 @@ class ArabicKeyboard extends LitElement {
     }
 
     // Handle Insertion
+    // TODO: Handle Pasting [x]
+    // TODO: handle inserting at cursor position [x]
+    // TODO: replace selected text []
     if (inputType === "insertText") {
       const inputCharacter = event.data;
-
+      const cursorPosition = this.textarea.selectionStart;
       if (isNumber(inputCharacter)) {
-        return this.updateState({ 
-          textValue: this.textValue += numberFactory(inputCharacter),
+        const { newText, newCursorPosition } = numberFactory(inputCharacter, this.textValue, cursorPosition);
+        return this.updateState({
+          textValue: newText,
+          cursorPosition: newCursorPosition,
         });
       }
 
@@ -177,30 +183,51 @@ class ArabicKeyboard extends LitElement {
     return this.updateState({ selectedText: getSelectedText(this.textarea) });
   }
 
+  handlePaste(event) {
+    event.preventDefault();
+    const pastedText = (event.clipboardData || window.clipboardData).getData('text');
+    let _cursorPosition = this.textarea.selectionStart + 1;
+
+    for (let i=0; i < pastedText.length; i++) {
+      const char = pastedText[i];
+      if (isNumber(char)) {
+        const { newText, newCursorPosition } = numberFactory(char, this.textValue, _cursorPosition);
+        _cursorPosition = _cursorPosition + 1;
+        this.updateState({
+          textValue: newText,
+          cursorPosition: newCursorPosition,
+        })
+      }
+    }
+  }
+
   render() {
     return html`
       <section class="wrapper">
+        <p>${this.cursorPosition}</p>
         <label>
           <textarea
             aria-label="Text Area"
             type="text"
             class="textarea"
+            lang="ar"
             rows="5"
             cols="10"
             @input=${this.handleKeyChange}
             @select="${this.updateSelectedText}"
+            @paste="${this.handlePaste}"
             .value=${this.textValue}
           >
           </textarea>
         </label>
         <div class="keyboard">
           ${this.buttonGroups.map((buttonGroup) => {
-            const { buttons, type } = buttonGroup;
-            return html`
+      const { buttons, type } = buttonGroup;
+      return html`
               <div class="button_group ${type === "number" ? "ltr" : "rtl"}">
                 ${buttons.map(
-                  (button) =>
-                    html`
+        (button) =>
+          html`
                       <div class="button_wrapper">
                         <label class="label">${button.label[0]}</label>
                         <button
@@ -214,10 +241,10 @@ class ArabicKeyboard extends LitElement {
                         </button>
                       </div>
                     `
-                )}
+      )}
               </div>
             `;
-          })}
+    })}
           <button class="space">Space</button>
         </div>
       </section>
