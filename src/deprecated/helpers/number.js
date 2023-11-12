@@ -11,9 +11,9 @@ export const numberFactory = (englishNumber, originalText, cursorPosition) => {
   const numberObject = numbers.find((obj) => obj.en === englishNumber);
   const arabicNumber = numberObject && numberObject.ar;
 
-  originalArray.splice(cursorPosition - 1, 0, arabicNumber);
+  originalArray.splice(cursorPosition, 0, arabicNumber);
   const newText = originalArray.join('');
-  return { newText, newCursorPosition: cursorPosition - 1 };
+  return { newText, newCursorPosition: cursorPosition };
 };
 
 /** 
@@ -24,3 +24,12 @@ export const numberFactory = (englishNumber, originalText, cursorPosition) => {
 export const isNumber = (value) => {
   return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].includes(parseInt(value));
 };
+
+/**
+ * Function to return corresponding arabic number based on the english number input.
+ */
+export const correspondingArabicNumber = (englishNumber) => {
+  const numberObject = numbers.find((obj) => obj.en === englishNumber);
+  const arabicNumber = numberObject && numberObject.ar;
+  return arabicNumber
+}

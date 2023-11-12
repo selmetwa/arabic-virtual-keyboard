@@ -1,16 +1,17 @@
 import { LitElement, html, css } from "lit";
 
 import { button_groups } from "./constants/button_groups.js";
-import { numberFactory, isNumber } from "./helpers/number.js";
-import { handleDeleteText, deleteSelectedText } from "./helpers/delete.js";
-import { getSelectedText } from "./helpers/getSelectedText.js";
-import { isLetter, letterFactory, specialLetterFactory } from "./helpers/letter.js";
+
+import { isNumber, getSelectedText, isLeftArrow, isRightArrow } from "./utils.js";
+import { NumbersFactory } from "./Numbers/index.js";
+import { BackspaceFactory } from "./Backspace/index.js";
+import { KeyboardNavigationFactory } from "./KeyboardNavigation/index.js";
+import { PasteFactory } from "./Paste/index.js";
 
 class ArabicKeyboard extends LitElement {
   static get properties() {
     return {
-      textValue: { type: String },
-      selectedText: { type: String },
+      state: { type: Object },
     };
   }
 
@@ -18,8 +19,12 @@ class ArabicKeyboard extends LitElement {
     super();
     this.textarea = null;
     this.buttonGroups = button_groups;
-    this.textValue = "";
-    this.selectedText = "";
+    this.state = {
+      textValue: "",
+      selectedText: "",
+      previousKey: "",
+      cursorPosition: 0,
+    };
   }
 
   static styles = css`
@@ -87,124 +92,61 @@ class ArabicKeyboard extends LitElement {
     this.textarea = this.shadowRoot.querySelector("textarea");
   }
 
-  /**
-   * @description Updates the state of the component.
-   * @param {{
-   *  selectedText: string,
-   *  textValue: string,
-   *  cursorPosition: number
-   * }} object - Object containing updated values.
-   */
   updateState(object) {
-    const { textValue, selectedText, cursorPosition } = object;
+    this.state = { ...this.state, ...object };
+    this.textarea.focus();
+  }
 
-    if (typeof textValue === "string") {
-      this.textValue = textValue;
+  handleKeyDown(event) {
+    event.preventDefault();
+    const key = event.key;
+    const isNumberKey = isNumber(key);
+
+    // Handle Deletion
+    if (key === "Backspace") {
+      this.updateState(BackspaceFactory(key, this.state));
     }
 
-    if (typeof selectedText === "string") {
-      this.selectedText = selectedText;
+    // Handle Inserting Numbers
+    if (isNumberKey) {
+      this.updateState(NumbersFactory(key, this.state));
     }
 
-    if (typeof cursorPosition === "number") {
-      this.textarea.setSelectionRange(cursorPosition, cursorPosition);
-      this.textarea.focus();
+    // Update Cursor Position
+    if (isLeftArrow(key) || isRightArrow(key)) {
+      const res = KeyboardNavigationFactory(key, this.state);
+      this.textarea.setSelectionRange(res.cursorPosition, res.cursorPosition);
+      this.updateState(res);
     }
   }
 
-  handleKeyChange(event) {
-    const inputType = event.inputType;
-
-    // Handle Delete
-    if (inputType === "deleteContentBackward") {
-      if (!!this.selectedText) {
-        return this.updateState({
-          textValue: deleteSelectedText(this.textValue, this.selectedText),
-          selectedText: "",
-        });
-      }
-
-      const { newText, cursorPosition } = handleDeleteText(this.textarea);
-      return this.updateState({
-        textValue: newText,
-        cursorPosition,
-      });
-    }
-
-    // Handle Insertion
-    // TODO: Handle Pasting [x]
-    // TODO: handle inserting at cursor position [x]
-    // TODO: replace selected text []
-    if (inputType === "insertText") {
-      const inputCharacter = event.data;
-      const cursorPosition = this.textarea.selectionStart;
-      if (isNumber(inputCharacter)) {
-        const { newText, newCursorPosition } = numberFactory(inputCharacter, this.textValue, cursorPosition);
-        return this.updateState({
-          textValue: newText,
-          cursorPosition: newCursorPosition,
-        });
-      }
-
-      if (isLetter(inputCharacter)) {
-        // Handle Letters with no 1-1 english equivalent
-        if (inputCharacter === "'") {
-          return this.updateState({
-            textValue: specialLetterFactory(this.textValue),
-          });
-        }
-
-        return this.updateState({
-          textValue: this.textValue += letterFactory(inputCharacter),
-        });
-      }
-    }
-  }
-
-  handleClick(event) {
-    const eventObject = event.target.value;
-    const buttonType = eventObject && eventObject.split("_")[0];
-    const buttonValue = eventObject && eventObject.split("_")[1];
-
-    if (buttonType === "number") {
-      return this.updateState({
-        textValue: this.textValue += numberFactory(buttonValue),
-      })
-    }
-
-    if (buttonType === "alphabet") {
-      return this.updateState({
-        textValue: this.textValue += letterFactory(buttonValue),
-      })
-    }
-  }
-
-  updateSelectedText() {
-    return this.updateState({ selectedText: getSelectedText(this.textarea) });
+  updateSelectedText(event) {
+    return this.updateState({
+      ...this.state,
+      cursorPosition: event.target.selectionStart,
+      selectedText: getSelectedText(this.textarea),
+    });
   }
 
   handlePaste(event) {
     event.preventDefault();
-    const pastedText = (event.clipboardData || window.clipboardData).getData('text');
-    let _cursorPosition = this.textarea.selectionStart + 1;
+    this.updateState(PasteFactory(event, this.state));
+  }
 
-    for (let i=0; i < pastedText.length; i++) {
-      const char = pastedText[i];
-      if (isNumber(char)) {
-        const { newText, newCursorPosition } = numberFactory(char, this.textValue, _cursorPosition);
-        _cursorPosition = _cursorPosition + 1;
-        this.updateState({
-          textValue: newText,
-          cursorPosition: newCursorPosition,
-        })
-      }
-    }
+  handleTextareaClick(event) {
+    event.preventDefault();
+    this.updateState({
+      ...this.state,
+      cursorPosition: event.target.selectionStart,
+      selectedText: "",
+    });
   }
 
   render() {
     return html`
       <section class="wrapper">
-        <p>${this.cursorPosition}</p>
+        <div>${JSON.stringify(this.state)}</div>
+        <p>textvalue length: ${this.state.textValue.length}</p>
         <label>
           <textarea
             aria-label="Text Area"
@@ -213,21 +155,22 @@ class ArabicKeyboard extends LitElement {
             lang="ar"
             rows="5"
             cols="10"
-            @input=${this.handleKeyChange}
+            @keydown="${this.handleKeyDown}"
             @select="${this.updateSelectedText}"
             @paste="${this.handlePaste}"
-            .value=${this.textValue}
+            @click="${this.handleTextareaClick}"
+            .value=${this.state.textValue}
           >
           </textarea>
         </label>
         <div class="keyboard">
           ${this.buttonGroups.map((buttonGroup) => {
-      const { buttons, type } = buttonGroup;
-      return html`
+            const { buttons, type } = buttonGroup;
+            return html`
               <div class="button_group ${type === "number" ? "ltr" : "rtl"}">
                 ${buttons.map(
-        (button) =>
-          html`
+                  (button) =>
+                    html`
                       <div class="button_wrapper">
                         <label class="label">${button.label[0]}</label>
                         <button
@@ -241,10 +184,10 @@ class ArabicKeyboard extends LitElement {
                         </button>
                       </div>
                     `
-      )}
+                )}
               </div>
             `;
-    })}
+          })}
           <button class="space">Space</button>
         </div>
       </section>
