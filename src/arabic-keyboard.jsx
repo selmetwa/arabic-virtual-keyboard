@@ -148,23 +148,26 @@ class ArabicKeyboard extends LitElement {
 
   render() {
     return html`
-      <section class="wrapper">
+      <noscript>
+        <p>Please enable JavaScript to use this application.</p>
+      </noscript>
+      <section class="wrapper" lang="ar">
         <div>${JSON.stringify(this.state)}</div>
         <p>textvalue length: ${this.state.textValue.length}</p>
-          <textarea
-            aria-label="Text Area"
-            type="text"
-            class="textarea"
-            lang="ar"
-            rows="5"
-            cols="10"
-            @keydown="${this.handleKeyDown}"
-            @select="${this.updateSelectedText}"
-            @paste="${this.handlePaste}"
-            @click="${this.handleTextareaClick}"
-            .value=${this.state.textValue}
-          >
-          </textarea>
+        <textarea
+          aria-label="Text Area"
+          type="text"
+          class="textarea"
+          lang="ar"
+          rows="5"
+          cols="10"
+          @keydown="${this.handleKeyDown}"
+          @select="${this.updateSelectedText}"
+          @paste="${this.handlePaste}"
+          @click="${this.handleTextareaClick}"
+          .value=${this.state.textValue}
+        >
+        </textarea>
         <div class="keyboard">
           ${this.buttonGroups.map((buttonGroup) => {
             const { buttons, type } = buttonGroup;

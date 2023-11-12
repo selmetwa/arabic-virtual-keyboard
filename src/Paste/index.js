@@ -5,7 +5,7 @@ import { numberFactory } from '../Numbers/index.js'
 export const PasteFactory = (event, state) => {
   const pastedText = (event.clipboardData).getData("text");
   const _selectedText = state.selectedText;
-
+  console.log('pastedText', pastedText)
   let _cursorPosition = state.cursorPosition;
   let _textValue = state.textValue;
 
