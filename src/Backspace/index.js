@@ -1,4 +1,17 @@
-import { deleteSelectedText, handleDeleteText } from "./backspace_helpers";
+export const handleDeleteText = (cursorPosition, textValue) => {
+  const arr = textValue.split('');
+  arr.splice(cursorPosition - 1, 1);
+
+  return {
+    newCursorPosition: cursorPosition - 1,
+    newText: arr.join('')
+  };
+}
+
+export const deleteSelectedText = (textValue, selectedText) => {
+  const newTextValue = textValue.replace(selectedText, '');
+  return newTextValue;
+}
 
 export const BackspaceFactory = (key, state) => {
   const _selectedText = state.selectedText;
@@ -7,7 +20,6 @@ export const BackspaceFactory = (key, state) => {
 
   if (_textValue.length === 0) return state;
 
-  console.log({ _selectedText })
   if (!!_selectedText) {
     return {
       textValue: deleteSelectedText(_textValue, _selectedText),
@@ -16,10 +28,11 @@ export const BackspaceFactory = (key, state) => {
   }
 
   const { newText, newCursorPosition } = handleDeleteText(_cursorPosition, _textValue);
-  console.log({ newText })
+
   return {
     textValue: newText,
-    cursorPosition: newCursorPosition,
+    cursorPosition: newCursorPosition >= 0 ? newCursorPosition : 0,
     previousKey: key,
+    selectedText: "",
   };
 }

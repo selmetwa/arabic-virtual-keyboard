@@ -2,7 +2,12 @@ import { LitElement, html, css } from "lit";
 
 import { button_groups } from "./constants/button_groups.js";
 
-import { isNumber, getSelectedText, isLeftArrow, isRightArrow } from "./utils.js";
+import {
+  isNumber,
+  getSelectedText,
+  isLeftArrow,
+  isRightArrow,
+} from "./utils.js/index.js";
 import { NumbersFactory } from "./Numbers/index.js";
 import { BackspaceFactory } from "./Backspace/index.js";
 import { KeyboardNavigationFactory } from "./KeyboardNavigation/index.js";
@@ -94,7 +99,6 @@ class ArabicKeyboard extends LitElement {
 
   updateState(object) {
     this.state = { ...this.state, ...object };
-    this.textarea.focus();
   }
 
   handleKeyDown(event) {
@@ -147,7 +151,6 @@ class ArabicKeyboard extends LitElement {
       <section class="wrapper">
         <div>${JSON.stringify(this.state)}</div>
         <p>textvalue length: ${this.state.textValue.length}</p>
-        <label>
           <textarea
             aria-label="Text Area"
             type="text"
@@ -162,28 +165,25 @@ class ArabicKeyboard extends LitElement {
             .value=${this.state.textValue}
           >
           </textarea>
-        </label>
         <div class="keyboard">
           ${this.buttonGroups.map((buttonGroup) => {
             const { buttons, type } = buttonGroup;
             return html`
-              <div class="button_group ${type === "number" ? "ltr" : "rtl"}">
+              <div class="button_group ${type === "number " ? "ltr " : "rtl"}">
                 ${buttons.map(
                   (button) =>
-                    html`
-                      <div class="button_wrapper">
-                        <label class="label">${button.label[0]}</label>
-                        <button
-                          value="${type}_${button.label[0]}"
-                          type="button"
-                          class="button"
-                          title="${button.title}"
-                          @click="${this.handleClick}"
-                        >
-                          ${button.ar}
-                        </button>
-                      </div>
-                    `
+                    html`<div class="button_wrapper">
+                      <label class="label">${button.label[0]}</label>
+                      <button
+                        value="${type}_${button.label[0]}"
+                        type="button"
+                        class="button"
+                        title="${button.title}"
+                        @click="${this.handleClick}"
+                      >
+                        ${button.ar}
+                      </button>
+                    </div> `
                 )}
               </div>
             `;
