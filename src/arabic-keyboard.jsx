@@ -97,6 +97,27 @@ class ArabicKeyboard extends LitElement {
     this.textarea = this.shadowRoot.querySelector("textarea");
   }
 
+  connectedCallback() {
+    super.connectedCallback();
+    this.startInterval();
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.clearInterval();
+  }
+
+  clearInterval() {
+    clearInterval(this.intervalId);
+  }
+
+  startInterval() {
+    this.intervalId = setInterval(() => {
+      this.updateState({ previousKey: '' });
+      this.requestUpdate();
+    }, 500);
+  }
+
   updateState(object) {
     this.state = { ...this.state, ...object };
   }
@@ -105,6 +126,25 @@ class ArabicKeyboard extends LitElement {
     event.preventDefault();
     const key = event.key;
     const isNumberKey = isNumber(key);
+    this.clearInterval();
+    console.log({ key, event })
+
+    // Handle Meta Key
+    if (key === "Meta") {
+      this.updateState({ previousKey: key });
+    }
+
+    if (this.state.previousKey === "Meta" && key === "a") {
+      this.handleSelectAllText();
+    }
+
+    if (this.state.previousKey === "Meta" && key === "c") {
+      this.handleCopySelectedText();
+    }
+
+    if (this.state.previousKey === "Meta" && key === "v") {
+      alert("paste");
+    }
 
     // Handle Deletion
     if (key === "Backspace") {
@@ -122,6 +162,16 @@ class ArabicKeyboard extends LitElement {
       this.textarea.setSelectionRange(res.cursorPosition, res.cursorPosition);
       this.updateState(res);
     }
+
+    this.startInterval();
+  }
+
+  handleSelectAllText() {
+    this.textarea.select();
+  }
+
+  handleCopySelectedText() {
+    document.execCommand("copy");
   }
 
   updateSelectedText(event) {
