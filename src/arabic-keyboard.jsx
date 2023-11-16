@@ -7,7 +7,9 @@ import {
   getSelectedText,
   isLeftArrow,
   isRightArrow,
+  deleteSelectedText
 } from "./utils.js/index.js";
+
 import { NumbersFactory } from "./Numbers/index.js";
 import { BackspaceFactory } from "./Backspace/index.js";
 import { KeyboardNavigationFactory } from "./KeyboardNavigation/index.js";
@@ -135,15 +137,29 @@ class ArabicKeyboard extends LitElement {
     }
 
     if (this.state.previousKey === "Meta" && key === "a") {
-      this.handleSelectAllText();
+      this.textarea.select();
     }
 
     if (this.state.previousKey === "Meta" && key === "c") {
-      this.handleCopySelectedText();
+      document.execCommand("copy");
     }
 
+    if (this.state.previousKey === "Meta" && key === "x") {
+      document.execCommand("copy");
+      const res = deleteSelectedText(this.state.textValue, this.state.selectedText);
+      this.updateState({ textValue: res});
+      console.log({ res })
+    }
+
+    // Handle Paste from Keyboard shortcut
     if (this.state.previousKey === "Meta" && key === "v") {
-      alert("paste");
+      navigator.clipboard.readText()
+        .then(clipboardText => {
+          this.updateState(PasteFactory(null, clipboardText, this.state));
+        })
+        .catch(err => {
+          console.error("Failed to read from clipboard", err);
+        });
     }
 
     // Handle Deletion
@@ -164,14 +180,6 @@ class ArabicKeyboard extends LitElement {
     }
 
     this.startInterval();
-  }
-
-  handleSelectAllText() {
-    this.textarea.select();
-  }
-
-  handleCopySelectedText() {
-    document.execCommand("copy");
   }
 
   updateSelectedText(event) {
