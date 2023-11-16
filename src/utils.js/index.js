@@ -38,3 +38,26 @@ export const isRightArrow = (key) => {
 export const isLeftArrow = (key) => {
   return key === 'ArrowLeft';
 }
+
+/**
+ * Function to delete selected text.
+ * @param {string} textValue - original text
+ * @param {string} selectedText - selected text to delete
+ * @returns {string} - updated text value after deleting selected text
+ */
+export const deleteSelectedText = (textValue, selectedText) => {
+  const newTextValue = textValue.replace(selectedText, '');
+  return newTextValue;
+}
+
+/**
+ * Test is string is arabic or not
+ * @param {string} text 
+ * @returns 
+ */
+export const isInputArabic = (text) => {
+  // Define the Arabic Unicode ranges
+  const arabicRange = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/;
+
+  return arabicRange.test(text);
+}
