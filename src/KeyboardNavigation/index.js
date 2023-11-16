@@ -1,5 +1,12 @@
+import * as Types from '../constants/types'
 import { isRightArrow, isLeftArrow } from '../utils.js';
 
+/**
+ * 
+ * @param {string} key - key that was pressed
+ * @param {Types.State} state - current state of the keyboard
+ * @returns {Types.State}
+ */
 export const KeyboardNavigationFactory = (key, state) => {
   const _cursorPosition = state.cursorPosition;
   const _textValueLength = state.textValue.length;
