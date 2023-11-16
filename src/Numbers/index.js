@@ -1,6 +1,13 @@
+import * as Types from '../constants/types.js'
 import { numbers } from "../constants/data.js";
-import { deleteSelectedText } from '../Backspace/index.js';
+import { deleteSelectedText } from '../utils.js';
 
+/**
+ * Finds corresponding arabic number for english number, inserts it into text and returns new text and cursor position
+ * @param {string} englishNumber 
+ * @param {string} originalText 
+ * @param {number} cursorPosition 
+ */
 export const numberFactory = (englishNumber, originalText, cursorPosition) => {
   const originalArray = originalText.split('');
   const numberObject = numbers.find((obj) => obj.en === englishNumber);
@@ -14,6 +21,10 @@ export const numberFactory = (englishNumber, originalText, cursorPosition) => {
   return { newText, newCursorPosition };
 };
 
+/**
+ * @param {string} char - key pressed 
+ * @param {Types.State} state - current state of the keyboard
+ */
 export const NumbersFactory = (key, state) => {
   const _selectedText = state.selectedText;
   const _cursorPosition = state.cursorPosition;
@@ -27,7 +38,7 @@ export const NumbersFactory = (key, state) => {
 
   return {
     textValue: newText,
-    cursorPosition: newText.length,
+    cursorPosition: newCursorPosition,
     previousKey: key,
     selectedText: '',
   };
