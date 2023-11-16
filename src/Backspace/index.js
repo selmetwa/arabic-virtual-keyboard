@@ -1,4 +1,11 @@
-export const handleDeleteText = (cursorPosition, textValue) => {
+import { deleteSelectedText } from "../utils.js";
+
+/**
+ * Function to delete one character from text based on the cursor position.
+ * @param {number} cursorPosition 
+ * @param {string} textValue 
+ */
+const handleDeleteText = (cursorPosition, textValue) => {
   const arr = textValue.split('');
   arr.splice(cursorPosition - 1, 1);
 
@@ -8,11 +15,10 @@ export const handleDeleteText = (cursorPosition, textValue) => {
   };
 }
 
-export const deleteSelectedText = (textValue, selectedText) => {
-  const newTextValue = textValue.replace(selectedText, '');
-  return newTextValue;
-}
-
+/**
+ * @param {string} key - Key pressed
+ * @param {Types.State} state - current state of the keyboard
+ */
 export const BackspaceFactory = (key, state) => {
   const _selectedText = state.selectedText;
   const _cursorPosition = state.cursorPosition;
