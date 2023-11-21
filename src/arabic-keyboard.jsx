@@ -7,13 +7,13 @@ import {
   getSelectedText,
   isLeftArrow,
   isRightArrow,
-  deleteSelectedText
+  deleteSelectedText,
+  isInputArabic
 } from "./utils.js/index.js";
 
 import { NumbersFactory } from "./Numbers/index.js";
 import { BackspaceFactory } from "./Backspace/index.js";
 import { KeyboardNavigationFactory } from "./KeyboardNavigation/index.js";
-import { PasteFactory } from "./Paste/index.js";
 
 class ArabicKeyboard extends LitElement {
   static get properties() {
@@ -28,6 +28,9 @@ class ArabicKeyboard extends LitElement {
     this.buttonGroups = button_groups;
     this.state = {
       textValue: "",
+      historyIndex: 0,
+      history: [],
+      previousTextValue: "",
       selectedText: "",
       previousKey: "",
       cursorPosition: 0,
@@ -117,7 +120,7 @@ class ArabicKeyboard extends LitElement {
     this.intervalId = setInterval(() => {
       this.updateState({ previousKey: '' });
       this.requestUpdate();
-    }, 500);
+    }, 1000);
   }
 
   updateState(object) {
@@ -147,7 +150,7 @@ class ArabicKeyboard extends LitElement {
     if (this.state.previousKey === "Meta" && key === "x") {
       document.execCommand("copy");
       const res = deleteSelectedText(this.state.textValue, this.state.selectedText);
-      this.updateState({ textValue: res});
+      this.updateState({ textValue: res });
       console.log({ res })
     }
 
@@ -155,11 +158,22 @@ class ArabicKeyboard extends LitElement {
     if (this.state.previousKey === "Meta" && key === "v") {
       navigator.clipboard.readText()
         .then(clipboardText => {
-          this.updateState(PasteFactory(null, clipboardText, this.state));
+          this.handlePaste(null, clipboardText)
         })
         .catch(err => {
           console.error("Failed to read from clipboard", err);
         });
+    }
+
+    if (this.state.previousKey === "Meta" && key === "z") {
+      if (this.state.historyIndex >= 0) {
+        const index = this.state.historyIndex
+        const textValue = this.state.history[this.state.historyIndex];
+        console.log("this.state.history: ", this.state.history)
+        const historyIndex = this.state.historyIndex - 1;
+        console.log({ textValue, index })
+        this.updateState({ textValue, historyIndex });
+      }
     }
 
     // Handle Deletion
@@ -190,9 +204,19 @@ class ArabicKeyboard extends LitElement {
     });
   }
 
-  handlePaste(event) {
-    event.preventDefault();
-    this.updateState(PasteFactory(event, this.state));
+  handlePaste(event, pastedTextFromKeyboard) {
+    event && event.preventDefault();
+    const pastedText = event && event.clipboardData && event.clipboardData.getData("text") || pastedTextFromKeyboard;
+
+    if (isInputArabic(pastedText)) {
+      let modifiedString = this.state.textValue.slice(0, this.state.cursorPosition) + pastedText + this.state.textValue.slice(this.state.cursorPosition);
+      this.updateState({ textValue: modifiedString });
+    }
+
+    for (let i = 0; i < pastedText.length; i++) {
+      const char = pastedText[i];
+      this.updateState(NumbersFactory(char, this.state));
+    }
   }
 
   handleTextareaClick(event) {

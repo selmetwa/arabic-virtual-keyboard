@@ -3,13 +3,12 @@ import { isNumber, deleteSelectedText, isInputArabic } from '../utils.js'
 import { numberFactory } from '../Numbers/index.js'
 
 /**
- * 
- * @param {Event} event - paste event
+ * DEPRECATED
+ * @param {Event=} event - paste event
  * @param {string=} pastedTextFromClipboard - pasted text from clipboard
  * @param {Types.state} state - current state of the keyboard
  */
 export const PasteFactory = (event, pastedTextFromClipboard, state) => {
-  // console.log('PasteFactory', event, pastedTextFromClipboard, state)
   const pastedText = event && event.clipboardData && event.clipboardData.getData("text") || pastedTextFromClipboard;
   const isArabic = isInputArabic(pastedText)
 
@@ -19,8 +18,6 @@ export const PasteFactory = (event, pastedTextFromClipboard, state) => {
     }
   }
 
-  console.log({ isArabic })
-  alert(pastedText)
   const _selectedText = state.selectedText;
   let _cursorPosition = state.cursorPosition;
   let _textValue = state.textValue;
@@ -36,6 +33,7 @@ export const PasteFactory = (event, pastedTextFromClipboard, state) => {
 
     if (isNumber(char)) {
       const { newText } = numberFactory(char, _textValue, _cursorPosition);
+      console.log({ newText })
       _cursorPosition = _cursorPosition + 1;
       outputText = outputText += newText
     }

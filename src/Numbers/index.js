@@ -14,7 +14,7 @@ export const numberFactory = (englishNumber, originalText, cursorPosition) => {
   const arabicNumber = numberObject && numberObject.ar;
 
   originalArray.splice(cursorPosition, 0, arabicNumber);
-
+  console.log({ originalArray })
   const newText = originalArray.join('');
   const newCursorPosition = cursorPosition + 1;
 
@@ -36,8 +36,15 @@ export const NumbersFactory = (key, state) => {
 
   const { newText, newCursorPosition } = numberFactory(key, _textValue, _cursorPosition);
 
+  const existingHistory = [...state.history, _textValue]
+  console.log({ existingHistory })
+    // const newHistory = existingHistory.push(_textValue);
+    // console.log({ existingHistory, newHistory })
   return {
     textValue: newText,
+    historyIndex: existingHistory.length - 1,
+    history: existingHistory,
+    previousTextValue: state.textValue,
     cursorPosition: newCursorPosition,
     previousKey: key,
     selectedText: '',
