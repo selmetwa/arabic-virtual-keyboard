@@ -30,7 +30,6 @@ class ArabicKeyboard extends LitElement {
       textValue: "",
       historyIndex: 0,
       history: [],
-      previousTextValue: "",
       selectedText: "",
       previousKey: "",
       cursorPosition: 0,
@@ -150,8 +149,12 @@ class ArabicKeyboard extends LitElement {
     if (this.state.previousKey === "Meta" && key === "x") {
       document.execCommand("copy");
       const res = deleteSelectedText(this.state.textValue, this.state.selectedText);
-      this.updateState({ textValue: res });
-      console.log({ res })
+      this.updateState({ 
+        textValue: res, 
+        cursorPosition: res.length, 
+        history: [...this.state.history, this.state.textValue], 
+        historyIndex: this.state.historyIndex + 1 
+      });
     }
 
     // Handle Paste from Keyboard shortcut
@@ -167,12 +170,13 @@ class ArabicKeyboard extends LitElement {
 
     if (this.state.previousKey === "Meta" && key === "z") {
       if (this.state.historyIndex >= 0) {
-        const index = this.state.historyIndex
         const textValue = this.state.history[this.state.historyIndex];
-        console.log("this.state.history: ", this.state.history)
         const historyIndex = this.state.historyIndex - 1;
-        console.log({ textValue, index })
-        this.updateState({ textValue, historyIndex });
+        this.updateState({ textValue, historyIndex, cursorPosition: textValue.length });
+
+        if (textValue === '') {
+          this.updateState({ historyIndex: -1, history: [], cursorPosition: 0 });
+        }
       }
     }
 
@@ -209,8 +213,14 @@ class ArabicKeyboard extends LitElement {
     const pastedText = event && event.clipboardData && event.clipboardData.getData("text") || pastedTextFromKeyboard;
 
     if (isInputArabic(pastedText)) {
+      alert("Paste Arabic text only");
       let modifiedString = this.state.textValue.slice(0, this.state.cursorPosition) + pastedText + this.state.textValue.slice(this.state.cursorPosition);
-      this.updateState({ textValue: modifiedString });
+      return this.updateState({ 
+        textValue: modifiedString, 
+        cursorPosition: this.state.cursorPosition + pastedText.length,
+        history: [...this.state.history, this.state.textValue],
+        historyIndex: this.state.historyIndex + 1,
+      });
     }
 
     for (let i = 0; i < pastedText.length; i++) {
@@ -235,7 +245,7 @@ class ArabicKeyboard extends LitElement {
       </noscript>
       <section class="wrapper" lang="ar">
         <div>${JSON.stringify(this.state)}</div>
-        <p>textvalue length: ${this.state.textValue.length}</p>
+        <p>textvalue length: ${this.state.textValue?.length}</p>
         <textarea
           aria-label="Text Area"
           type="text"

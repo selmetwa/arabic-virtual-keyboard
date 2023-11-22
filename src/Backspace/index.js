@@ -34,12 +34,11 @@ export const BackspaceFactory = (key, state) => {
   }
 
   const { newText, newCursorPosition } = handleDeleteText(_cursorPosition, _textValue);
-  const existingHistory = [...state.history, _textValue]
-  console.log({ existingHistory })
+  const newHistory = [...state.history, _textValue]
   return {
     textValue: newText,
-    historyIndex: existingHistory.length - 1,
-    history: existingHistory,
+    historyIndex: newHistory.length - 1,
+    history: newHistory,
     cursorPosition: newCursorPosition >= 0 ? newCursorPosition : 0,
     previousKey: key,
     selectedText: "",

@@ -36,14 +36,12 @@ export const NumbersFactory = (key, state) => {
 
   const { newText, newCursorPosition } = numberFactory(key, _textValue, _cursorPosition);
 
-  const existingHistory = [...state.history, _textValue]
-  console.log({ existingHistory })
-    // const newHistory = existingHistory.push(_textValue);
-    // console.log({ existingHistory, newHistory })
+  const newHistory = [...state.history, _textValue]
+
   return {
     textValue: newText,
-    historyIndex: existingHistory.length - 1,
-    history: existingHistory,
+    historyIndex: newHistory.length - 1,
+    history: newHistory,
     previousTextValue: state.textValue,
     cursorPosition: newCursorPosition,
     previousKey: key,
