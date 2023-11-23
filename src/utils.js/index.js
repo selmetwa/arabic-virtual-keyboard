@@ -51,12 +51,11 @@ export const deleteSelectedText = (textValue, selectedText) => {
 }
 
 /**
- * Test is string is arabic or not
+ * Test if string is arabic or not
  * @param {string} text 
- * @returns 
+ * @returns {boolean}
  */
 export const isInputArabic = (text) => {
-  // Define the Arabic Unicode ranges
   const arabicRange = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/;
 
   return arabicRange.test(text);

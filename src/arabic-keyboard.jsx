@@ -225,7 +225,9 @@ class ArabicKeyboard extends LitElement {
 
     for (let i = 0; i < pastedText.length; i++) {
       const char = pastedText[i];
-      this.updateState(NumbersFactory(char, this.state));
+      if (isNumber(char)) {
+        this.updateState(NumbersFactory(char, this.state));
+      }
     }
   }
 
