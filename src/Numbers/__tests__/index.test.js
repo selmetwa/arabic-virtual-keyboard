@@ -1,5 +1,5 @@
 import { assert } from '@esm-bundle/chai';
-import { insertEnglishNumberIntoArabic } from '../index'
+import { insertEnglishNumberIntoArabic, NumbersFactory } from '../index'
 
 describe('insertEnglishNumberIntoArabic', () => {
   it('should insert Arabic number for Arabic number at the cursor position', () => {
@@ -51,6 +51,92 @@ describe('insertEnglishNumberIntoArabic', () => {
     assert.deepStrictEqual(result, {
       newText: originalText,
       newCursorPosition: cursorPosition,
+    });
+  });
+});
+
+describe('NumbersFactory', () => {
+  it('should insert English number into Arabic text and update state', () => {
+    const key = '2';
+    const state = {
+      textValue: '١٢٣',
+      cursorPosition: 0,
+      history: [],
+      selectedText: '',
+    };
+
+    const result = NumbersFactory(key, state);
+
+    assert.deepStrictEqual(result, {
+      textValue: '٢١٢٣',
+      historyIndex: 0,
+      history: ['١٢٣'],
+      cursorPosition: 1,
+      previousKey: key,
+      selectedText: '',
+    });
+  });
+
+  it('should insert English number into empty text and update state', () => {
+    const key = '1';
+    const state = {
+      textValue: '',
+      cursorPosition: 0,
+      history: [],
+      selectedText: '',
+    };
+
+    const result = NumbersFactory(key, state);
+
+    assert.deepStrictEqual(result, {
+      textValue: '١',
+      historyIndex: 0,
+      history: [''],
+      cursorPosition: 1,
+      previousKey: key,
+      selectedText: '',
+    });
+  });
+
+  it('should insert English number the middle of the text and update state', () => {
+    const key = '0';
+    const state = {
+      textValue: '٥٥٥٥٥',
+      cursorPosition: 3,
+      history: [],
+      selectedText: '',
+    };
+
+    const result = NumbersFactory(key, state);
+
+    assert.deepStrictEqual(result, {
+      textValue: '٥٥٥٠٥٥',
+      historyIndex: 0,
+      history: ['٥٥٥٥٥'],
+      cursorPosition: 4,
+      previousKey: key,
+      selectedText: '',
+    });
+  });
+
+  it('should insert delete selected text and correctly insert the english number', () => {
+    const key = '1';
+    const state = {
+      textValue: '١٢٣٥٥',
+      cursorPosition: 0,
+      history: [],
+      selectedText: '١٢٣',
+    };
+
+    const result = NumbersFactory(key, state);
+
+    assert.deepStrictEqual(result, {
+      textValue: '١٥٥',
+      historyIndex: 0,
+      history: ['١٢٣٥٥'],
+      cursorPosition: 1,
+      previousKey: key,
+      selectedText: '',
     });
   });
 });
