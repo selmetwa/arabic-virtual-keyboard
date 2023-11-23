@@ -266,7 +266,7 @@ class ArabicKeyboard extends LitElement {
           ${this.buttonGroups.map((buttonGroup) => {
             const { buttons, type } = buttonGroup;
             return html`
-              <div class="button_group ${type === "number " ? "ltr " : "rtl"}">
+              <div class="button_group ${type === "number" ? "ltr " : "rtl"}">
                 ${buttons.map(
                   (button) =>
                     html`<div class="button_wrapper">
