@@ -14,7 +14,6 @@ export const numberFactory = (englishNumber, originalText, cursorPosition) => {
   const arabicNumber = numberObject && numberObject.ar;
 
   originalArray.splice(cursorPosition, 0, arabicNumber);
-  console.log({ originalArray })
   const newText = originalArray.join('');
   const newCursorPosition = cursorPosition + 1;
 
