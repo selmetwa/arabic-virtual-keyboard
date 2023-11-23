@@ -5,8 +5,8 @@ import { deleteSelectedText } from "../utils.js";
  * @param {number} cursorPosition 
  * @param {string} textValue 
  */
-const handleDeleteText = (cursorPosition, textValue) => {
-  const arr = textValue.split('');
+export const handleDeleteText = (cursorPosition, textValue) => {
+  const arr = textValue && textValue.split('') || [];
   arr.splice(cursorPosition - 1, 1);
 
   return {
