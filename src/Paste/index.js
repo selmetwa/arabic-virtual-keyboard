@@ -1,6 +1,6 @@
 import * as Types from '../constants/types.js'
 import { isNumber, deleteSelectedText, isInputArabic } from '../utils.js'
-import { numberFactory } from '../Numbers/index.js'
+import { insertEnglishNumberIntoArabic } from '../Numbers/index.js'
 
 /**
  * DEPRECATED
@@ -32,7 +32,7 @@ export const PasteFactory = (event, pastedTextFromClipboard, state) => {
     const char = pastedText[i];
 
     if (isNumber(char)) {
-      const { newText } = numberFactory(char, _textValue, _cursorPosition);
+      const { newText } = insertEnglishNumberIntoArabic(char, _textValue, _cursorPosition);
       console.log({ newText })
       _cursorPosition = _cursorPosition + 1;
       outputText = outputText += newText

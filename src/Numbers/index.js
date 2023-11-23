@@ -8,7 +8,7 @@ import { deleteSelectedText } from '../utils.js';
  * @param {string} originalText 
  * @param {number} cursorPosition 
  */
-export const numberFactory = (englishNumber, originalText, cursorPosition) => {
+export const insertEnglishNumberIntoArabic = (englishNumber, originalText, cursorPosition) => {
   const originalArray = originalText.split('');
   const numberObject = numbers.find((obj) => obj.en === englishNumber);
   const arabicNumber = numberObject && numberObject.ar;
@@ -40,7 +40,7 @@ export const NumbersFactory = (key, state) => {
     _textValue = deleteSelectedText(_textValue, _selectedText);
   }
 
-  const { newText, newCursorPosition } = numberFactory(key, _textValue, _cursorPosition);
+  const { newText, newCursorPosition } = insertEnglishNumberIntoArabic(key, _textValue, _cursorPosition);
 
   const newHistory = [...state.history, _textValue]
 

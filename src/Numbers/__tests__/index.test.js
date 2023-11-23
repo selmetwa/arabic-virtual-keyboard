@@ -1,13 +1,13 @@
 import { assert } from '@esm-bundle/chai';
-import { numberFactory } from '../index'
+import { insertEnglishNumberIntoArabic } from '../index'
 
-describe('numberFactory', () => {
+describe('insertEnglishNumberIntoArabic', () => {
   it('should insert Arabic number for Arabic number at the cursor position', () => {
     const englishNumber = '5';
     const originalText = '١٢٣٤٥٦.';
     const cursorPosition = 6;
 
-    const result = numberFactory(englishNumber, originalText, cursorPosition);
+    const result = insertEnglishNumberIntoArabic(englishNumber, originalText, cursorPosition);
 
     assert.deepStrictEqual(result, {
       newText: '١٢٣٤٥٦٥.',
@@ -20,7 +20,7 @@ describe('numberFactory', () => {
     const originalText = '٧٨٩١٢٣٤٥.';
     const cursorPosition = 0;
 
-    const result = numberFactory(englishNumber, originalText, cursorPosition);
+    const result = insertEnglishNumberIntoArabic(englishNumber, originalText, cursorPosition);
 
     assert.deepStrictEqual(result, {
       newText: '٢٧٨٩١٢٣٤٥.',
@@ -33,7 +33,7 @@ describe('numberFactory', () => {
     const originalText = '١٢٣٤٥٦٧٨.';
     const cursorPosition = originalText.length;
 
-    const result = numberFactory(englishNumber, originalText, cursorPosition);
+    const result = insertEnglishNumberIntoArabic(englishNumber, originalText, cursorPosition);
 
     assert.deepStrictEqual(result, {
       newText: '١٢٣٤٥٦٧٨.٩',
@@ -46,7 +46,7 @@ describe('numberFactory', () => {
     const originalText = '١٢٣٤٥';
     const cursorPosition = 5;
 
-    const result = numberFactory(englishNumber, originalText, cursorPosition);
+    const result = insertEnglishNumberIntoArabic(englishNumber, originalText, cursorPosition);
 
     assert.deepStrictEqual(result, {
       newText: originalText,
