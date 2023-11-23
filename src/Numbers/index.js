@@ -32,15 +32,13 @@ export const insertEnglishNumberIntoArabic = (englishNumber, originalText, curso
  * @param {Types.State} state - current state of the keyboard
  */
 export const NumbersFactory = (key, state) => {
-  const _selectedText = state.selectedText;
-  const _cursorPosition = state.cursorPosition;
   let _textValue = state.textValue;
 
-  if (!!_selectedText) {
-    _textValue = deleteSelectedText(_textValue, _selectedText);
+  if (!!state.selectedText) {
+    _textValue = deleteSelectedText(_textValue, state.selectedText);
   }
 
-  const { newText, newCursorPosition } = insertEnglishNumberIntoArabic(key, _textValue, _cursorPosition);
+  const { newText, newCursorPosition } = insertEnglishNumberIntoArabic(key, _textValue, state.cursorPosition);
 
   const newHistory = [...state.history, _textValue]
 

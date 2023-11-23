@@ -18,12 +18,11 @@ export const PasteFactory = (event, pastedTextFromClipboard, state) => {
     }
   }
 
-  const _selectedText = state.selectedText;
   let _cursorPosition = state.cursorPosition;
   let _textValue = state.textValue;
 
-  if (!!_selectedText) {
-    _textValue = deleteSelectedText(_textValue, _selectedText)
+  if (!!state.selectedText) {
+    _textValue = deleteSelectedText(_textValue, state.selectedText)
   }
 
   let outputText = ''

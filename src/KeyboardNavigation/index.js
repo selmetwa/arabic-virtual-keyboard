@@ -8,19 +8,16 @@ import { isRightArrow, isLeftArrow } from '../utils.js';
  * @returns {Types.State}
  */
 export const KeyboardNavigationFactory = (key, state) => {
-  const _cursorPosition = state.cursorPosition;
-  const _textValueLength = state.textValue.length;
-
-  if (isLeftArrow(key) && _cursorPosition < _textValueLength) {
-    return { cursorPosition: _cursorPosition + 1, previousKey: key, selectedText: '' };
+  if (isLeftArrow(key) && state.cursorPosition < state.textValue.length) {
+    return { cursorPosition: state.cursorPosition + 1, previousKey: key, selectedText: '' };
   }
 
-  if (isRightArrow(key) && _cursorPosition > 0) {
-    return { cursorPosition: _cursorPosition - 1, previousKey: key, selectedText: '' };
+  if (isRightArrow(key) && state.cursorPosition > 0) {
+    return { cursorPosition: state.cursorPosition - 1, previousKey: key, selectedText: '' };
   }
 
   return {
-    cursorPosition: _cursorPosition,
+    cursorPosition: state.cursorPosition,
     previousKey: key,
     selectedText: ''
   }
