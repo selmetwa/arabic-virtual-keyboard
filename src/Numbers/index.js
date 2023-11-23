@@ -13,6 +13,13 @@ export const numberFactory = (englishNumber, originalText, cursorPosition) => {
   const numberObject = numbers.find((obj) => obj.en === englishNumber);
   const arabicNumber = numberObject && numberObject.ar;
 
+  if (!arabicNumber) {
+    return {
+      newText: originalText,
+      newCursorPosition: cursorPosition
+    }
+  }
+
   originalArray.splice(cursorPosition, 0, arabicNumber);
   const newText = originalArray.join('');
   const newCursorPosition = cursorPosition + 1;
