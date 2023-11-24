@@ -240,6 +240,20 @@ class ArabicKeyboard extends LitElement {
     });
   }
 
+  handleClick(event) {
+    event.preventDefault();
+    const value = event.target.value;
+    const [type, key] = value.split("_");
+
+    if (type === "number") {
+      this.updateState(NumbersFactory(key, this.state));
+    }
+
+    if (type === "alphabet" && key === "Delete") {
+      this.updateState(BackspaceFactory(key, this.state));
+    }
+  }
+
   render() {
     return html`
       <noscript>
