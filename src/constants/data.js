@@ -1,8 +1,8 @@
 export const alphabet = [{
-    "ar": 'Delete',
-    "en": 'Delete',
-    'label': ['Delete'],
-    'title': 'Delete'
+    "ar": 'Backspace',
+    "en": 'Backspace',
+    'label': ['Backspace'],
+    'title': 'Backspace'
   },
   {
     'ar': 'ا',

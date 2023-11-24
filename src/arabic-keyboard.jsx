@@ -31,6 +31,7 @@ class ArabicKeyboard extends LitElement {
       historyIndex: 0,
       history: [],
       selectedText: "",
+      copiedText: "",
       previousKey: "",
       cursorPosition: 0,
     };
@@ -42,6 +43,12 @@ class ArabicKeyboard extends LitElement {
       --columns: 10;
       --font-size: 18px;
       --width: 50px;
+      --border-radius: 4px;
+      --background-color: #ececec;
+      --border: 1px solid #999999;
+      --active-background-color: #D6D6D6;
+      --active-border: 1px solid #8F8F8F;
+      --button-padding: 4px;
     }
 
     .wrapper {
@@ -50,41 +57,41 @@ class ArabicKeyboard extends LitElement {
       outline: 1px solid black;
       padding: 16px;
       font-family: sans-serif;
-
-      .textarea {
-        width: 100%;
-        direction: rtl;
-        resize: none;
-        text-align: right;
-        font-size: var(--font-size);
-      }
-
-      .keyboard {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 8px;
-
-        .space {
-          width: 100%;
-        }
-      }
     }
 
+    .keyboard {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .space {
+      width: 100%;
+    }
+
+    .textarea {
+      width: 100%;
+      direction: rtl;
+      resize: none;
+      text-align: right;
+      font-size: var(--font-size);
+    }
+    
     .button_group {
       display: grid;
       grid-template-columns: repeat(var(--columns), 1fr);
       gap: var(--gap);
+    }
 
-      .button_wrapper {
-        display: flex;
-        flex-direction: column;
-        text-align: center;
+    .button_wrapper {
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+    }
 
-        .label {
-          direction: ltr;
-        }
-      }
+    .label {
+      direction: ltr;
     }
 
     .rtl {
@@ -94,6 +101,14 @@ class ArabicKeyboard extends LitElement {
 
     .button {
       font-size: var(--font-size);
+      border-radius: var(--border-radius);
+      background-color: var(--background-color);
+      border: var(--border);
+      padding: var(--button-padding);
+    }
+    .active {
+      background-color: var(--active-background-color);
+      border: var(--active-border);
     }
   `;
 
@@ -126,12 +141,22 @@ class ArabicKeyboard extends LitElement {
     this.state = { ...this.state, ...object };
   }
 
+  handleAddActiveState(target) {
+    const keyPressed = this.shadowRoot.querySelector(target);
+    keyPressed && keyPressed.classList.add('active');
+    setTimeout(() => {
+      keyPressed && keyPressed.classList.remove('active');
+    }, 50)
+  }
+
   handleKeyDown(event) {
     event.preventDefault();
     const key = event.key;
     const isNumberKey = isNumber(key);
     this.clearInterval();
     console.log({ key, event })
+    
+    this.handleAddActiveState(`.button_${key}`)
 
     // Handle Meta Key
     if (key === "Meta") {
@@ -144,6 +169,8 @@ class ArabicKeyboard extends LitElement {
 
     if (this.state.previousKey === "Meta" && key === "c") {
       document.execCommand("copy");
+      console.log({ selectedText: this.state.selectedText })
+      this.updateState({ copiedText: this.state.selectedText });
     }
 
     if (this.state.previousKey === "Meta" && key === "x") {
@@ -151,7 +178,8 @@ class ArabicKeyboard extends LitElement {
       const res = deleteSelectedText(this.state.textValue, this.state.selectedText);
       this.updateState({ 
         textValue: res, 
-        cursorPosition: res.length, 
+        cursorPosition: res.length,
+        copiedText: this.state.selectedText,
         history: [...this.state.history, this.state.textValue], 
         historyIndex: this.state.historyIndex + 1 
       });
@@ -159,24 +187,15 @@ class ArabicKeyboard extends LitElement {
 
     // Handle Paste from Keyboard shortcut
     if (this.state.previousKey === "Meta" && key === "v") {
-      navigator.clipboard.readText()
-        .then(clipboardText => {
-          this.handlePaste(null, clipboardText)
-        })
-        .catch(err => {
-          console.error("Failed to read from clipboard", err);
-        });
+      this.handlePaste(null, this.state.copiedText);
     }
 
     if (this.state.previousKey === "Meta" && key === "z") {
       if (this.state.historyIndex >= 0) {
         const textValue = this.state.history[this.state.historyIndex];
         const historyIndex = this.state.historyIndex - 1;
-        this.updateState({ textValue, historyIndex, cursorPosition: textValue.length });
-
-        if (textValue === '') {
-          this.updateState({ historyIndex: -1, history: [], cursorPosition: 0 });
-        }
+        const newHistory = this.state.history.slice(0, this.state.historyIndex);
+        this.updateState({ textValue, historyIndex, cursorPosition: textValue.length, history: newHistory });
       }
     }
 
@@ -213,8 +232,13 @@ class ArabicKeyboard extends LitElement {
     const pastedText = event && event.clipboardData && event.clipboardData.getData("text") || pastedTextFromKeyboard;
 
     if (isInputArabic(pastedText)) {
-      alert("Paste Arabic text only");
-      let modifiedString = this.state.textValue.slice(0, this.state.cursorPosition) + pastedText + this.state.textValue.slice(this.state.cursorPosition);
+      console.log({ pastedText, selectedText: this.state.selectedText })
+      // handle selected text
+      let _textValue = this.state.textValue;
+      if (!!this.state.selectedText) {
+        _textValue = deleteSelectedText(_textValue, this.state.selectedText);
+      }
+      let modifiedString = _textValue.slice(0, this.state.cursorPosition) + pastedText + _textValue.slice(this.state.cursorPosition);
       return this.updateState({ 
         textValue: modifiedString, 
         cursorPosition: this.state.cursorPosition + pastedText.length,
@@ -240,18 +264,44 @@ class ArabicKeyboard extends LitElement {
     });
   }
 
-  handleClick(event) {
+  handleButtonClick(event) {
     event.preventDefault();
     const value = event.target.value;
     const [type, key] = value.split("_");
 
+    this.handleAddActiveState(`.button_${key}`)
     if (type === "number") {
       this.updateState(NumbersFactory(key, this.state));
     }
 
-    if (type === "alphabet" && key === "Delete") {
+    if (type === "alphabet" && key === "Backspace") {
       this.updateState(BackspaceFactory(key, this.state));
     }
+  }
+
+  handleCopy(event) {
+    console.log("copy", { event })
+    const selection = this.state.selectedText;
+    event.clipboardData.setData("text/plain", selection.toString());
+    this.updateState({ copiedText: selection, selectedText: "" });
+    event.preventDefault();
+  }
+
+  handleCut(event) {
+    const selection = this.state.selectedText;
+    let _textValue = this.state.textValue;
+    console.log("cut", { event, selection, _textValue })
+    if (!!this.state.selectedText) {
+      _textValue = deleteSelectedText(_textValue, this.state.selectedText);
+    }
+    event.clipboardData.setData("text/plain", selection.toString());
+    this.updateState({ 
+      copiedText: selection, 
+      textValue: _textValue, 
+      cursorPosition: this.state.cursorPosition - selection.length,
+      selectedText: "", 
+    });
+    event.preventDefault();
   }
 
   render() {
@@ -260,9 +310,8 @@ class ArabicKeyboard extends LitElement {
         <p>Please enable JavaScript to use this application.</p>
       </noscript>
       <section class="wrapper" lang="ar">
-        <div>${JSON.stringify(this.state)}</div>
-        <p>textvalue length: ${this.state.textValue?.length}</p>
         <textarea
+          contenteditable="true"
           aria-label="Text Area"
           type="text"
           class="textarea"
@@ -272,6 +321,8 @@ class ArabicKeyboard extends LitElement {
           @keydown="${this.handleKeyDown}"
           @select="${this.updateSelectedText}"
           @paste="${this.handlePaste}"
+          @copy="${this.handleCopy}"
+          @cut="${this.handleCut}"
           @click="${this.handleTextareaClick}"
           .value=${this.state.textValue}
         >
@@ -288,9 +339,9 @@ class ArabicKeyboard extends LitElement {
                       <button
                         value="${type}_${button.label[0]}"
                         type="button"
-                        class="button"
+                        class="button button_${button.label[0]}"
                         title="${button.title}"
-                        @click="${this.handleClick}"
+                        @click="${this.handleButtonClick}"
                       >
                         ${button.ar}
                       </button>
@@ -302,6 +353,8 @@ class ArabicKeyboard extends LitElement {
           <button class="space">Space</button>
         </div>
       </section>
+      <div>${JSON.stringify(this.state)}</div>
+      <p>textvalue length: ${this.state.textValue?.length}</p>
     `;
   }
 }
