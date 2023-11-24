@@ -15,7 +15,8 @@ export const isNumber = (value) => {
 export const getSelectedText = (textarea) => {
   const start = textarea.selectionStart;
   const end = textarea.selectionEnd;
-
+  // const text = textarea.value.substring(start, end);
+  // console.log({ start, end, textarea, text });
   if (start !== end) {
     return textarea.value.substring(start, end);
   }

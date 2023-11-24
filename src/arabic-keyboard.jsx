@@ -132,12 +132,15 @@ class ArabicKeyboard extends LitElement {
 
   startInterval() {
     this.intervalId = setInterval(() => {
-      this.updateState({ previousKey: '' });
+      if (this.state.previousKey !== '') {
+        this.updateState({ previousKey: '' });
+      }
       this.requestUpdate();
     }, 1000);
   }
 
   updateState(object) {
+    console.log({ object })
     this.state = { ...this.state, ...object };
   }
 
@@ -220,10 +223,12 @@ class ArabicKeyboard extends LitElement {
   }
 
   updateSelectedText(event) {
+    const target = event.target;
+    const selectedText = getSelectedText(target);
     return this.updateState({
       ...this.state,
       cursorPosition: event.target.selectionStart,
-      selectedText: getSelectedText(this.textarea),
+      selectedText: selectedText,
     });
   }
 
@@ -256,11 +261,13 @@ class ArabicKeyboard extends LitElement {
   }
 
   handleTextareaClick(event) {
+    const target = event.target;
+    const selectedText = getSelectedText(target);
     event.preventDefault();
     this.updateState({
       ...this.state,
       cursorPosition: event.target.selectionStart,
-      selectedText: "",
+      selectedText: selectedText,
     });
   }
 
@@ -280,17 +287,16 @@ class ArabicKeyboard extends LitElement {
   }
 
   handleCopy(event) {
-    console.log("copy", { event })
     const selection = this.state.selectedText;
+    console.log("copy", { event, selection })
     event.clipboardData.setData("text/plain", selection.toString());
-    this.updateState({ copiedText: selection, selectedText: "" });
+    this.updateState({ copiedText: selection });
     event.preventDefault();
   }
 
   handleCut(event) {
     const selection = this.state.selectedText;
     let _textValue = this.state.textValue;
-    console.log("cut", { event, selection, _textValue })
     if (!!this.state.selectedText) {
       _textValue = deleteSelectedText(_textValue, this.state.selectedText);
     }
