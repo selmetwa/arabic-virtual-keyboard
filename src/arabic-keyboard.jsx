@@ -249,6 +249,7 @@ class ArabicKeyboard extends LitElement {
         cursorPosition: this.state.cursorPosition + pastedText.length,
         history: [...this.state.history, this.state.textValue],
         historyIndex: this.state.historyIndex + 1,
+        selectedText: "",
       });
     }
 
