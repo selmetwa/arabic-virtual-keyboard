@@ -14,6 +14,7 @@ import { BackspaceFactory } from "./Backspace/index.js";
 import { MouseCutFactory, UpdateSelectedTextFactory, TextareaClickFactory } from "./MouseEvents/index.js";
 import { PasteFactory } from "./Paste/index.js";
 import { KeyboardShortcutFactory, KeyboardNavigationFactory } from "./KeyboardEvents/index.js";
+import { SpaceFactory } from "./Space/index.js";
 
 class ArabicKeyboard extends LitElement {
   static get properties() {
@@ -159,7 +160,8 @@ class ArabicKeyboard extends LitElement {
     event.preventDefault();
     this.clearInterval();
     const key = event.key;
-    
+    const code = event.code;
+    console.log({ key, event, code })
     this.handleAddActiveState(`.button_${key}`)
 
     if (this.state.previousKey === "Meta") {
@@ -174,6 +176,10 @@ class ArabicKeyboard extends LitElement {
     // Handle Deletion
     if (key === "Backspace") {
       this.updateState(BackspaceFactory(key, this.state));
+    }
+
+    if (event.code === 'Space') {
+      this.updateState(SpaceFactory(this.state))
     }
 
     // Handle Inserting Numbers
@@ -193,8 +199,15 @@ class ArabicKeyboard extends LitElement {
     event.preventDefault();
     const value = event.target.value;
     const [type, key] = value.split("_");
-
+    console.log({ type, key })
     this.handleAddActiveState(`.button_${key}`)
+
+    if (type === "misc") {
+      if (key === "space") {
+        this.updateState(SpaceFactory(this.state))
+      }
+    }
+
     if (type === "number") {
       this.updateState(NumbersFactory(key, this.state));
     }
@@ -202,6 +215,8 @@ class ArabicKeyboard extends LitElement {
     if (type === "alphabet" && key === "Backspace") {
       this.updateState(BackspaceFactory(key, this.state));
     }
+
+    this.textarea.focus();
   }
 
   handlePaste(event, pastedTextFromKeyboard) {
@@ -276,7 +291,11 @@ class ArabicKeyboard extends LitElement {
               </div>
             `;
           })}
-          <button class="space">Space</button>
+          <button 
+          class="space button button_ " 
+          @click="${this.handleButtonClick}"
+          value="misc_space"
+          >Space</button>
         </div>
       </section>
       <div>${JSON.stringify(this.state)}</div>
