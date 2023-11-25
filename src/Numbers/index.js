@@ -1,6 +1,6 @@
 import * as Types from '../constants/types.js'
 import { numbers } from "../constants/data.js";
-import { deleteSelectedText } from '../utils.js';
+import { deleteSelectedText, convertNumberToArabic } from '../utils.js';
 
 /**
  * Finds corresponding arabic number for english number, inserts it into text and returns new text and cursor position
@@ -10,8 +10,9 @@ import { deleteSelectedText } from '../utils.js';
  */
 export const insertEnglishNumberIntoArabic = (englishNumber, originalText, cursorPosition) => {
   const originalArray = originalText.split('');
-  const numberObject = numbers.find((obj) => obj.en === englishNumber);
-  const arabicNumber = numberObject && numberObject.ar;
+  const arabicNumber = convertNumberToArabic(englishNumber);
+  // const numberObject = numbers.find((obj) => obj.en === englishNumber);
+  // const arabicNumber = numberObject && numberObject.ar;
 
   if (!arabicNumber) {
     return {

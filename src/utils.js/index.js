@@ -1,5 +1,7 @@
+import { numbers } from "../constants/data.js";
+
 /** 
- * Function to check if the value is a number.
+ * Function to check if the value is a number. 
  * @param {string} value - The value to be checked.
  * @returns {boolean} - True if the value is a number, false otherwise.
  */
@@ -60,4 +62,15 @@ export const isInputArabic = (text) => {
   const arabicRange = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/;
 
   return arabicRange.test(text);
+}
+
+/**
+ * Return corresponding arabic number for english number
+ * @param {string} number
+ * @returns {string}
+ */
+export const convertNumberToArabic = (englishNumber) => {
+  const numberObject = numbers.find((obj) => obj.en === englishNumber);
+  const arabicNumber = numberObject && numberObject.ar;
+  return arabicNumber;
 }

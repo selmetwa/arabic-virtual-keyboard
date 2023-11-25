@@ -4,16 +4,16 @@ import { button_groups } from "./constants/button_groups.js";
 
 import {
   isNumber,
-  getSelectedText,
   isLeftArrow,
   isRightArrow,
-  deleteSelectedText,
-  isInputArabic
 } from "./utils.js/index.js";
 
+import * as Types from "./constants/types.js";
 import { NumbersFactory } from "./Numbers/index.js";
 import { BackspaceFactory } from "./Backspace/index.js";
-import { KeyboardNavigationFactory } from "./KeyboardNavigation/index.js";
+import { MouseCutFactory, UpdateSelectedTextFactory, TextareaClickFactory } from "./MouseEvents/index.js";
+import { PasteFactory } from "./Paste/index.js";
+import { KeyboardShortcutFactory, KeyboardNavigationFactory } from "./KeyboardEvents/index.js";
 
 class ArabicKeyboard extends LitElement {
   static get properties() {
@@ -139,9 +139,12 @@ class ArabicKeyboard extends LitElement {
     }, 1000);
   }
 
-  updateState(object) {
-    console.log({ object })
-    this.state = { ...this.state, ...object };
+  /**
+   * Function to update the state of our keyboard
+   * @param {Types.State} newState - new state of our keyboard
+   */
+  updateState(newState) {
+    this.state = { ...this.state, ...newState };
   }
 
   handleAddActiveState(target) {
@@ -154,52 +157,18 @@ class ArabicKeyboard extends LitElement {
 
   handleKeyDown(event) {
     event.preventDefault();
-    const key = event.key;
-    const isNumberKey = isNumber(key);
     this.clearInterval();
-    console.log({ key, event })
+    const key = event.key;
     
     this.handleAddActiveState(`.button_${key}`)
+
+    if (this.state.previousKey === "Meta") {
+      this.updateState(KeyboardShortcutFactory(key, this.state, this.textarea))
+    }
 
     // Handle Meta Key
     if (key === "Meta") {
       this.updateState({ previousKey: key });
-    }
-
-    if (this.state.previousKey === "Meta" && key === "a") {
-      this.textarea.select();
-    }
-
-    if (this.state.previousKey === "Meta" && key === "c") {
-      document.execCommand("copy");
-      console.log({ selectedText: this.state.selectedText })
-      this.updateState({ copiedText: this.state.selectedText });
-    }
-
-    if (this.state.previousKey === "Meta" && key === "x") {
-      document.execCommand("copy");
-      const res = deleteSelectedText(this.state.textValue, this.state.selectedText);
-      this.updateState({ 
-        textValue: res, 
-        cursorPosition: res.length,
-        copiedText: this.state.selectedText,
-        history: [...this.state.history, this.state.textValue], 
-        historyIndex: this.state.historyIndex + 1 
-      });
-    }
-
-    // Handle Paste from Keyboard shortcut
-    if (this.state.previousKey === "Meta" && key === "v") {
-      this.handlePaste(null, this.state.copiedText);
-    }
-
-    if (this.state.previousKey === "Meta" && key === "z") {
-      if (this.state.historyIndex >= 0) {
-        const textValue = this.state.history[this.state.historyIndex];
-        const historyIndex = this.state.historyIndex - 1;
-        const newHistory = this.state.history.slice(0, this.state.historyIndex);
-        this.updateState({ textValue, historyIndex, cursorPosition: textValue.length, history: newHistory });
-      }
     }
 
     // Handle Deletion
@@ -208,68 +177,16 @@ class ArabicKeyboard extends LitElement {
     }
 
     // Handle Inserting Numbers
-    if (isNumberKey) {
+    if (isNumber(key)) {
       this.updateState(NumbersFactory(key, this.state));
     }
 
     // Update Cursor Position
     if (isLeftArrow(key) || isRightArrow(key)) {
-      const res = KeyboardNavigationFactory(key, this.state);
-      this.textarea.setSelectionRange(res.cursorPosition, res.cursorPosition);
-      this.updateState(res);
+      this.updateState(KeyboardNavigationFactory(key, this.state, this.textarea));
     }
 
     this.startInterval();
-  }
-
-  updateSelectedText(event) {
-    const target = event.target;
-    const selectedText = getSelectedText(target);
-    return this.updateState({
-      ...this.state,
-      cursorPosition: event.target.selectionStart,
-      selectedText: selectedText,
-    });
-  }
-
-  handlePaste(event, pastedTextFromKeyboard) {
-    event && event.preventDefault();
-    const pastedText = event && event.clipboardData && event.clipboardData.getData("text") || pastedTextFromKeyboard;
-
-    if (isInputArabic(pastedText)) {
-      console.log({ pastedText, selectedText: this.state.selectedText })
-      // handle selected text
-      let _textValue = this.state.textValue;
-      if (!!this.state.selectedText) {
-        _textValue = deleteSelectedText(_textValue, this.state.selectedText);
-      }
-      let modifiedString = _textValue.slice(0, this.state.cursorPosition) + pastedText + _textValue.slice(this.state.cursorPosition);
-      return this.updateState({ 
-        textValue: modifiedString, 
-        cursorPosition: this.state.cursorPosition + pastedText.length,
-        history: [...this.state.history, this.state.textValue],
-        historyIndex: this.state.historyIndex + 1,
-        selectedText: "",
-      });
-    }
-
-    for (let i = 0; i < pastedText.length; i++) {
-      const char = pastedText[i];
-      if (isNumber(char)) {
-        this.updateState(NumbersFactory(char, this.state));
-      }
-    }
-  }
-
-  handleTextareaClick(event) {
-    const target = event.target;
-    const selectedText = getSelectedText(target);
-    event.preventDefault();
-    this.updateState({
-      ...this.state,
-      cursorPosition: event.target.selectionStart,
-      selectedText: selectedText,
-    });
   }
 
   handleButtonClick(event) {
@@ -287,28 +204,30 @@ class ArabicKeyboard extends LitElement {
     }
   }
 
-  handleCopy(event) {
-    const selection = this.state.selectedText;
-    console.log("copy", { event, selection })
-    event.clipboardData.setData("text/plain", selection.toString());
-    this.updateState({ copiedText: selection });
+  handlePaste(event, pastedTextFromKeyboard) {
+    event && event.preventDefault();
+    this.updateState(PasteFactory(event && event.clipboardData && event.clipboardData.getData("text") || pastedTextFromKeyboard, this.state));
+  }
+
+  updateSelectedText(event) {
+    this.updateState(UpdateSelectedTextFactory(event));
+  }
+
+  handleTextareaClick(event) {
     event.preventDefault();
+    this.updateState(TextareaClickFactory(event))
+  }
+
+  handleCopy(event) {
+    event.preventDefault();
+    event.clipboardData.setData("text/plain", this.state.selectedText.toString());
+    this.updateState({ copiedText: this.state.selectedText });
   }
 
   handleCut(event) {
-    const selection = this.state.selectedText;
-    let _textValue = this.state.textValue;
-    if (!!this.state.selectedText) {
-      _textValue = deleteSelectedText(_textValue, this.state.selectedText);
-    }
-    event.clipboardData.setData("text/plain", selection.toString());
-    this.updateState({ 
-      copiedText: selection, 
-      textValue: _textValue, 
-      cursorPosition: this.state.cursorPosition - selection.length,
-      selectedText: "", 
-    });
     event.preventDefault();
+    event.clipboardData.setData("text/plain", this.state.selectedText.toString());
+    this.updateState(MouseCutFactory(this.state));
   }
 
   render() {
@@ -338,7 +257,7 @@ class ArabicKeyboard extends LitElement {
           ${this.buttonGroups.map((buttonGroup) => {
             const { buttons, type } = buttonGroup;
             return html`
-              <div class="button_group ${type === "number" ? "ltr " : "rtl"}">
+              <div class="button_group ${type === "number" ? "ltr" : "rtl"}">
                 ${buttons.map(
                   (button) =>
                     html`<div class="button_wrapper">
