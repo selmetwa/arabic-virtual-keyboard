@@ -5,7 +5,7 @@ import {
   shifted_button_groups,
 } from "./constants/button_groups.js";
 
-import { isNumber, isLeftArrow, isRightArrow, crypt, isSpecialCharacter, isLetter } from "./utils.js/index.js";
+import { isNumber, isLeftArrow, isRightArrow, crypt, isSpecialCharacter, isLetter, checkPreviousLetter } from "./utils.js/index.js";
 
 import * as Types from "./constants/types.js";
 import { NumbersFactory } from "./Numbers/index.js";
@@ -93,6 +93,7 @@ class ArabicKeyboard extends LitElement {
       resize: none;
       text-align: right;
       font-size: var(--font-size);
+      font-weight: 500;
     }
 
     .keyboard_row {
@@ -105,7 +106,6 @@ class ArabicKeyboard extends LitElement {
       grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 2fr
     }
     .keyboard_row.second_row {
-      // grid-template-columns: repeat(var(--second-row-columns), 1fr);
       grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr
     }
     .keyboard_row.third_row {
@@ -266,6 +266,18 @@ class ArabicKeyboard extends LitElement {
       const deCryptedClass = crypt("salt", 'space');
       this.handleAddActiveState(`.button_${deCryptedClass}`);
       this.updateState(SpaceFactory(this.state));
+    }
+
+    if (key === "'") {
+      const previousLetter = checkPreviousLetter(this.state.textValue, this.state.cursorPosition);
+      if (['d', 's', 't'].includes(previousLetter)) {
+        this.updateState(BackspaceFactory(key, this.state));
+        const deCryptedClass = crypt("salt", previousLetter + "'");
+        this.handleAddActiveState(`.button_${deCryptedClass}`);
+        return this.updateState(LettersFactory(previousLetter + "'", this.state));
+      } else {
+        return
+      }
     }
 
     // Handle Inserting Numbers

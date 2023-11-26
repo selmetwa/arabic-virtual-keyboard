@@ -1,5 +1,3 @@
-import * as Types from '../constants/types.js'
-import { numbers } from "../constants/data.js";
 import { deleteSelectedText, convertLetterToArabic } from '../utils.js';
 
 /**

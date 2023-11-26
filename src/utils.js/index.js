@@ -1,9 +1,19 @@
 import { numbers, punctuation, letters, englishLetters } from "../constants/data.js";
 
+/**
+ * Function to check if the value is a letter.
+ * @param {string} value - The value to be checked.
+ * @returns {boolean} - True if the value is a letter, false otherwise.
+ */
 export const isLetter = (value) => {
   return englishLetters.includes(value);
 }
 
+/**
+ * Function to check if the value is a special character.
+ * @param {string} value - The value to be checked.
+ * @returns {boolean} - True if the value is a special character, false otherwise.
+ */
 export const isSpecialCharacter = (value) => {
   return ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', '-', '=', '{', '}', '[', ']', '|', '\\', ':', ';', '"', "'", '<', '>', ',', '.', '?', '/', '~', '`'].includes(value);
 }
@@ -104,6 +114,13 @@ export const getArabicPunctuation = (key) => {
   return punctuationArabic;
 }
 
+
+/**
+ * Function to encrypt text
+ * @param {string} salt - The salt to be used for encryption.
+ * @param {string} text - The text to be encrypted.
+ * @returns {string} - The encrypted text.
+ */
 export const crypt = (salt, text) => {
   const textToChars = (text) => text.split("").map((c) => c.charCodeAt(0));
   const byteHex = (n) => ("0" + Number(n).toString(16)).substr(-2);
@@ -117,7 +134,15 @@ export const crypt = (salt, text) => {
     .join("");
 };
 
+/**
+ * Function to check the previous letter
+ * @param {string} textValue - The text value.
+ * @param {number} cursorPosition - The cursor position.
+ * @returns {string} - The previous english letter letter.
+ */
 export const checkPreviousLetter = (textValue, cursorPosition) => {
   const previousLetter = textValue[cursorPosition - 1];
-  // return isLetter(previousLetter);
+  const previousEnglishLetterObj = letters.find((obj) => obj.ar === previousLetter)
+  const previousEnglishLetter = previousEnglishLetterObj && previousEnglishLetterObj.en;
+  return previousEnglishLetter;
 }

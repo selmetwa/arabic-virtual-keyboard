@@ -4,8 +4,6 @@ import { third_row, shifted_third_row } from "./keyboard_rows/third_row.js"
 import { fourth_row, shifted_fourth_row } from "./keyboard_rows/fourth_row.js"
 import { fifth_row } from "./keyboard_rows/fifth_row.js"
 
-console.log({ first_row, shifted_first_row, second_row, shifted_second_row, third_row, shifted_third_row, fourth_row, shifted_fourth_row, fifth_row })
-
 const allKeys = [
   ...first_row,
   ...second_row,
@@ -18,9 +16,9 @@ const allKeys = [
   ...shifted_fourth_row
 ]
 
-export const punctuation = allKeys.filter(button => button.type === 'punctuation')
 export const letters = allKeys.filter(button => button.type === 'letter')
 export const englishLetters = letters.map(letter => letter.en)
+
+export const punctuation = allKeys.filter(button => button.type === 'punctuation')
 export const numbers = allKeys.filter(button => button.type === 'number')
 export const diacritics = allKeys.filter(button => button.type === 'diacritic')
-console.log({ punctuation, letters })

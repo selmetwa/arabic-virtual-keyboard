@@ -8,15 +8,16 @@ import { getSelectedText } from "../utils.js";
  * @returns {Types.State} - new state of the keyboard
  */
 export const MouseCutFactory = (state) => {
-  const selection = state.selectedText;
   let _textValue = state.textValue;
+
   if (!!state.selectedText) {
     _textValue = deleteSelectedText(_textValue, state.selectedText);
   }
+
   return {
-    copiedText: selection,
+    copiedText: state.selectedText,
     textValue: _textValue,
-    cursorPosition: state.cursorPosition - selection.length,
+    cursorPosition: state.cursorPosition - state.selectedText.length,
     selectedText: "",
   };
 }
@@ -27,10 +28,10 @@ export const MouseCutFactory = (state) => {
  * @returns {Types.State} - new state of the keyboard
  */
 export const UpdateSelectedTextFactory = (event) => {
-  const target = event.target;
-  const selectedText = getSelectedText(target);
+  const selectedText = getSelectedText(event.target);
+
   return {
-    cursorPosition: target.selectionStart,
+    cursorPosition: event.target.selectionStart,
     selectedText: selectedText,
   };
 }
@@ -41,7 +42,6 @@ export const UpdateSelectedTextFactory = (event) => {
  * @returns {Types.State} - new state of the keyboard
  */
 export const TextareaClickFactory = (event) => {
-  console.log({ event })
   const target = event.target;
 
   return {
