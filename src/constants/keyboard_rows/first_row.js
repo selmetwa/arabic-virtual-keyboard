@@ -10,14 +10,6 @@ export const shifted_first_row = [{
   },
   {
     'type': 'punctuation',
-    'ar': ')',
-    'en': ')',
-    'label': ')',
-    'title': ')',
-    'shifted': '0'
-  },
-  {
-    'type': 'punctuation',
     'ar': '!',
     'en': '!',
     'label': '!',
@@ -88,7 +80,14 @@ export const shifted_first_row = [{
     'title': '(',
     'shifted': '9'
   },
-
+  {
+    'type': 'punctuation',
+    'ar': ')',
+    'en': ')',
+    'label': ')',
+    'title': ')',
+    'shifted': '0'
+  },
   {
     'type': 'punctuation',
     'ar': '_',

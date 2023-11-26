@@ -224,14 +224,8 @@ export const diacritics = [{
   },
 ]
 
-export const numbers = [{
-    'type': 'number',
-    'ar': '\u0660',
-    'en': '0',
-    'label': '0',
-    'title': '0',
-    "shifted": ')'
-  },
+export const numbers = [
+
   {
     'type': 'number',
     'ar': '\u0661',
@@ -303,6 +297,14 @@ export const numbers = [{
     'label': '9',
     'title': '9',
     "shifted": '('
+  },
+  {
+    'type': 'number',
+    'ar': '\u0660',
+    'en': '0',
+    'label': '0',
+    'title': '0',
+    "shifted": ')'
   },
 ]
 

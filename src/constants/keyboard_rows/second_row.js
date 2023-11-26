@@ -2,12 +2,13 @@ export const shifted_second_row = [{
     'type': 'punctuation',
     'ar': 'tab',
     'title': 'tab',
+    'en': 'Tab',
     'modifierClass': 'wider'
   },
   {
     'type': 'letter',
     'ar': '\u0652',
-    'en': 'q',
+    'en': 'Q',
     'label': ['Q'],
     'title': 'Suqun, no vowel',
     'shifted': 'ق'
@@ -15,7 +16,7 @@ export const shifted_second_row = [{
   {
     'type': 'letter',
     'ar': 'ؤ',
-    'en': 'w',
+    'en': 'W',
     'label': ['W'],
     'title': 'Waw with hamza above',
     'shifted': 'و'
@@ -23,7 +24,7 @@ export const shifted_second_row = [{
   {
     'type': 'letter',
     'ar': 'ئ',
-    'en': 'e',
+    'en': 'E',
     'label': ['E'],
     'title': 'Ya, with hamza above',
     'shifted': 'إ'
@@ -31,7 +32,7 @@ export const shifted_second_row = [{
   {
     'type': 'letter',
     'ar': 'ر',
-    'en': 'r',
+    'en': 'R',
     'label': ['R'],
     'title': 'Ra, corresponding to the letter R in English',
     'shifted': 'ر'
@@ -55,7 +56,7 @@ export const shifted_second_row = [{
   {
     'type': 'letter',
     'ar': 'ى',
-    'en': 'y',
+    'en': 'Y',
     'label': ['Y'],
     'title': 'alif maqsura',
     'shifted': 'ي'
@@ -63,7 +64,7 @@ export const shifted_second_row = [{
   {
     'type': 'letter',
     'ar': '\u064C',
-    'en': 'u',
+    'en': 'U',
     'label': ['U'],
     'title': 'Dammatan',
     'shifted': '\u064F'
@@ -71,7 +72,7 @@ export const shifted_second_row = [{
   {
     'type': 'letter',
     'ar': '\u064D',
-    'en': 'i',
+    'en': 'I',
     'label': ['I'],
     'title': 'Kasratan',
     'shifted': '\u0650'
@@ -79,7 +80,7 @@ export const shifted_second_row = [{
   {
     'type': 'letter',
     'ar': 'ْ',
-    'en': 'o',
+    'en': 'O',
     'label': ['O'],
     'title': 'Damma, short vowel u',
     'shifted': '\u064F'
@@ -113,8 +114,8 @@ export const shifted_second_row = [{
 
 export const second_row = [{
     'type': 'punctuation',
-    'ar': 'tab',
-    'en': 'tab',
+    'ar': 'Tab',
+    'en': 'Tab',
     'title': 'tab',
     'modifierClass': 'wider'
   },

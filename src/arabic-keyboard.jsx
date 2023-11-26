@@ -5,7 +5,7 @@ import {
   shifted_button_groups,
 } from "./constants/button_groups.js";
 
-import { isNumber, isLeftArrow, isRightArrow } from "./utils.js/index.js";
+import { isNumber, isLeftArrow, isRightArrow, crypt, decrypt } from "./utils.js/index.js";
 
 import * as Types from "./constants/types.js";
 import { NumbersFactory } from "./Numbers/index.js";
@@ -70,7 +70,7 @@ class ArabicKeyboard extends LitElement {
       margin: auto;
       max-width: 800px;
       outline: 1px solid black;
-      padding: 16px;
+      padding: 8px;
       font-family: sans-serif;
     }
 
@@ -100,16 +100,19 @@ class ArabicKeyboard extends LitElement {
     }
 
     .keyboard_row.first_row {
-      grid-template-columns: repeat(var(--first-row-columns), 1fr);
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 2fr
     }
     .keyboard_row.second_row {
-      grid-template-columns: repeat(var(--second-row-columns), 1fr);
+      // grid-template-columns: repeat(var(--second-row-columns), 1fr);
+      grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr
     }
     .keyboard_row.third_row {
-      grid-template-columns: repeat(var(--third-row-columns), 1fr);
+      // grid-template-columns: repeat(var(--third-row-columns), 1fr);
+      grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 2fr
     }
     .keyboard_row.fourth_row {
-      grid-template-columns: repeat(var(--fourth-row-columns), 1fr);
+      // grid-template-columns: repeat(var(--fourth-row-columns), 1fr);
+      grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 2fr
     }
     .keyboard_row.fifth_row {
       grid-template-columns: 1fr 6fr;
@@ -142,7 +145,7 @@ class ArabicKeyboard extends LitElement {
       height: var(--width);
     }
     .wider {
-      width: calc(var(--width) * 2);
+      // width: calc(var(--width) * 2);
     }
     .button_value {
       color: var(--button-color);
@@ -165,7 +168,7 @@ class ArabicKeyboard extends LitElement {
       left: 2px;
       padding: 0;
       margin: 0;
-      font-size: 10px;
+      font-size: 14px;
       color: blue;
     }
     .active {
@@ -197,7 +200,7 @@ class ArabicKeyboard extends LitElement {
       if (this.state.previousKey !== "") {
         this.updateState({ previousKey: "" });
       }
-      this.requestUpdate();
+      // this.requestUpdate();
     }, 1000);
   }
 
@@ -210,29 +213,32 @@ class ArabicKeyboard extends LitElement {
   }
 
   handleAddActiveState(target) {
-    const keyPressed = this.shadowRoot.querySelector(target);
-    keyPressed && keyPressed.classList.add("active");
-    setTimeout(() => {
-      keyPressed && keyPressed.classList.remove("active");
-    }, 50);
+    const keysPressed = this.shadowRoot.querySelectorAll(target);
+    const nodes = Array.from(keysPressed);
+
+    nodes.forEach((node) => {
+      node && node.classList.add("active");
+      setTimeout(() => {
+        node && node.classList.remove("active");
+      }, 50);
+    })
   }
 
   handleKeyUp(event) {
     const key = event.key;
-    const code = event.code;
     if (key === "Shift") {
       this.buttonGroups = button_groups;
       this.requestUpdate();
     }
-    console.log({ key, event, code });
   }
 
   handleKeyDown(event) {
     event.preventDefault();
     this.clearPreviousKeyInterval();
     const key = event.key;
-    console.log({ key, event });
-    this.handleAddActiveState(`.button_${key}`);
+
+    const deCryptedClass = crypt("salt", key);
+    this.handleAddActiveState(`.button_${deCryptedClass}`);
 
     if (key === "Shift") {
       this.buttonGroups = shifted_button_groups;
@@ -245,6 +251,8 @@ class ArabicKeyboard extends LitElement {
 
     // Handle Meta Key
     if (key === "Meta") {
+      const deCryptedClass = crypt("salt", 'meta');
+      this.handleAddActiveState(`.button_${deCryptedClass}`);
       this.updateState({ previousKey: key });
     }
 
@@ -254,6 +262,8 @@ class ArabicKeyboard extends LitElement {
     }
 
     if (event.code === "Space") {
+      const deCryptedClass = crypt("salt", 'space');
+      this.handleAddActiveState(`.button_${deCryptedClass}`);
       this.updateState(SpaceFactory(this.state));
     }
 
@@ -360,13 +370,14 @@ class ArabicKeyboard extends LitElement {
             return html`
               <div class="keyboard_row ${name}">
                 ${buttons.map(
-                  (button) =>
-                    html`<div class="button_wrapper">
+                  (button) => {
+                    // console.log({ button });
+                    const cryptedClass = crypt("salt", button.en);
+                    return html`<div class="button_wrapper">
                       <button
-                        value="${button.label}"
+                        value="${button.en}"
                         type="button"
-                        class="button button_${button
-                          .label} ${button.modifierClass}"
+                        class="button button_${cryptedClass} ${button.modifierClass}"
                         title="${button.title}"
                         @click="${this.handleButtonClick}"
                       >
@@ -383,6 +394,7 @@ class ArabicKeyboard extends LitElement {
                         <p class="button_value">${button.ar}</p>
                       </button>
                     </div> `
+                  }
                 )}
               </div>
             `;

@@ -1,13 +1,13 @@
 export const fifth_row = [{
     'type': 'punctuation',
     'ar': 'Meta',
-    'en': 'Meta',
+    'en': 'meta',
     'title': 'Meta',
   },
   {
     'type': 'punctuation',
     'ar': 'Space',
-    'en': 'Space',
+    'en': 'space',
     'title': 'Space',
     'modifierClass': 'space'
   }

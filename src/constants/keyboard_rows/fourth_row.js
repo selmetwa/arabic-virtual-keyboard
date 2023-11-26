@@ -78,11 +78,11 @@ export const fourth_row = [{
   },
   {
     'type': 'punctuation',
-    'ar': '؟',
-    'en': '?',
-    'label': ['?'],
-    'title': 'Question mark',
-    'shifted': '/'
+    'ar': '/',
+    'en': '/',
+    'label': ['/'],
+    'title': 'Slash',
+    'shifted': '؟'
   },
   {
     'type': 'punctuation',
@@ -103,7 +103,7 @@ export const shifted_fourth_row = [{
   {
     'type': 'letter',
     'ar': 'ظ',
-    'en': 'z',
+    'en': 'Z',
     'label': ['Z'],
     'title': 'Thal',
     'shifted': 'ز'
@@ -111,7 +111,7 @@ export const shifted_fourth_row = [{
   {
     'type': 'letter',
     'ar': 'ء',
-    'en': 'x',
+    'en': 'X',
     'label': ['X'],
     'title': 'X',
     'shifted': 'ء'
@@ -119,7 +119,7 @@ export const shifted_fourth_row = [{
   {
     'type': 'diacratic',
     "ar": '\u064B',
-    'en': 'c',
+    'en': 'C',
     'label': 'C',
     'title': 'Fathahan',
     'shifted': '\u064E'
@@ -127,7 +127,7 @@ export const shifted_fourth_row = [{
   {
     'type': 'letter',
     'ar': 'ڤ',
-    'en': 'v',
+    'en': 'V',
     'label': ['V'],
     'title': 'V',
     'shifted': 'ڤ'
@@ -135,7 +135,7 @@ export const shifted_fourth_row = [{
   {
     'type': 'letter',
     'ar': 'ب',
-    'en': 'b',
+    'en': 'B',
     'label': ['B'],
     'title': 'Ba',
     'shifted': 'ب'
@@ -143,7 +143,7 @@ export const shifted_fourth_row = [{
   {
     'type': 'letter',
     'ar': 'ن',
-    'en': 'n',
+    'en': 'N',
     'label': ['N'],
     'title': 'Noon',
     'shifted': 'ن'
@@ -151,7 +151,7 @@ export const shifted_fourth_row = [{
   {
     'type': 'letter',
     'ar': 'م',
-    'en': 'm',
+    'en': 'M',
     'label': ['M'],
     'title': 'Meem',
     'shifted': 'م'
@@ -159,7 +159,7 @@ export const shifted_fourth_row = [{
   {
     'type': 'punctuation',
     'ar': '<',
-    'en': ',',
+    'en': '<',
     'label': ['<'],
     'title': 'Angle bracket',
     'shifted': '،'
@@ -167,18 +167,18 @@ export const shifted_fourth_row = [{
   {
     'type': 'punctuation',
     'ar': '>',
-    'en': '.',
+    'en': '>',
     'label': ['>'],
     'title': 'Angle bracket',
     'shifted': '.'
   },
   {
     'type': 'punctuation',
-    'ar': '/',
+    'ar': '؟',
     'en': '?',
-    'label': ['/'],
-    'title': 'Slash',
-    'shifted': '؟'
+    'label': ['؟'],
+    'title': 'Question mark',
+    'shifted': '/'
   },
   {
     'type': 'punctuation',

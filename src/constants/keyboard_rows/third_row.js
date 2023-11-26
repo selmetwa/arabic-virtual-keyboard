@@ -1,5 +1,11 @@
 export const third_row = [{
     'type': 'letter',
+    'ar': 'CapLk',
+    'en': 'CapLk',
+    'title': 'CapLk',
+  },
+  {
+    'type': 'letter',
     'ar': 'ا',
     'en': 'a',
     'label': ['a'],
@@ -120,6 +126,12 @@ export const third_row = [{
 ]
 
 export const shifted_third_row = [{
+    'type': 'letter',
+    'ar': 'CapLk',
+    'en': 'CapLk',
+    'title': 'CapLk',
+  },
+  {
     'type': 'letter',
     'ar': 'أ',
     'en': 'A',
