@@ -6,7 +6,7 @@ export const shifted_second_row = [{
     'modifierClass': 'wider'
   },
   {
-    'type': 'letter',
+    'type': 'diacritic',
     'ar': '\u0652',
     'en': 'Q',
     'label': ['Q'],
@@ -48,7 +48,7 @@ export const shifted_second_row = [{
   {
     'type': 'letter',
     "ar": 'ث',
-    'en': "th",
+    'en': "t'",
     'label': ["t'"],
     'title': "Tha, does not have a corresponding sound in English",
     'shifted': 'ث'
@@ -62,7 +62,7 @@ export const shifted_second_row = [{
     'shifted': 'ي'
   },
   {
-    'type': 'letter',
+    'type': 'diacritic',
     'ar': '\u064C',
     'en': 'U',
     'label': ['U'],
@@ -70,7 +70,7 @@ export const shifted_second_row = [{
     'shifted': '\u064F'
   },
   {
-    'type': 'letter',
+    'type': 'diacritic',
     'ar': '\u064D',
     'en': 'I',
     'label': ['I'],
@@ -78,7 +78,7 @@ export const shifted_second_row = [{
     'shifted': '\u0650'
   },
   {
-    'type': 'letter',
+    'type': 'diacritic',
     'ar': 'ْ',
     'en': 'O',
     'label': ['O'],
@@ -162,8 +162,8 @@ export const second_row = [{
   {
     'type': 'letter',
     "ar": 'ث',
-    'en': "th",
-    'label': ["th"],
+    'en': "t'",
+    'label': ["t'"],
     'title': "Tha, does not have a corresponding sound in English",
     'shifted': 'ث'
   },
@@ -176,7 +176,7 @@ export const second_row = [{
     'shifted': 'ى'
   },
   {
-    'type': 'letter',
+    'type': 'diacritic',
     'ar': '\u064F',
     'en': "u",
     'label': ["u"],
@@ -184,7 +184,7 @@ export const second_row = [{
     'shifted': '\u064C'
   },
   {
-    'type': 'letter',
+    'type': 'diacritic',
     "ar": '\u0650',
     'en': "i",
     'label': ["i"],
@@ -192,7 +192,7 @@ export const second_row = [{
     'shifted': '\u064D'
   },
   {
-    'type': 'letter',
+    'type': 'diacritic',
     "ar": '\u064F',
     'en': "o",
     'label': ["o"],

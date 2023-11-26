@@ -1,7 +1,7 @@
 export const third_row = [{
-    'type': 'letter',
+    'type': 'punctuation',
     'ar': 'CapLk',
-    'en': 'CapLk',
+    'en': 'CapsLock',
     'title': 'CapLk',
   },
   {
@@ -50,7 +50,7 @@ export const third_row = [{
     'en': 'f',
     'label': ['f'],
     'title': 'Feh, corresponding to the letter f',
-    'shifted': '\u064E' // fatha, short vowel a
+    'shifted': 'ف' // fatha, short vowel a
   },
   {
     'type': 'letter',
@@ -70,14 +70,6 @@ export const third_row = [{
   },
   {
     'type': 'letter',
-    'ar': 'خ',
-    'en': 'Kh',
-    'label': ["h'"],
-    'title': 'Kha',
-    'shifted': 'خ'
-  },
-  {
-    'type': 'letter',
     'ar': 'ج',
     'en': 'j',
     'label': ['j'],
@@ -90,7 +82,7 @@ export const third_row = [{
     'en': 'k',
     'label': ['k'],
     'title': 'Kaf, corresponding to the letter k',
-    'shifted': '\u064D'
+    'shifted': 'خ'
   },
   {
     'type': 'letter',
@@ -126,9 +118,9 @@ export const third_row = [{
 ]
 
 export const shifted_third_row = [{
-    'type': 'letter',
+    'type': 'punctuation',
     'ar': 'CapLk',
-    'en': 'CapLk',
+    'en': 'CapsLock',
     'title': 'CapLk',
   },
   {
@@ -173,10 +165,10 @@ export const shifted_third_row = [{
   },
   {
     'type': 'letter',
-    'ar': '\u064E',
+    'ar': 'ف',
     'en': 'F',
     'label': ['F'],
-    'title': 'Fatha, short vowel a',
+    'title': 'Fa',
     'shifted': 'ف'
   },
   {
@@ -195,14 +187,14 @@ export const shifted_third_row = [{
     'title': 'Ha',
     'shifted': 'ه'
   },
-  {
-    'type': 'letter',
-    'ar': 'خ',
-    'en': 'Kh',
-    'label': ["H'"],
-    'title': 'Kha',
-    'shifted': 'خ'
-  },
+  // {
+  //   'type': 'letter',
+  //   'ar': 'خ',
+  //   'en': 'Kh',
+  //   'label': ["H'"],
+  //   'title': 'Kha',
+  //   'shifted': 'خ'
+  // },
   {
     'type': 'letter',
     'ar': 'ج',
@@ -213,12 +205,20 @@ export const shifted_third_row = [{
   },
   {
     'type': 'letter',
-    'ar': '\u064D',
+    'ar': 'خ',
     'en': 'K',
-    'label': ['K'],
-    'title': 'Kasra, short vowel i',
+    'label': ["K"],
+    'title': 'Kh',
     'shifted': 'ك'
   },
+  // {
+  //   'type': 'diacritic',
+  //   'ar': '\u064D',
+  //   'en': 'K',
+  //   'label': ['K'],
+  //   'title': 'Kasra, short vowel i',
+  //   'shifted': 'ك'
+  // },
   {
     'type': 'letter',
     'ar': 'ل',

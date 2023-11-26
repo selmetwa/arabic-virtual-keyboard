@@ -24,6 +24,7 @@ export const BackspaceFactory = (key, state) => {
   const _selectedText = state.selectedText;
   const _cursorPosition = state.cursorPosition;
   let _textValue = state.textValue;
+  console.log({ _selectedText, _cursorPosition, _textValue })
 
   if (_textValue.length === 0) return state;
 

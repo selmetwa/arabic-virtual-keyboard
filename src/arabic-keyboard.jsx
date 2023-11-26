@@ -5,7 +5,7 @@ import {
   shifted_button_groups,
 } from "./constants/button_groups.js";
 
-import { isNumber, isLeftArrow, isRightArrow, crypt, decrypt } from "./utils.js/index.js";
+import { isNumber, isLeftArrow, isRightArrow, crypt, isSpecialCharacter, isLetter } from "./utils.js/index.js";
 
 import * as Types from "./constants/types.js";
 import { NumbersFactory } from "./Numbers/index.js";
@@ -21,6 +21,8 @@ import {
   KeyboardNavigationFactory,
 } from "./KeyboardEvents/index.js";
 import { SpaceFactory } from "./Space/index.js";
+import { SpecialCharacterFactory } from "./SpecialCharacters/index.js";
+import { LettersFactory } from "./Letters/index.js";
 
 class ArabicKeyboard extends LitElement {
   static get properties() {
@@ -107,15 +109,13 @@ class ArabicKeyboard extends LitElement {
       grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr
     }
     .keyboard_row.third_row {
-      // grid-template-columns: repeat(var(--third-row-columns), 1fr);
-      grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 2fr
+      grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 2fr
     }
     .keyboard_row.fourth_row {
-      // grid-template-columns: repeat(var(--fourth-row-columns), 1fr);
       grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 2fr
     }
     .keyboard_row.fifth_row {
-      grid-template-columns: 1fr 6fr;
+      grid-template-columns: 2fr 12fr;
     }
 
     .button_wrapper {
@@ -141,9 +141,10 @@ class ArabicKeyboard extends LitElement {
       border-radius: var(--border-radius);
       background-color: var(--background-color);
       border: var(--border);
-      padding: var(--button-padding);
       height: var(--width);
+      padding: 0;
     }
+
     .wider {
       // width: calc(var(--width) * 2);
     }
@@ -197,11 +198,9 @@ class ArabicKeyboard extends LitElement {
 
   startPreviousKeyInterval() {
     this.previousKeyIntervalId = setInterval(() => {
-      if (this.state.previousKey !== "") {
-        this.updateState({ previousKey: "" });
-      }
-      // this.requestUpdate();
-    }, 1000);
+      this.updateState({ previousKey: "" });
+      this.requestUpdate();
+    }, 500);
   }
 
   /**
@@ -226,7 +225,7 @@ class ArabicKeyboard extends LitElement {
 
   handleKeyUp(event) {
     const key = event.key;
-    if (key === "Shift") {
+    if (["CapsLock", "Shift"].includes(key)) {
       this.buttonGroups = button_groups;
       this.requestUpdate();
     }
@@ -236,17 +235,19 @@ class ArabicKeyboard extends LitElement {
     event.preventDefault();
     this.clearPreviousKeyInterval();
     const key = event.key;
-
     const deCryptedClass = crypt("salt", key);
+    console.log({ key, deCryptedClass });
+
     this.handleAddActiveState(`.button_${deCryptedClass}`);
 
-    if (key === "Shift") {
+    if (["CapsLock", "Shift"].includes(key)) {
       this.buttonGroups = shifted_button_groups;
       this.requestUpdate();
     }
 
     if (this.state.previousKey === "Meta") {
-      this.updateState(KeyboardShortcutFactory(key, this.state, this.textarea));
+      this.startPreviousKeyInterval();
+      return this.updateState(KeyboardShortcutFactory(key, this.state, this.textarea));
     }
 
     // Handle Meta Key
@@ -272,11 +273,21 @@ class ArabicKeyboard extends LitElement {
       this.updateState(NumbersFactory(key, this.state));
     }
 
+    // Handle Inserting Letters
+    if (isLetter(key)) {
+      this.updateState(LettersFactory(key, this.state));
+    }
+
     // Update Cursor Position
     if (isLeftArrow(key) || isRightArrow(key)) {
       this.updateState(
         KeyboardNavigationFactory(key, this.state, this.textarea)
       );
+    }
+
+    // Handle Inserting Special Characters (rename to punctuation)
+    if (isSpecialCharacter(key)) {
+      this.updateState(SpecialCharacterFactory(key, this.state, this.textarea));
     }
 
     this.startPreviousKeyInterval();
@@ -286,7 +297,8 @@ class ArabicKeyboard extends LitElement {
     event.preventDefault();
     const key = event.target.value;
     this.handleAddActiveState(`.button_${key}`);
-
+    const target = event.target;
+    console.log({ key, target });
     if (key === "space") {
       this.updateState(SpaceFactory(this.state));
     }
@@ -371,17 +383,16 @@ class ArabicKeyboard extends LitElement {
               <div class="keyboard_row ${name}">
                 ${buttons.map(
                   (button) => {
-                    // console.log({ button });
                     const cryptedClass = crypt("salt", button.en);
-                    return html`<div class="button_wrapper">
-                      <button
+                    return html` <button
                         value="${button.en}"
                         type="button"
                         class="button button_${cryptedClass} ${button.modifierClass}"
                         title="${button.title}"
                         @click="${this.handleButtonClick}"
                       >
-                        ${button && button.shifted
+                      <div class="button_inner">
+                      ${button && button.shifted
                           ? html`<p class="button_shifted">
                               ${button.shifted}
                             </p>`
@@ -392,6 +403,7 @@ class ArabicKeyboard extends LitElement {
                             </p>`
                           : ""}
                         <p class="button_value">${button.ar}</p>
+                      </div>
                       </button>
                     </div> `
                   }

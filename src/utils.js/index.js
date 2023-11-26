@@ -1,4 +1,12 @@
-import { numbers } from "../constants/data.js";
+import { numbers, punctuation, letters, englishLetters } from "../constants/data.js";
+
+export const isLetter = (value) => {
+  return englishLetters.includes(value);
+}
+
+export const isSpecialCharacter = (value) => {
+  return ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', '-', '=', '{', '}', '[', ']', '|', '\\', ':', ';', '"', "'", '<', '>', ',', '.', '?', '/', '~', '`'].includes(value);
+}
 
 /** 
  * Function to check if the value is a number. 
@@ -65,6 +73,17 @@ export const isInputArabic = (text) => {
 }
 
 /**
+ * Return corresponding english letter for arabic letter
+ * @param {string} letter
+ * @returns {string} 
+ */
+export const convertLetterToArabic = (letter) => {
+  const letterObject = letters.find((obj) => obj.en === letter);
+  const arabicLetter = letterObject && letterObject.ar;
+  return arabicLetter;
+}
+
+/**
  * Return corresponding arabic number for english number
  * @param {string} number
  * @returns {string}
@@ -73,6 +92,16 @@ export const convertNumberToArabic = (englishNumber) => {
   const numberObject = numbers.find((obj) => obj.en === englishNumber);
   const arabicNumber = numberObject && numberObject.ar;
   return arabicNumber;
+}
+
+/**
+ * @param {string} key - The key pressed. 
+ * @returns {string}  - The key pressed in arabic.
+ */
+export const getArabicPunctuation = (key) => {
+  const punctuationObject = punctuation.find((obj) => obj.en === key);
+  const punctuationArabic = punctuationObject && punctuationObject.ar;
+  return punctuationArabic;
 }
 
 export const crypt = (salt, text) => {
@@ -88,13 +117,7 @@ export const crypt = (salt, text) => {
     .join("");
 };
 
-export const decrypt = (salt, encoded) => {
-  const textToChars = (text) => text.split("").map((c) => c.charCodeAt(0));
-  const applySaltToChar = (code) => textToChars(salt).reduce((a, b) => a ^ b, code);
-  return encoded
-    .match(/.{1,2}/g)
-    .map((hex) => parseInt(hex, 16))
-    .map(applySaltToChar)
-    .map((charCode) => String.fromCharCode(charCode))
-    .join("");
-};
+export const checkPreviousLetter = (textValue, cursorPosition) => {
+  const previousLetter = textValue[cursorPosition - 1];
+  // return isLetter(previousLetter);
+}

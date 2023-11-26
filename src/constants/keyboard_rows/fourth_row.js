@@ -15,10 +15,10 @@ export const fourth_row = [{
   },
   {
     'type': 'letter',
-    'ar': 'ء',
+    'ar': 'ة',
     'en': 'x',
     'label': ['x'],
-    'title': 'X',
+    'title': 'Ta marbuta',
     'shifted': 'ء'
   }, {
     'type': 'diacratic',
@@ -113,8 +113,8 @@ export const shifted_fourth_row = [{
     'ar': 'ء',
     'en': 'X',
     'label': ['X'],
-    'title': 'X',
-    'shifted': 'ء'
+    'title': 'Hamza',
+    'shifted': 'ة'
   },
   {
     'type': 'diacratic',
