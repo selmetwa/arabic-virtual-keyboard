@@ -1,25 +1,32 @@
 import { LitElement, html, css } from "lit";
 
-import { button_groups } from "./constants/button_groups.js";
-
 import {
-  isNumber,
-  isLeftArrow,
-  isRightArrow,
-} from "./utils.js/index.js";
+  button_groups,
+  shifted_button_groups,
+} from "./constants/button_groups.js";
+
+import { isNumber, isLeftArrow, isRightArrow } from "./utils.js/index.js";
 
 import * as Types from "./constants/types.js";
 import { NumbersFactory } from "./Numbers/index.js";
 import { BackspaceFactory } from "./Backspace/index.js";
-import { MouseCutFactory, UpdateSelectedTextFactory, TextareaClickFactory } from "./MouseEvents/index.js";
+import {
+  MouseCutFactory,
+  UpdateSelectedTextFactory,
+  TextareaClickFactory,
+} from "./MouseEvents/index.js";
 import { PasteFactory } from "./Paste/index.js";
-import { KeyboardShortcutFactory, KeyboardNavigationFactory } from "./KeyboardEvents/index.js";
+import {
+  KeyboardShortcutFactory,
+  KeyboardNavigationFactory,
+} from "./KeyboardEvents/index.js";
 import { SpaceFactory } from "./Space/index.js";
 
 class ArabicKeyboard extends LitElement {
   static get properties() {
     return {
       state: { type: Object },
+      button_groups: { type: Array },
     };
   }
 
@@ -40,21 +47,28 @@ class ArabicKeyboard extends LitElement {
 
   static styles = css`
     :host {
-      --gap: 6px;
-      --columns: 10;
+      --gap: 4px;
+      --columns: 14;
+      --first-row-columns: 14;
+      --second-row-columns: 14;
+      --third-row-columns: 15;
+      --fourth-row-columns: 12;
+      --fifth-row-columns: 2;
       --font-size: 18px;
       --width: 50px;
       --border-radius: 4px;
       --background-color: #ececec;
       --border: 1px solid #999999;
-      --active-background-color: #D6D6D6;
-      --active-border: 1px solid #8F8F8F;
+      --active-background-color: #d6d6d6;
+      --active-border: 1px solid #8f8f8f;
       --button-padding: 4px;
+      --button-color: #000000;
+      --button-shifted-color: #ff0000;
     }
 
     .wrapper {
       margin: auto;
-      max-width: 700px;
+      max-width: 800px;
       outline: 1px solid black;
       padding: 16px;
       font-family: sans-serif;
@@ -64,7 +78,7 @@ class ArabicKeyboard extends LitElement {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 8px;
+      gap: 4px;
     }
 
     .space {
@@ -78,11 +92,27 @@ class ArabicKeyboard extends LitElement {
       text-align: right;
       font-size: var(--font-size);
     }
-    
-    .button_group {
+
+    .keyboard_row {
       display: grid;
-      grid-template-columns: repeat(var(--columns), 1fr);
       gap: var(--gap);
+      width: 100%;
+    }
+
+    .keyboard_row.first_row {
+      grid-template-columns: repeat(var(--first-row-columns), 1fr);
+    }
+    .keyboard_row.second_row {
+      grid-template-columns: repeat(var(--second-row-columns), 1fr);
+    }
+    .keyboard_row.third_row {
+      grid-template-columns: repeat(var(--third-row-columns), 1fr);
+    }
+    .keyboard_row.fourth_row {
+      grid-template-columns: repeat(var(--fourth-row-columns), 1fr);
+    }
+    .keyboard_row.fifth_row {
+      grid-template-columns: 1fr 6fr;
     }
 
     .button_wrapper {
@@ -100,12 +130,43 @@ class ArabicKeyboard extends LitElement {
       direction: rtl;
     }
 
+    button {
+      position: relative;
+    }
     .button {
       font-size: var(--font-size);
       border-radius: var(--border-radius);
       background-color: var(--background-color);
       border: var(--border);
       padding: var(--button-padding);
+      height: var(--width);
+    }
+    .wider {
+      width: calc(var(--width) * 2);
+    }
+    .button_value {
+      color: var(--button-color);
+      font-size: 16px;
+      padding: 0;
+      margin: 0;
+    }
+    .button_shifted {
+      position: absolute;
+      top: 2px;
+      right: 4px;
+      padding: 0;
+      margin: 0;
+      font-size: 14px;
+      color: var(--button-shifted-color);
+    }
+    .button_en {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      padding: 0;
+      margin: 0;
+      font-size: 10px;
+      color: blue;
     }
     .active {
       background-color: var(--active-background-color);
@@ -119,22 +180,22 @@ class ArabicKeyboard extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    this.startInterval();
+    this.startPreviousKeyInterval();
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    this.clearInterval();
+    this.clearPreviousKeyInterval();
   }
 
-  clearInterval() {
-    clearInterval(this.intervalId);
+  clearPreviousKeyInterval() {
+    clearInterval(this.previousKeyIntervalId);
   }
 
-  startInterval() {
-    this.intervalId = setInterval(() => {
-      if (this.state.previousKey !== '') {
-        this.updateState({ previousKey: '' });
+  startPreviousKeyInterval() {
+    this.previousKeyIntervalId = setInterval(() => {
+      if (this.state.previousKey !== "") {
+        this.updateState({ previousKey: "" });
       }
       this.requestUpdate();
     }, 1000);
@@ -150,22 +211,36 @@ class ArabicKeyboard extends LitElement {
 
   handleAddActiveState(target) {
     const keyPressed = this.shadowRoot.querySelector(target);
-    keyPressed && keyPressed.classList.add('active');
+    keyPressed && keyPressed.classList.add("active");
     setTimeout(() => {
-      keyPressed && keyPressed.classList.remove('active');
-    }, 50)
+      keyPressed && keyPressed.classList.remove("active");
+    }, 50);
+  }
+
+  handleKeyUp(event) {
+    const key = event.key;
+    const code = event.code;
+    if (key === "Shift") {
+      this.buttonGroups = button_groups;
+      this.requestUpdate();
+    }
+    console.log({ key, event, code });
   }
 
   handleKeyDown(event) {
     event.preventDefault();
-    this.clearInterval();
+    this.clearPreviousKeyInterval();
     const key = event.key;
-    const code = event.code;
-    console.log({ key, event, code })
-    this.handleAddActiveState(`.button_${key}`)
+    console.log({ key, event });
+    this.handleAddActiveState(`.button_${key}`);
+
+    if (key === "Shift") {
+      this.buttonGroups = shifted_button_groups;
+      this.requestUpdate();
+    }
 
     if (this.state.previousKey === "Meta") {
-      this.updateState(KeyboardShortcutFactory(key, this.state, this.textarea))
+      this.updateState(KeyboardShortcutFactory(key, this.state, this.textarea));
     }
 
     // Handle Meta Key
@@ -178,8 +253,8 @@ class ArabicKeyboard extends LitElement {
       this.updateState(BackspaceFactory(key, this.state));
     }
 
-    if (event.code === 'Space') {
-      this.updateState(SpaceFactory(this.state))
+    if (event.code === "Space") {
+      this.updateState(SpaceFactory(this.state));
     }
 
     // Handle Inserting Numbers
@@ -189,30 +264,28 @@ class ArabicKeyboard extends LitElement {
 
     // Update Cursor Position
     if (isLeftArrow(key) || isRightArrow(key)) {
-      this.updateState(KeyboardNavigationFactory(key, this.state, this.textarea));
+      this.updateState(
+        KeyboardNavigationFactory(key, this.state, this.textarea)
+      );
     }
 
-    this.startInterval();
+    this.startPreviousKeyInterval();
   }
 
   handleButtonClick(event) {
     event.preventDefault();
-    const value = event.target.value;
-    const [type, key] = value.split("_");
-    console.log({ type, key })
-    this.handleAddActiveState(`.button_${key}`)
+    const key = event.target.value;
+    this.handleAddActiveState(`.button_${key}`);
 
-    if (type === "misc") {
-      if (key === "space") {
-        this.updateState(SpaceFactory(this.state))
-      }
+    if (key === "space") {
+      this.updateState(SpaceFactory(this.state));
     }
 
-    if (type === "number") {
+    if (isNumber(key)) {
       this.updateState(NumbersFactory(key, this.state));
     }
 
-    if (type === "alphabet" && key === "Backspace") {
+    if (key === "Backspace") {
       this.updateState(BackspaceFactory(key, this.state));
     }
 
@@ -221,7 +294,13 @@ class ArabicKeyboard extends LitElement {
 
   handlePaste(event, pastedTextFromKeyboard) {
     event && event.preventDefault();
-    this.updateState(PasteFactory(event && event.clipboardData && event.clipboardData.getData("text") || pastedTextFromKeyboard, this.state));
+    this.updateState(
+      PasteFactory(
+        (event && event.clipboardData && event.clipboardData.getData("text")) ||
+          pastedTextFromKeyboard,
+        this.state
+      )
+    );
   }
 
   updateSelectedText(event) {
@@ -230,18 +309,24 @@ class ArabicKeyboard extends LitElement {
 
   handleTextareaClick(event) {
     event.preventDefault();
-    this.updateState(TextareaClickFactory(event))
+    this.updateState(TextareaClickFactory(event));
   }
 
   handleCopy(event) {
     event.preventDefault();
-    event.clipboardData.setData("text/plain", this.state.selectedText.toString());
+    event.clipboardData.setData(
+      "text/plain",
+      this.state.selectedText.toString()
+    );
     this.updateState({ copiedText: this.state.selectedText });
   }
 
   handleCut(event) {
     event.preventDefault();
-    event.clipboardData.setData("text/plain", this.state.selectedText.toString());
+    event.clipboardData.setData(
+      "text/plain",
+      this.state.selectedText.toString()
+    );
     this.updateState(MouseCutFactory(this.state));
   }
 
@@ -260,6 +345,7 @@ class ArabicKeyboard extends LitElement {
           rows="5"
           cols="10"
           @keydown="${this.handleKeyDown}"
+          @keyup="${this.handleKeyUp}"
           @select="${this.updateSelectedText}"
           @paste="${this.handlePaste}"
           @copy="${this.handleCopy}"
@@ -270,32 +356,37 @@ class ArabicKeyboard extends LitElement {
         </textarea>
         <div class="keyboard">
           ${this.buttonGroups.map((buttonGroup) => {
-            const { buttons, type } = buttonGroup;
+            const { buttons, name } = buttonGroup;
             return html`
-              <div class="button_group ${type === "number" ? "ltr" : "rtl"}">
+              <div class="keyboard_row ${name}">
                 ${buttons.map(
                   (button) =>
                     html`<div class="button_wrapper">
-                      <label class="label">${button.label[0]}</label>
                       <button
-                        value="${type}_${button.label[0]}"
+                        value="${button.label}"
                         type="button"
-                        class="button button_${button.label[0]}"
+                        class="button button_${button
+                          .label} ${button.modifierClass}"
                         title="${button.title}"
                         @click="${this.handleButtonClick}"
                       >
-                        ${button.ar}
+                        ${button && button.shifted
+                          ? html`<p class="button_shifted">
+                              ${button.shifted}
+                            </p>`
+                          : ""}
+                        ${button && button.label
+                          ? html`<p class="button_en">
+                              ${button.label}
+                            </p>`
+                          : ""}
+                        <p class="button_value">${button.ar}</p>
                       </button>
                     </div> `
                 )}
               </div>
             `;
           })}
-          <button 
-          class="space button button_ " 
-          @click="${this.handleButtonClick}"
-          value="misc_space"
-          >Space</button>
         </div>
       </section>
       <div>${JSON.stringify(this.state)}</div>

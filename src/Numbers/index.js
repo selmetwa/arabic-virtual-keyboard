@@ -11,8 +11,6 @@ import { deleteSelectedText, convertNumberToArabic } from '../utils.js';
 export const insertEnglishNumberIntoArabic = (englishNumber, originalText, cursorPosition) => {
   const originalArray = originalText.split('');
   const arabicNumber = convertNumberToArabic(englishNumber);
-  // const numberObject = numbers.find((obj) => obj.en === englishNumber);
-  // const arabicNumber = numberObject && numberObject.ar;
 
   if (!arabicNumber) {
     return {
