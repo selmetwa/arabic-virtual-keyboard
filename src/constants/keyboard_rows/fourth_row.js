@@ -21,7 +21,7 @@ export const fourth_row = [{
     'title': 'Ta marbuta',
     'shifted': 'ء'
   }, {
-    'type': 'diacratic',
+    'type': 'diacritic',
     "ar": '\u064E',
     'en': 'c',
     'label': 'c',
@@ -117,7 +117,7 @@ export const shifted_fourth_row = [{
     'shifted': 'ة'
   },
   {
-    'type': 'diacratic',
+    'type': 'diacritic',
     "ar": '\u064B',
     'en': 'C',
     'label': 'C',

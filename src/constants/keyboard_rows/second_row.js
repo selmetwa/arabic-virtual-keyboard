@@ -6,11 +6,11 @@ export const shifted_second_row = [{
     'modifierClass': 'wider'
   },
   {
-    'type': 'diacritic',
-    'ar': '\u0652',
+    'type': 'letter',
+    'ar': 'ق',
     'en': 'Q',
     'label': ['Q'],
-    'title': 'Suqun, no vowel',
+    'title': 'Qaf, does not have a corresponding sound in English',
     'shifted': 'ق'
   },
   {
@@ -79,11 +79,11 @@ export const shifted_second_row = [{
   },
   {
     'type': 'diacritic',
-    'ar': 'ْ',
+    'ar': '\u0651',
     'en': 'O',
     'label': ['O'],
-    'title': 'Damma, short vowel u',
-    'shifted': '\u064F'
+    'title': 'Shadda, doubling the consonant',
+    'shifted': '\u0652'
   },
   {
     'type': 'punctuation',
@@ -125,7 +125,7 @@ export const second_row = [{
     'en': "q",
     'label': ["q"],
     'title': "Qaf, does not have a corresponding sound in English",
-    'shifted': '\u0652'
+    'shifted': 'ق'
   },
   {
     "type": 'letter',
@@ -193,11 +193,11 @@ export const second_row = [{
   },
   {
     'type': 'diacritic',
-    "ar": '\u064F',
+    "ar": '\u0652',
     'en': "o",
     'label': ["o"],
-    'title': "Damma, short vowel u",
-    'shifted': 'ْ'
+    'title': "Sukun, no vowel",
+    'shifted': "\u0651"
   },
   {
     'type': 'punctuation',

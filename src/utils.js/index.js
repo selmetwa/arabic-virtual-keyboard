@@ -1,4 +1,4 @@
-import { numbers, punctuation, letters, englishLetters } from "../constants/data.js";
+import { numbers, punctuation, letters, englishLetters, diacritics, diacriticsEnglishKeys } from "../constants/data.js";
 
 /**
  * Function to check if the value is a letter.
@@ -7,6 +7,15 @@ import { numbers, punctuation, letters, englishLetters } from "../constants/data
  */
 export const isLetter = (value) => {
   return englishLetters.includes(value);
+}
+
+/**
+ * Function to check if the value is a diacritic mark.
+ * @param {string} value - The value to be checked.
+ * @returns {boolean} - True if the value is a diacritic mark, false otherwise.
+ */
+export const isDiacriticMark = (value) => {
+  return diacriticsEnglishKeys.includes(value)
 }
 
 /**
@@ -105,15 +114,26 @@ export const convertNumberToArabic = (englishNumber) => {
 }
 
 /**
- * @param {string} key - The key pressed. 
- * @returns {string}  - The key pressed in arabic.
+ * Return corresponding arabic diacritic mark for english key pressed
+ * @param {string} key - The key pressed in english.
+ * @returns {string} diacriticMark - The key pressed in arabic.
+ */
+export const getArabicDiacriticMark = (key) => {
+  const diacriticMarkObject = diacritics.find((obj) => obj.en === key);
+  const diacriticMark = diacriticMarkObject && diacriticMarkObject.ar;
+  return diacriticMark;
+}
+
+/**
+ * Return corresponding arabic punctuation for english punctuation
+ * @param {string} key - The key pressed in english. 
+ * @returns {string} punctuationArabic - The key pressed in arabic.
  */
 export const getArabicPunctuation = (key) => {
   const punctuationObject = punctuation.find((obj) => obj.en === key);
   const punctuationArabic = punctuationObject && punctuationObject.ar;
   return punctuationArabic;
 }
-
 
 /**
  * Function to encrypt text
