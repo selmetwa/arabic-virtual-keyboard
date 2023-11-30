@@ -65,6 +65,7 @@ class ArabicKeyboard extends LitElement {
       --button-padding: 4px;
       --button-color: #000000;
       --button-shifted-color: #ff0000;
+      --hover-background-color: #E0E0E0;
     }
 
     .wrapper {
@@ -108,7 +109,7 @@ class ArabicKeyboard extends LitElement {
       grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr
     }
     .keyboard_row.third_row {
-      grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 2fr
+      grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 2fr
     }
     .keyboard_row.fourth_row {
       grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 2fr
@@ -143,6 +144,10 @@ class ArabicKeyboard extends LitElement {
       border: var(--border);
       height: var(--width);
       padding: 0;
+    }
+
+    .button:hover {
+      background-color: var(--hover-background-color);
     }
 
     .button_value {
@@ -211,6 +216,9 @@ class ArabicKeyboard extends LitElement {
     this.state = { ...this.state, ...newState };
   }
 
+  getClassName(key) {
+    
+  }
   handleAddActiveState(key) {
     const cryptedClassname = crypt("salt", key);
     const target = `.button_${cryptedClassname}`;
@@ -219,14 +227,40 @@ class ArabicKeyboard extends LitElement {
 
     nodes.forEach((node) => {
       node && node.classList.add("active");
-      setTimeout(() => {
-        node && node.classList.remove("active");
-      }, 50);
+      // setTimeout(() => {
+      //   node && node.classList.remove("active");
+      // }, 50);
     })
   }
 
   handleKeyUp(event) {
-    const key = event.key;
+    console.log({ event });
+    // const key = event.key;
+    let key;
+    if (event.key === "'") {
+      const previousLetter = checkPreviousLetter(this.state.textValue, this.state.cursorPosition);
+      console.log({ previousLetter });
+      if (["d'", "g'", "s'", "t'"].includes(previousLetter)) {
+        key = previousLetter;
+      }
+    }
+    else if (event.key === "Meta") {
+      key = "meta"
+    } else if (event.code === "Space") {
+      key = "space"
+    } else {
+      key = event.key;
+    }
+    console.log({ key });
+    const cryptedClassname = crypt("salt", key);
+    const target = `.button_${cryptedClassname}`;
+    const keysPressed = this.shadowRoot.querySelectorAll(target);
+    const nodes = Array.from(keysPressed);
+
+    nodes.forEach((node) => {
+      node && node.classList.remove("active");
+    })
+
     if (["CapsLock", "Shift"].includes(key)) {
       this.buttonGroups = button_groups;
       this.requestUpdate();
@@ -254,8 +288,6 @@ class ArabicKeyboard extends LitElement {
     }
 
     if (key === "Meta") {
-      // const deCryptedClass = crypt("salt", 'meta');
-      // this.handleAddActiveState(`.button_${deCryptedClass}`);
       this.handleAddActiveState("meta")
       this.updateState({ previousKey: key });
     }
@@ -279,7 +311,7 @@ class ArabicKeyboard extends LitElement {
 
     if (key === "'") {
       const previousLetter = checkPreviousLetter(this.state.textValue, this.state.cursorPosition);
-      if (['d', 's', 't'].includes(previousLetter)) {
+      if (['d', 'g', 's', 't'].includes(previousLetter)) {
         const newKey = previousLetter + "'";
         this.updateState(BackspaceFactory(key, this.state));
         this.handleAddActiveState(newKey)

@@ -54,10 +54,18 @@ export const third_row = [{
   },
   {
     'type': 'letter',
-    'ar': 'غ',
+    'ar': 'ع',
     'en': 'g',
     'label': ['g'],
-    'title': 'Ghain, no corresponding letter in English',
+    'title': 'Ayn',
+    'shifted': 'ع'
+  },
+  {
+    'type': 'letter',
+    'ar': 'غ',
+    'en': "g'",
+    'label': ["g'"],
+    'title': 'Ayn',
     'shifted': 'غ'
   },
   {
@@ -173,10 +181,18 @@ export const shifted_third_row = [{
   },
   {
     'type': 'letter',
-    'ar': 'غ',
+    'ar': 'ع',
     'en': 'G',
     'label': ['G'],
-    'title': 'Ghain',
+    'title': 'Ayn',
+    'shifted': 'ع'
+  },
+  {
+    'type': 'letter',
+    'ar': 'غ',
+    'en': "G'",
+    'label': ["G'"],
+    'title': 'Ghayn',
     'shifted': 'غ'
   },
   {
@@ -187,14 +203,6 @@ export const shifted_third_row = [{
     'title': 'Ha',
     'shifted': 'ه'
   },
-  // {
-  //   'type': 'letter',
-  //   'ar': 'خ',
-  //   'en': 'Kh',
-  //   'label': ["H'"],
-  //   'title': 'Kha',
-  //   'shifted': 'خ'
-  // },
   {
     'type': 'letter',
     'ar': 'ج',
