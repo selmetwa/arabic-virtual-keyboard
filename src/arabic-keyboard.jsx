@@ -220,13 +220,10 @@ class ArabicKeyboard extends LitElement {
    * Function to update the state of our keyboard
    * @param {Types.State} newState - new state of our keyboard
    */
-  updateState(newState) {
+  updateState(newState, source) {
     this.state = { ...this.state, ...newState };
   }
 
-  getClassName(key) {
-    
-  }
   handleAddActiveState(key) {
     const cryptedClassname = crypt("salt", key);
     const target = `.button_${cryptedClassname}`;
@@ -242,7 +239,6 @@ class ArabicKeyboard extends LitElement {
     let key;
     if (event.key === "'") {
       const previousLetter = checkPreviousLetter(this.state.textValue, this.state.cursorPosition);
-      console.log({ previousLetter });
       if (["d'", "g'", "s'", "t'", "h'", "H'"].includes(previousLetter)) {
         key = previousLetter;
       }
@@ -254,7 +250,6 @@ class ArabicKeyboard extends LitElement {
     } else {
       key = event.key;
     }
-    console.log({ key });
     const cryptedClassname = crypt("salt", key);
     const target = `.button_${cryptedClassname}`;
     const keysPressed = this.shadowRoot.querySelectorAll(target);
@@ -274,7 +269,6 @@ class ArabicKeyboard extends LitElement {
     event.preventDefault();
     this.clearPreviousKeyInterval();
     const key = event.key;
-    console.log({ key });
 
     if (["CapsLock", "Shift"].includes(key)) {
       this.buttonGroups = shifted_button_groups;
@@ -288,24 +282,24 @@ class ArabicKeyboard extends LitElement {
 
     if (key === "Meta") {
       this.handleAddActiveState("meta")
-      this.updateState({ previousKey: key });
+      this.updateState({ previousKey: key }, "meta");
     }
 
     if (key === 'Enter') {
-      this.updateState(EnterFactory(this.state, this.textarea));
+      this.updateState(EnterFactory(this.state, this.textarea), "enter");
     }
 
     if (key === 'Tab') {
-      this.updateState(TabFactory(this.state));
+      this.updateState(TabFactory(this.state), "tab");
     }
 
     if (key === "Backspace") {
-      this.updateState(BackspaceFactory(key, this.state));
+      this.updateState(BackspaceFactory(key, this.state), "backspace");
     }
 
     if (event.code === "Space") {
       this.handleAddActiveState("space")
-      this.updateState(SpaceFactory(this.state));
+      this.updateState(SpaceFactory(this.state), "space");
     }
 
     if (key === "'") {
@@ -314,7 +308,7 @@ class ArabicKeyboard extends LitElement {
         const newKey = previousLetter + "'";
         this.updateState(BackspaceFactory(key, this.state));
         this.handleAddActiveState(newKey)
-        return this.updateState(LettersFactory(newKey, this.state));
+        return this.updateState(LettersFactory(newKey, this.state), "letter");
       } else {
         return
       }
@@ -323,28 +317,27 @@ class ArabicKeyboard extends LitElement {
     if (key === "=") {
       const previousLetter = checkPreviousLetter(this.state.textValue, this.state.cursorPosition);
       const previousPreviousLetter = checkPreviousLetter(this.state.textValue, this.state.cursorPosition - 1);
-      return this.updateState(DiacriticsFactory(previousLetter,previousPreviousLetter, this.state))
+      return this.updateState(DiacriticsFactory(previousLetter,previousPreviousLetter, this.state), "diacritic");
     }
 
     if (isNumber(key)) {
-      this.updateState(NumbersFactory(key, this.state));
+      this.updateState(NumbersFactory(key, this.state), "number");
     }
 
     if (isLetter(key)) {
-      this.updateState(LettersFactory(key, this.state));
+      this.updateState(LettersFactory(key, this.state), "letter");
     }
 
     if (isDiacriticMark(key)) {
-      this.updateState(DiacriticsFactory(key, this.state));
+      this.updateState(DiacriticsFactory(key, this.state), "diacritic second");
     }
 
     if (isArrowKey(key)) {
-      this.updateState(KeyboardNavigationFactory(key, this.state, this.textarea))
+      this.updateState(KeyboardNavigationFactory(key, this.state, this.textarea), "arrow")
     }
 
-    // Handle Inserting Special Characters (rename to punctuation)
     if (isPunctuation(key)) {
-      this.updateState(PunctuationFactory(key, this.state, this.textarea));
+      this.updateState(PunctuationFactory(key, this.state, this.textarea), "punctuation");
     }
 
     this.handleAddActiveState(key);
@@ -355,8 +348,7 @@ class ArabicKeyboard extends LitElement {
     event.preventDefault();
     const key = event.target.value;
     this.handleAddActiveState(`.button_${key}`);
-    const target = event.target;
-    console.log({ key, target });
+
     if (key === "space") {
       this.updateState(SpaceFactory(this.state));
     }

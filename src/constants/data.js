@@ -21,9 +21,7 @@ const allKeys = [
 
 export const letters = allKeys.filter(button => button.type === 'letter')
 export const englishLetters = letters.map(letter => letter.en)
-console.log({ englishLetters })
 export const punctuation = allKeys.filter(button => button.type === 'punctuation')
 export const numbers = allKeys.filter(button => button.type === 'number')
 export const diacritics = allKeys.filter(button => button.type === 'diacritic')
 export const diacriticsEnglishKeys = diacritics.map(letter => letter.en)
-console.log({ diacritics })

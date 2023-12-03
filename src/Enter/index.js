@@ -7,7 +7,6 @@ import { deleteSelectedText } from "../utils.js";
  * @param {Element} textarea
  */
 export const EnterFactory = (state, textarea) => {
-  console.log({ state })
   let _textValue = state.textValue;
 
   if (!!state.selectedText) {

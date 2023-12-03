@@ -24,7 +24,7 @@ export const isDiacriticMark = (value) => {
  * @returns {boolean} - True if the value is punctuation, false otherwise.
  */
 export const isPunctuation = (value) => {
-  return ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', '-', '=', '{', '}', '[', ']', '|', '\\', ':', ';', '"', "'", '<', '>', ',', '.', '?', '/', '~', '`'].includes(value);
+  return ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', '{', '}', '[', ']', '|', '\\', ':', ';', '"', "'", '<', '>', ',', '.', '?', '/', '~', '`'].includes(value);
 }
 
 /** 
