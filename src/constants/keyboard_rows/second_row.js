@@ -1,7 +1,7 @@
 export const shifted_second_row = [{
     'type': 'punctuation',
-    'ar': 'tab',
-    'title': 'tab',
+    'ar': 'Tab',
+    'title': 'Tab',
     'en': 'Tab',
     'modifierClass': 'wider'
   },
