@@ -70,6 +70,30 @@ export const isLeftArrow = (key) => {
 }
 
 /**
+ * @param {key} string - The key pressed.
+ * @returns {boolean} - True if the key pressed is the down arrow, false otherwise.
+ */
+export const isDownArrow = (key) => {
+  return key === 'ArrowDown';
+}
+
+/**
+ * @param {key} string - The key pressed.
+ * @returns {boolean} - True if the key pressed is the up arrow, false otherwise.
+ */
+export const isUpArrow = (key) => {
+  return key === 'ArrowUp';
+}
+
+/**
+ * @param {key} string - The key pressed.
+ * @returns {boolean} - True if the key pressed is an arrow key, false otherwise.
+ */
+export const isArrowKey = (key) => {
+  return isRightArrow(key) || isLeftArrow(key) || isDownArrow(key) || isUpArrow(key);
+}
+
+/**
  * Function to delete selected text.
  * @param {string} textValue - original text
  * @param {string} selectedText - selected text to delete

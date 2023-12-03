@@ -8,8 +8,7 @@ import {
 
 import { 
   isNumber, 
-  isLeftArrow, 
-  isRightArrow, 
+  isArrowKey, 
   crypt, 
   isSpecialCharacter, 
   isLetter, 
@@ -90,7 +89,8 @@ class ArabicKeyboard extends LitElement {
     .textarea {
       width: 100%;
       direction: rtl;
-      resize: none;
+      max-width: 100%;
+      min-width: 100%;
       text-align: right;
       font-size: var(--font-size);
       font-weight: 500;
@@ -293,7 +293,7 @@ class ArabicKeyboard extends LitElement {
     }
 
     if (key === 'Enter') {
-      this.updateState(EnterFactory(this.state));
+      this.updateState(EnterFactory(this.state, this.textarea));
     }
 
     if (key === 'Tab') {
@@ -333,10 +333,8 @@ class ArabicKeyboard extends LitElement {
       this.updateState(DiacriticsFactory(key, this.state));
     }
 
-    if (isLeftArrow(key) || isRightArrow(key)) {
-      this.updateState(
-        KeyboardNavigationFactory(key, this.state, this.textarea)
-      );
+    if (isArrowKey(key)) {
+      this.updateState(KeyboardNavigationFactory(key, this.state, this.textarea))
     }
 
     // Handle Inserting Special Characters (rename to punctuation)
@@ -464,7 +462,8 @@ class ArabicKeyboard extends LitElement {
         </div>
       </section>
       <div>
-        ${JSON.stringify(this.state)}
+        <!-- ${JSON.stringify(this.state)} -->
+        cursor position: ${this.state.cursorPosition}
       </div>
     `;
   }
