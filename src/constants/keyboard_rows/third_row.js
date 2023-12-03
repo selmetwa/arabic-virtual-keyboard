@@ -78,6 +78,14 @@ export const third_row = [{
   },
   {
     'type': 'letter',
+    'ar': 'ة',
+    'en': "h'",
+    'label': ["h'"],
+    'title': 'Tah Marbuta',
+    'shifted': 'خ'
+  },
+  {
+    'type': 'letter',
     'ar': 'ج',
     'en': 'j',
     'label': ['j'],
@@ -205,6 +213,14 @@ export const shifted_third_row = [{
   },
   {
     'type': 'letter',
+    'ar': 'خ',
+    'en': "H'",
+    'label': ["H'"],
+    'title': 'Kha',
+    'shifted': 'ة'
+  },
+  {
+    'type': 'letter',
     'ar': 'ج',
     'en': 'J',
     'label': ['J'],
@@ -219,14 +235,6 @@ export const shifted_third_row = [{
     'title': 'Kh',
     'shifted': 'ك'
   },
-  // {
-  //   'type': 'diacritic',
-  //   'ar': '\u064D',
-  //   'en': 'K',
-  //   'label': ['K'],
-  //   'title': 'Kasra, short vowel i',
-  //   'shifted': 'ك'
-  // },
   {
     'type': 'letter',
     'ar': 'ل',

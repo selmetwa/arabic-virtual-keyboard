@@ -70,8 +70,8 @@ class ArabicKeyboard extends LitElement {
     .wrapper {
       margin: auto;
       max-width: 800px;
-      outline: 1px solid black;
-      padding: 8px;
+      // outline: 1px solid black;
+      // padding: 8px;
       font-family: sans-serif;
     }
 
@@ -79,6 +79,9 @@ class ArabicKeyboard extends LitElement {
       display: flex;
       flex-direction: column;
       align-items: center;
+      border-radius: var(--border-radius);
+      border: 1px solid var(--background-color);
+      padding: 4px;
       gap: 4px;
     }
 
@@ -88,6 +91,7 @@ class ArabicKeyboard extends LitElement {
 
     .textarea {
       width: 100%;
+      border-radius: var(--border-radius);
       direction: rtl;
       max-width: 100%;
       min-width: 100%;
@@ -106,10 +110,10 @@ class ArabicKeyboard extends LitElement {
       grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 2fr
     }
     .keyboard_row.second_row {
-      grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr
+      grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr
     }
     .keyboard_row.third_row {
-      grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 2fr
+      grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 2fr
     }
     .keyboard_row.fourth_row {
       grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 2fr
@@ -227,20 +231,15 @@ class ArabicKeyboard extends LitElement {
 
     nodes.forEach((node) => {
       node && node.classList.add("active");
-      // setTimeout(() => {
-      //   node && node.classList.remove("active");
-      // }, 50);
     })
   }
 
   handleKeyUp(event) {
-    console.log({ event });
-    // const key = event.key;
     let key;
     if (event.key === "'") {
       const previousLetter = checkPreviousLetter(this.state.textValue, this.state.cursorPosition);
       console.log({ previousLetter });
-      if (["d'", "g'", "s'", "t'"].includes(previousLetter)) {
+      if (["d'", "g'", "s'", "t'", "h'", "H'"].includes(previousLetter)) {
         key = previousLetter;
       }
     }
@@ -272,10 +271,6 @@ class ArabicKeyboard extends LitElement {
     this.clearPreviousKeyInterval();
     const key = event.key;
     console.log({ key });
-
-
-    // const deCryptedClass = crypt("salt", key);
-    // this.handleAddActiveState(`.button_${deCryptedClass}`);
 
     if (["CapsLock", "Shift"].includes(key)) {
       this.buttonGroups = shifted_button_groups;
@@ -311,7 +306,7 @@ class ArabicKeyboard extends LitElement {
 
     if (key === "'") {
       const previousLetter = checkPreviousLetter(this.state.textValue, this.state.cursorPosition);
-      if (['d', 'g', 's', 't'].includes(previousLetter)) {
+      if (['d', 'g', 's', 't', 'h', 'H'].includes(previousLetter)) {
         const newKey = previousLetter + "'";
         this.updateState(BackspaceFactory(key, this.state));
         this.handleAddActiveState(newKey)
@@ -384,6 +379,7 @@ class ArabicKeyboard extends LitElement {
 
   handleCopy(event) {
     event.preventDefault();
+    document.execCommand("copy");
     event.clipboardData.setData(
       "text/plain",
       this.state.selectedText.toString()
@@ -393,6 +389,7 @@ class ArabicKeyboard extends LitElement {
 
   handleCut(event) {
     event.preventDefault();
+    document.execCommand("copy");
     event.clipboardData.setData(
       "text/plain",
       this.state.selectedText.toString()
@@ -462,8 +459,14 @@ class ArabicKeyboard extends LitElement {
         </div>
       </section>
       <div>
-        <!-- ${JSON.stringify(this.state)} -->
-        cursor position: ${this.state.cursorPosition}
+        <ul>
+          <li>textValue: ${this.state.textValue}</li>
+          <li>historyIndex: ${this.state.historyIndex}</li>
+          <li>selectedText: ${this.state.selectedText}</li>
+          <li>copiedText: ${this.state.copiedText}</li>
+          <li>previousKey: ${this.state.previousKey}</li>
+          <li>cursorPosition: ${this.state.cursorPosition}</li>
+        </ul>
       </div>
     `;
   }

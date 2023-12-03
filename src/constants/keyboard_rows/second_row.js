@@ -15,19 +15,19 @@ export const shifted_second_row = [{
   },
   {
     'type': 'letter',
-    'ar': 'ؤ',
+    'ar': 'و',
     'en': 'W',
     'label': ['W'],
-    'title': 'Waw with hamza above',
+    'title': 'Waw',
     'shifted': 'و'
   },
   {
     'type': 'letter',
-    'ar': 'ئ',
+    'ar': 'ى',
     'en': 'E',
     'label': ['E'],
-    'title': 'Ya, with hamza above',
-    'shifted': 'إ'
+    'title': 'alif maqsura',
+    'shifted': 'ي'
   },
   {
     'type': 'letter',
@@ -62,28 +62,36 @@ export const shifted_second_row = [{
     'shifted': 'ي'
   },
   {
-    'type': 'diacritic',
-    'ar': '\u064C',
+    'type': 'letter',
+    'ar': 'و',
     'en': 'U',
     'label': ['U'],
-    'title': 'Dammatan',
-    'shifted': '\u064F'
+    'title': 'Waw',
+    'shifted': 'و'
   },
   {
-    'type': 'diacritic',
-    'ar': '\u064D',
+    'type': 'letter',
+    'ar': 'ى',
     'en': 'I',
     'label': ['I'],
     'title': 'Kasratan',
-    'shifted': '\u0650'
+    'shifted': 'ي'
   },
   {
-    'type': 'diacritic',
-    'ar': '\u0651',
+    'type': 'letter',
+    'ar': 'و',
     'en': 'O',
     'label': ['O'],
-    'title': 'Shadda, doubling the consonant',
-    'shifted': '\u0652'
+    'title': 'Waw',
+    'shifted': 'و'
+  },
+  {
+    "type": "letter",
+    "ar": 'ب',
+    'en': "P",
+    'label': ["P"],
+    'title': "Ba, corresponding to the letter B in English",
+    'shifted': 'ب'
   },
   {
     'type': 'punctuation',
@@ -133,15 +141,15 @@ export const second_row = [{
     'en': "w",
     'label': ["w"],
     'title': "Waw, corresponding to the letter W in English",
-    'shifted': 'ؤ'
+    'shifted': 'و'
   },
   {
-    "type": 'letter',
-    "ar": 'إ',
+    'type': 'letter',
+    "ar": 'ي',
     'en': "e",
     'label': ["e"],
-    'title': 'Alef with hamza below',
-    'shifted': 'ئ'
+    'title': "Ya, corresponding to the letter Y in English",
+    'shifted': 'ى'
   },
   {
     "type": 'letter',
@@ -176,28 +184,36 @@ export const second_row = [{
     'shifted': 'ى'
   },
   {
-    'type': 'diacritic',
-    'ar': '\u064F',
+    "type": 'letter',
+    "ar": 'و',
     'en': "u",
     'label': ["u"],
-    'title': "Damma, short vowel u",
-    'shifted': '\u064C'
+    'title': "Waw",
+    'shifted': 'و'
   },
   {
-    'type': 'diacritic',
-    "ar": '\u0650',
+    'type': 'letter',
+    "ar": 'ي',
     'en': "i",
     'label': ["i"],
-    'title': "Kasra, short vowel i",
-    'shifted': '\u064D'
+    'title': "Ya, corresponding to the letter Y in English",
+    'shifted': 'ى'
   },
   {
-    'type': 'diacritic',
-    "ar": '\u0652',
+    'type': 'letter',
+    "ar": 'و',
     'en': "o",
     'label': ["o"],
-    'title': "Sukun, no vowel",
-    'shifted': "\u0651"
+    'title': "Waw",
+    'shifted': 'و'
+  },
+  {
+    "type": "letter",
+    "ar": 'ب',
+    'en': "p",
+    'label': ["p"],
+    'title': "Ba, corresponding to the letter B in English",
+    'shifted': 'ب'
   },
   {
     'type': 'punctuation',

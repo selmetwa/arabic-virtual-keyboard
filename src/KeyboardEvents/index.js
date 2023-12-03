@@ -24,10 +24,12 @@ export const KeyboardShortcutFactory = (key, state, textarea) => {
       textarea.select()
       return {}
     case 'c': // copy
+      document.execCommand('copy');
       return { copiedText: state.selectedText }
     case 'v': // paste
       return PasteFactory(state.copiedText, state)
     case 'x': // cut
+      document.execCommand('copy');
       const res = deleteSelectedText(state.textValue, state.selectedText);
 
       return {

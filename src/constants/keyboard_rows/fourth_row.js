@@ -15,26 +15,26 @@ export const fourth_row = [{
   },
   {
     'type': 'letter',
-    'ar': 'ة',
+    'ar': 'خ',
     'en': 'x',
     'label': ['x'],
-    'title': 'Ta marbuta',
-    'shifted': 'ء'
+    'title': 'Kha',
+    'shifted': 'خ'
   }, {
-    'type': 'diacritic',
-    "ar": '\u064E',
+    'type': 'letter',
+    "ar": 'س',
     'en': 'c',
     'label': 'c',
-    'title': 'Fatha, short vowel a',
-    'shifted': '\u064B'
+    'title': 'Seen',
+    'shifted': 'س'
   },
   {
     'type': 'letter',
-    'ar': 'ڤ',
+    'ar': 'ف',
     'en': 'v',
     'label': ['v'],
-    'title': 'V',
-    'shifted': 'ڤ'
+    'title': 'Fa, there is no V in Arabic',
+    'shifted': 'ف'
   },
   {
     'type': 'letter',
@@ -110,27 +110,27 @@ export const shifted_fourth_row = [{
   },
   {
     'type': 'letter',
-    'ar': 'ء',
+    'ar': 'خ',
     'en': 'X',
     'label': ['X'],
     'title': 'Hamza',
-    'shifted': 'ة'
+    'shifted': 'خ'
   },
   {
     'type': 'diacritic',
-    "ar": '\u064B',
+    "ar": 'س',
     'en': 'C',
     'label': 'C',
-    'title': 'Fathahan',
-    'shifted': '\u064E'
+    'title': 'Seen',
+    'shifted': 'س'
   },
   {
     'type': 'letter',
-    'ar': 'ڤ',
+    'ar': 'ف',
     'en': 'V',
     'label': ['V'],
-    'title': 'V',
-    'shifted': 'ڤ'
+    'title': 'Fa, there is no v in Arabic',
+    'shifted': 'ف'
   },
   {
     'type': 'letter',

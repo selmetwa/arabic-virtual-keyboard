@@ -87,12 +87,12 @@ export const shifted_first_row = [{
     'shifted': '0'
   },
   {
-    'type': 'punctuation',
-    'ar': '_',
+    'type': 'letter',
+    'ar': 'ء',
     'en': '_',
     'label': '_',
-    'title': '_',
-    'shifted': '-'
+    'title': 'Hamza, glottal stop',
+    'shifted': 'ء'
   },
   {
     'type': 'punctuation',
@@ -200,12 +200,12 @@ export const first_row = [{
     "shifted": ')'
   },
   {
-    'type': 'punctuation',
-    'ar': '-',
+    'type': 'letter',
+    'ar': 'ء',
     'en': '-',
     'label': '-',
-    'title': '-',
-    'shifted': '_'
+    'title': 'Hamza, glottal stop',
+    'shifted': 'ء'
   },
   {
     'type': 'punctuation',
