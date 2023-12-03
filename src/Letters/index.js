@@ -13,7 +13,9 @@ export const insertEnglishLetterIntoArabic = (englishLetter, originalText, curso
   originalArray.splice(cursorPosition, 0, arabicLetter);
   const newText = originalArray.join('');
   const newCursorPosition = cursorPosition + 1;
-  console.log({ newCursorPosition })
+
+  console.log({ arabicLetter, newCursorPosition })
+
   return { newText, newCursorPosition };
 };
 

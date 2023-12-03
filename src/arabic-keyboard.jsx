@@ -13,7 +13,7 @@ import {
   isPunctuation, 
   isLetter, 
   checkPreviousLetter, 
-  isDiacriticMark 
+  isDiacriticMark,
 } from "./utils.js/index.js";
 
 import { NumbersFactory } from "./Numbers/index.js";
@@ -40,6 +40,7 @@ class ArabicKeyboard extends LitElement {
     super();
     this.textarea = null;
     this.buttonGroups = button_groups;
+    this.englishTextValue = "",
     this.state = {
       textValue: "",
       historyIndex: 0,
@@ -319,6 +320,12 @@ class ArabicKeyboard extends LitElement {
       }
     }
 
+    if (key === "=") {
+      const previousLetter = checkPreviousLetter(this.state.textValue, this.state.cursorPosition);
+      const previousPreviousLetter = checkPreviousLetter(this.state.textValue, this.state.cursorPosition - 1);
+      return this.updateState(DiacriticsFactory(previousLetter,previousPreviousLetter, this.state))
+    }
+
     if (isNumber(key)) {
       this.updateState(NumbersFactory(key, this.state));
     }
@@ -463,6 +470,7 @@ class ArabicKeyboard extends LitElement {
       </section>
       <div>
         <ul>
+          <li>english textValue: ${this.englishTextValue}</li>
           <li>textValue: ${this.state.textValue}</li>
           <li>historyIndex: ${this.state.historyIndex}</li>
           <li>selectedText: ${this.state.selectedText}</li>

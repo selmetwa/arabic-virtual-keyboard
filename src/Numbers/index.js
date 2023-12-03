@@ -37,7 +37,6 @@ export const NumbersFactory = (key, state) => {
   }
 
   const { newText, newCursorPosition } = insertEnglishNumberIntoArabic(key, _textValue, state.cursorPosition);
-
   const newHistory = [...state.history, state.textValue]
 
   return {

@@ -44,8 +44,7 @@ export const isNumber = (value) => {
 export const getSelectedText = (textarea) => {
   const start = textarea.selectionStart;
   const end = textarea.selectionEnd;
-  // const text = textarea.value.substring(start, end);
-  // console.log({ start, end, textarea, text });
+
   if (start !== end) {
     return textarea.value.substring(start, end);
   }
@@ -189,4 +188,16 @@ export const checkPreviousLetter = (textValue, cursorPosition) => {
   const previousEnglishLetterObj = letters.find((obj) => obj.ar === previousLetter)
   const previousEnglishLetter = previousEnglishLetterObj && previousEnglishLetterObj.en;
   return previousEnglishLetter;
+}
+
+export const isKasra = (letter) => {
+  return ["i", "e", "y", "I", "E", "Y"].includes(letter);
+}
+
+export const isFatha = (letter) => {
+  return ["a", "A"].includes(letter);
+}
+
+export const isDamma = (letter) => {
+  return ["u", "o", 'w', "U", "O", "W"].includes(letter);
 }
