@@ -117,7 +117,7 @@ export const shifted_fourth_row = [{
     'shifted': 'خ'
   },
   {
-    'type': 'diacritic',
+    'type': 'letter',
     "ar": 'س',
     'en': 'C',
     'label': 'C',

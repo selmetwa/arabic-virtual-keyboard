@@ -118,6 +118,9 @@ class ArabicKeyboard extends LitElement {
     .keyboard_row.fourth_row {
       grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 2fr
     }
+    .keyboard_row.sixth_row {
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr
+    }
     .keyboard_row.fifth_row {
       grid-template-columns: 2fr 12fr;
     }

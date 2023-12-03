@@ -3,7 +3,7 @@ import { second_row, shifted_second_row } from "./keyboard_rows/second_row"
 import { third_row, shifted_third_row } from "./keyboard_rows/third_row"
 import { fourth_row, shifted_fourth_row } from "./keyboard_rows/fourth_row"
 import { fifth_row } from "./keyboard_rows/fifth_row"
-
+import { sixth_row, shifted_sixth_row } from "./keyboard_rows/sixth_row"
 export const button_groups = [{
     buttons: first_row,
     name: 'first_row'
@@ -19,6 +19,10 @@ export const button_groups = [{
   {
     buttons: fourth_row,
     name: 'fourth_row'
+  },
+  {
+    buttons: sixth_row,
+    name: 'sixth_row'
   },
   {
     buttons: fifth_row,
@@ -43,6 +47,10 @@ export const shifted_button_groups = [{
   {
     buttons: shifted_fourth_row,
     name: 'fourth_row'
+  },
+  {
+    buttons: shifted_sixth_row,
+    name: 'sixth_row'
   },
   {
     buttons: fifth_row,
