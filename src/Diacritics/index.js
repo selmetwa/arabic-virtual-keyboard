@@ -20,6 +20,9 @@ const convertValidKey = (previousKey, previousPreviousKey) => {
   if (['s', 'S'].includes(previousKey)) {
     return "s="
   }
+  if (['h', 'H'].includes(previousKey)) {
+    return "h="
+  }
   if (['i', 'e', 'y', 'I', 'Y', 'E'].includes(previousKey)) {
     return "i="
   }

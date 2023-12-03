@@ -49,8 +49,8 @@ export const sixth_row = [{
   {
     "type": 'diacritic',
     "ar": '\u0652',
-    "en": "o=",
-    "label": ["o="],
+    "en": "h=",
+    "label": ["h="],
     "title": "Sukun",
     "shifted": '\u0652'
   },
@@ -115,8 +115,8 @@ export const shifted_sixth_row = [{
   {
     "type": 'diacritic',
     "ar": '\u0652',
-    "en": "=O",
-    "label": ["=O"],
+    "en": "=h",
+    "label": ["=h"],
     "title": "Sukun",
     "shifted": '\u0652'
   },
