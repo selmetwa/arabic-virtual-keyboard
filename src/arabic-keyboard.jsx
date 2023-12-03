@@ -10,7 +10,7 @@ import {
   isNumber, 
   isArrowKey, 
   crypt, 
-  isSpecialCharacter, 
+  isPunctuation, 
   isLetter, 
   checkPreviousLetter, 
   isDiacriticMark 
@@ -22,7 +22,7 @@ import { MouseCutFactory, UpdateSelectedTextFactory, TextareaClickFactory } from
 import { PasteFactory } from "./Paste/index.js";
 import { KeyboardShortcutFactory, KeyboardNavigationFactory } from "./KeyboardEvents/index.js";
 import { SpaceFactory } from "./Space/index.js";
-import { SpecialCharacterFactory } from "./SpecialCharacters/index.js";
+import { PunctuationFactory } from "./Punctuation/index.js";
 import { LettersFactory } from "./Letters/index.js";
 import { DiacriticsFactory } from "./Diacritics/index.js";
 import { TabFactory } from "./Tab/index.js";
@@ -336,8 +336,8 @@ class ArabicKeyboard extends LitElement {
     }
 
     // Handle Inserting Special Characters (rename to punctuation)
-    if (isSpecialCharacter(key)) {
-      this.updateState(SpecialCharacterFactory(key, this.state, this.textarea));
+    if (isPunctuation(key)) {
+      this.updateState(PunctuationFactory(key, this.state, this.textarea));
     }
 
     this.handleAddActiveState(key);

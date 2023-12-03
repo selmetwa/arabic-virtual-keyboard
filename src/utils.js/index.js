@@ -19,11 +19,11 @@ export const isDiacriticMark = (value) => {
 }
 
 /**
- * Function to check if the value is a special character.
+ * Function to check if the value is punctuation.
  * @param {string} value - The value to be checked.
- * @returns {boolean} - True if the value is a special character, false otherwise.
+ * @returns {boolean} - True if the value is punctuation, false otherwise.
  */
-export const isSpecialCharacter = (value) => {
+export const isPunctuation = (value) => {
   return ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', '-', '=', '{', '}', '[', ']', '|', '\\', ':', ';', '"', "'", '<', '>', ',', '.', '?', '/', '~', '`'].includes(value);
 }
 

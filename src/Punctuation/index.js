@@ -1,6 +1,6 @@
-import { deleteSelectedText, convertNumberToArabic, getArabicPunctuation } from '../utils.js';
+import { deleteSelectedText, getArabicPunctuation } from '../utils.js/index.js';
 
-const insertSpecialCharacter = (specialCharacter, originalText, cursorPosition) => {
+const insertPunctuation = (specialCharacter, originalText, cursorPosition) => {
   const originalArray = originalText.split('');
   const arabicCharacter = getArabicPunctuation(specialCharacter);
 
@@ -12,14 +12,14 @@ const insertSpecialCharacter = (specialCharacter, originalText, cursorPosition) 
 }
 
 
-export const SpecialCharacterFactory = (key, state) => {
+export const PunctuationFactory = (key, state) => {
   let _textValue = state.textValue;
 
   if (!!state.selectedText) {
     _textValue = deleteSelectedText(_textValue, state.selectedText);
   }
 
-  const { newText, newCursorPosition } = insertSpecialCharacter(key, _textValue, state.cursorPosition);
+  const { newText, newCursorPosition } = insertPunctuation(key, _textValue, state.cursorPosition);
 
   const newHistory = [...state.history, state.textValue]
 
