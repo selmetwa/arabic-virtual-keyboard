@@ -7,7 +7,6 @@ import {
   isDownArrow
 } from '../utils.js/index.js'
 import { PasteFactory } from '../Paste/index.js'
-import { EnterFactory } from '../Enter/index.js';
 
 import { getNextLineStart, getLineStart, generateRowIndices, getCurrentRow } from './helpers/index.js'
 
@@ -18,6 +17,8 @@ import { getNextLineStart, getLineStart, generateRowIndices, getCurrentRow } fro
  * @param {Element} textarea 
  */
 export const KeyboardShortcutFactory = (key, state, textarea) => {
+  const currentLineStart = getLineStart(state.cursorPosition, state.textValue);
+
   switch (key) {
     case 'a': // select all
       textarea.select()
@@ -52,6 +53,22 @@ export const KeyboardShortcutFactory = (key, state, textarea) => {
         cursorPosition: textValue.length,
         history: newHistory
       }
+
+    case 'ArrowLeft':
+      const rows = state.textValue.split('\n');
+      const currentRowIndex = getCurrentRow(state.textValue, state.cursorPosition) - 1;
+      const currentLineEnd = currentLineStart + rows[currentRowIndex].length;
+      textarea.setSelectionRange(currentLineEnd, currentLineEnd)
+      return { cursorPosition: currentLineEnd, previousKey: key, selectedText: '' }
+    case 'ArrowRight':
+      textarea.setSelectionRange(currentLineStart, currentLineStart)
+      return { cursorPosition: currentLineStart, previousKey: key, selectedText: '' }
+    case 'ArrowUp':
+      textarea.setSelectionRange(0, 0)
+      return { cursorPosition: 0, previousKey: key, selectedText: '' }
+    case 'ArrowDown':
+      textarea.setSelectionRange(state.textValue.length, state.textValue.length)
+      return { cursorPosition: state.textValue.length, previousKey: key, selectedText: '' }
   }
 }
 
@@ -111,11 +128,6 @@ export const KeyboardNavigationFactory = (key, state, textarea) => {
     const indexOfPositionInCurrentRow = currentRowIndices[(currentRowIndices.length - 1) - positionInCurrentRow]
     const nextRowIndices = generateRowIndices(nextLineStart, nextLineEnd);
     const newCursorPosition = nextRowIndices[(nextRowIndices.length - 1) - indexOfPositionInCurrentRow] || nextLineEnd;
-    const nextRowExists = nextRowIndex < rows.length;
-
-    if (!nextRowExists) {
-      return EnterFactory(state, textarea);
-    }
 
     textarea.setSelectionRange(newCursorPosition, newCursorPosition);
     return { cursorPosition: newCursorPosition, previousKey: key, selectedText: '' };
