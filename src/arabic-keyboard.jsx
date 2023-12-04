@@ -217,7 +217,7 @@ class ArabicKeyboard extends LitElement {
     this.previousKeyIntervalId = setInterval(() => {
       this.updateState({ previousKey: "" });
       this.requestUpdate();
-    }, 500);
+    }, 250);
   }
 
   /**
