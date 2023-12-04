@@ -10,7 +10,7 @@ export const third_row = [{
     'en': 'a',
     'label': ['a'],
     'title': 'Alif',
-    'shifted': 'أ'
+    'shifted': 'آ'
   },
   {
     'type': 'letter',
@@ -141,7 +141,7 @@ export const shifted_third_row = [{
   },
   {
     'type': 'letter',
-    'ar': 'أ',
+    'ar': 'آ',
     'en': 'A',
     'label': ['A'],
     'title': 'Alif',

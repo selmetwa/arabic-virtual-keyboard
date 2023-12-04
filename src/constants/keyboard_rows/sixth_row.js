@@ -61,7 +61,31 @@ export const sixth_row = [{
     "label": ["s="],
     "title": "Shadda",
     "shifted": '\u0651'
-  }
+  },
+  {
+    "type": "special_char",
+    "ar": "ئ",
+    "en": 'y--',
+    "label": ["y--"],
+    "title": "Ya, with Hamza above",
+    "shifted": "ئ"
+  },
+  {
+    "type": "special_char",
+    "ar": "ؤ",
+    "en": 'w--',
+    "label": ["w--"],
+    "title": "Wa, with Hamza above",
+    "shifted": "ؤ"
+  },
+  {
+    "type": "special_char",
+    "ar": "إ",
+    "en": 'a--',
+    "label": ["a--"],
+    "title": "Alif, with Hamza below",
+    "shifted": 'أ'
+  },
 ]
 
 export const shifted_sixth_row = [{
@@ -127,5 +151,29 @@ export const shifted_sixth_row = [{
     "label": ["S="],
     "title": "Shadda",
     "shifted": '\u0651'
-  }
+  },
+  {
+    "type": "special_char",
+    "ar": "ئ",
+    "en": 'Y--',
+    "label": ["Y--"],
+    "title": "Ya, with Hamza above",
+    "shifted": "ئ"
+  },
+  {
+    "type": "special_char",
+    "ar": "ؤ",
+    "en": 'W--',
+    "label": ["W--"],
+    "title": "Wa, with Hamza above",
+    "shifted": "ؤ"
+  },
+  {
+    "type": "special_char",
+    "ar": 'أ', //'أ'
+    "en": 'A--',
+    "label": ["A--"],
+    "title": "Alif, with Hamza below",
+    "shifted": "إ"
+  },
 ]

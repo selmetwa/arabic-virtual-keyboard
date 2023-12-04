@@ -27,6 +27,7 @@ import { LettersFactory } from "./Letters/index.js";
 import { DiacriticsFactory } from "./Diacritics/index.js";
 import { TabFactory } from "./Tab/index.js";
 import { EnterFactory } from "./Enter/index.js";
+import { SpecialCharacterFactory } from "./SpecialCharacters/index.js";
 
 class ArabicKeyboard extends LitElement {
   static get properties() {
@@ -57,6 +58,7 @@ class ArabicKeyboard extends LitElement {
       --gap: 4px;
       --font-size: 18px;
       --width: 50px;
+      --row-height: 50px;
       --border-radius: 4px;
       --background-color: #ececec;
       --border: 1px solid #999999;
@@ -105,6 +107,7 @@ class ArabicKeyboard extends LitElement {
       display: grid;
       gap: var(--gap);
       width: 100%;
+      height: var(--row-height);
     }
 
     .keyboard_row.first_row {
@@ -120,7 +123,7 @@ class ArabicKeyboard extends LitElement {
       grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 2fr
     }
     .keyboard_row.sixth_row {
-      grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     }
     .keyboard_row.fifth_row {
       grid-template-columns: 2fr 12fr;
@@ -151,6 +154,7 @@ class ArabicKeyboard extends LitElement {
       background-color: var(--background-color);
       border: var(--border);
       height: var(--width);
+      height: 100%;
       padding: 0;
     }
 
@@ -320,6 +324,14 @@ class ArabicKeyboard extends LitElement {
       return this.updateState(DiacriticsFactory(previousLetter,previousPreviousLetter, this.state), "diacritic");
     }
 
+    if (key === '-') {
+      const previousLetter = checkPreviousLetter(this.state.textValue, this.state.cursorPosition);
+      const previousPreviousLetter = checkPreviousLetter(this.state.textValue, this.state.cursorPosition - 1);
+      if (previousLetter === '-') {
+        return this.updateState(SpecialCharacterFactory(previousLetter,previousPreviousLetter, this.state), "special character");
+      }
+    }
+
     if (isNumber(key)) {
       this.updateState(NumbersFactory(key, this.state), "number");
     }
@@ -431,28 +443,18 @@ class ArabicKeyboard extends LitElement {
                 ${buttons.map(
                   (button) => {
                     const cryptedClass = crypt("salt", button.en);
-                    return html` <button
+                    return html`<button
                         value="${button.en}"
                         type="button"
                         class="button button_${cryptedClass} ${button.modifierClass}"
                         title="${button.title}"
                         @click="${this.handleButtonClick}"
                       >
-                      <div class="button_inner">
-                      ${button && button.shifted
-                          ? html`<p class="button_shifted">
-                              ${button.shifted}
-                            </p>`
-                          : ""}
-                        ${button && button.label
-                          ? html`<p class="button_en">
-                              ${button.label}
-                            </p>`
-                          : ""}
+                        <p class="button_shifted">${button.shifted}</p>
+                        <p class="button_en">${button.label}</p>
                         <p class="button_value">${button.ar}</p>
-                      </div>
                       </button>
-                    </div> `
+                    </div>`
                   }
                 )}
               </div>
