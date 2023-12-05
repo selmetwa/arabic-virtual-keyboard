@@ -7,6 +7,7 @@ import { MouseCutFactory, UpdateSelectedTextFactory, TextareaClickFactory } from
 import { PasteFactory } from "./Factories/Paste/index.js";
 import { KeyboardShortcutFactory } from "./Factories/KeyboardEvents/index.js";
 import { TaskMaster } from "./Factories/index.js";
+import { ClickFactory } from './Click/index.js';
 
 class ArabicKeyboard extends LitElement {
   static get properties() {
@@ -123,7 +124,9 @@ class ArabicKeyboard extends LitElement {
     button {
       position: relative;
     }
-
+    button > * {
+      pointer-events: none;
+    }
     .button {
       font-size: var(--font-size);
       border-radius: var(--border-radius);
@@ -304,6 +307,11 @@ class ArabicKeyboard extends LitElement {
     this.updateState(MouseCutFactory(this.state));
   }
 
+  handleClick(event) {
+    const value = event.target.value;
+    this.updateState(ClickFactory(value, this.state))
+  }
+
   render() {
     return html`
       <noscript>
@@ -341,6 +349,7 @@ class ArabicKeyboard extends LitElement {
                         type="button"
                         class="button button_${cryptedClass} ${button.modifierClass}"
                         title="${button.title}"
+                        @click="${this.handleClick}"
                       >
                         <p class="button_shifted">${button.shifted}</p>
                         <p class="button_en">${button.label}</p>
