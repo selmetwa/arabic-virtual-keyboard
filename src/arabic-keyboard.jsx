@@ -14,20 +14,22 @@ import {
   isLetter, 
   checkPreviousLetter, 
   isDiacriticMark,
-} from "./utils.js/index.js";
+} from "./utils/index.js";
 
-import { NumbersFactory } from "./Numbers/index.js";
-import { BackspaceFactory } from "./Backspace/index.js";
-import { MouseCutFactory, UpdateSelectedTextFactory, TextareaClickFactory } from "./MouseEvents/index.js";
-import { PasteFactory } from "./Paste/index.js";
-import { KeyboardShortcutFactory, KeyboardNavigationFactory } from "./KeyboardEvents/index.js";
-import { SpaceFactory } from "./Space/index.js";
-import { PunctuationFactory } from "./Punctuation/index.js";
-import { LettersFactory } from "./Letters/index.js";
-import { DiacriticsFactory } from "./Diacritics/index.js";
-import { TabFactory } from "./Tab/index.js";
-import { EnterFactory } from "./Enter/index.js";
-import { SpecialCharacterFactory } from "./SpecialCharacters/index.js";
+import { NumbersFactory } from "./Factories/Numbers/index.js"
+import { BackspaceFactory } from "./Factories/Backspace/index.js";
+import { MouseCutFactory, UpdateSelectedTextFactory, TextareaClickFactory } from "./Factories/MouseEvents/index.js";
+import { PasteFactory } from "./Factories/Paste/index.js";
+import { KeyboardShortcutFactory, KeyboardNavigationFactory } from "./Factories/KeyboardEvents/index.js";
+import { SpaceFactory } from "./Factories/Space/index.js";
+import { PunctuationFactory } from "./Factories/Punctuation/index.js";
+import { LettersFactory } from "./Factories/Letters/index.js";
+import { DiacriticsFactory } from "./Factories/Diacritics/index.js";
+import { TabFactory } from "./Factories/Tab/index.js";
+import { EnterFactory } from "./Factories/Enter/index.js";
+import { SpecialCharacterFactory } from "./Factories/SpecialCharacters/index.js";
+
+import { TaskMaster } from "./Factories/index.js";
 
 class ArabicKeyboard extends LitElement {
   static get properties() {
@@ -73,8 +75,6 @@ class ArabicKeyboard extends LitElement {
     .wrapper {
       margin: auto;
       max-width: 800px;
-      // outline: 1px solid black;
-      // padding: 8px;
       font-family: sans-serif;
     }
 
@@ -244,7 +244,10 @@ class ArabicKeyboard extends LitElement {
     if (event.key === "'") {
       const previousLetter = checkPreviousLetter(this.state.textValue, this.state.cursorPosition);
       if (["d'", "g'", "s'", "t'", "h'", "H'"].includes(previousLetter)) {
+        this.shadowRoot.querySelector('.button_2d').classList.remove("active");
         key = previousLetter;
+      } else {
+        key = event.key;
       }
     }
     else if (event.key === "Meta") {
@@ -254,6 +257,8 @@ class ArabicKeyboard extends LitElement {
     } else {
       key = event.key;
     }
+
+    console.log("keyup", { key })
     const cryptedClassname = crypt("salt", key);
     const target = `.button_${cryptedClassname}`;
     const keysPressed = this.shadowRoot.querySelectorAll(target);
@@ -272,7 +277,7 @@ class ArabicKeyboard extends LitElement {
   handleKeyDown(event) {
     event.preventDefault();
     this.clearPreviousKeyInterval();
-    const key = event.key;
+    const key = event.code === "Space" ? 'Space' : event.key;
 
     if (["CapsLock", "Shift"].includes(key)) {
       this.buttonGroups = shifted_button_groups;
@@ -284,96 +289,86 @@ class ArabicKeyboard extends LitElement {
       return this.updateState(KeyboardShortcutFactory(key, this.state, this.textarea));
     }
 
-    if (key === "Meta") {
-      this.handleAddActiveState("meta")
-      this.updateState({ previousKey: key }, "meta");
-    }
+    const res = TaskMaster(
+      key, 
+      this.state, 
+      this.textarea,
+      this.handleAddActiveState.bind(this),
+    );
 
-    if (key === 'Enter') {
-      this.updateState(EnterFactory(this.state, this.textarea), "enter");
-    }
+    this.updateState(res, "task master");
+    console.log({ res })
 
-    if (key === 'Tab') {
-      this.updateState(TabFactory(this.state), "tab");
-    }
+    // if (key === "Meta") {
+    //   this.handleAddActiveState("meta")
+    //   this.updateState({ previousKey: key }, "meta");
+    // }
 
-    if (key === "Backspace") {
-      this.updateState(BackspaceFactory(key, this.state), "backspace");
-    }
+    // if (key === 'Enter') {
+    //   this.updateState(EnterFactory(this.state, this.textarea), "enter");
+    // }
 
-    if (event.code === "Space") {
-      this.handleAddActiveState("space")
-      this.updateState(SpaceFactory(this.state), "space");
-    }
+    // if (key === 'Tab') {
+    //   this.updateState(TabFactory(this.state), "tab");
+    // }
 
-    if (key === "'") {
-      const previousLetter = checkPreviousLetter(this.state.textValue, this.state.cursorPosition);
-      if (['d', 'g', 's', 't', 'h', 'H'].includes(previousLetter)) {
-        const newKey = previousLetter + "'";
-        this.updateState(BackspaceFactory(key, this.state));
-        this.handleAddActiveState(newKey)
-        return this.updateState(LettersFactory(newKey, this.state), "letter");
-      } else {
-        return
-      }
-    }
+    // if (key === "Backspace") {
+    //   this.updateState(BackspaceFactory(key, this.state), "backspace");
+    // }
 
-    if (key === "=") {
-      const previousLetter = checkPreviousLetter(this.state.textValue, this.state.cursorPosition);
-      const previousPreviousLetter = checkPreviousLetter(this.state.textValue, this.state.cursorPosition - 1);
-      return this.updateState(DiacriticsFactory(previousLetter,previousPreviousLetter, this.state), "diacritic");
-    }
+    // if (key === "Space") {
+    //   this.handleAddActiveState("space")
+    //   this.updateState(SpaceFactory(this.state), "space");
+    // }
 
-    if (key === '-') {
-      const previousLetter = checkPreviousLetter(this.state.textValue, this.state.cursorPosition);
-      const previousPreviousLetter = checkPreviousLetter(this.state.textValue, this.state.cursorPosition - 1);
-      if (previousLetter === '-') {
-        return this.updateState(SpecialCharacterFactory(previousLetter,previousPreviousLetter, this.state), "special character");
-      }
-    }
+    // if (key === "'") {
+    //   const previousLetter = checkPreviousLetter(this.state.textValue, this.state.cursorPosition);
+    //   if (['d', 'g', 's', 't', 'h', 'H'].includes(previousLetter)) {
+    //     const newKey = previousLetter + "'";
+    //     this.updateState(BackspaceFactory(key, this.state));
+    //     this.handleAddActiveState(newKey)
+    //     return this.updateState(LettersFactory(newKey, this.state), "letter");
+    //   } else {
+    //     return
+    //   }
+    // }
 
-    if (isNumber(key)) {
-      this.updateState(NumbersFactory(key, this.state), "number");
-    }
+    // if (key === "=") {
+    //   const previousLetter = checkPreviousLetter(this.state.textValue, this.state.cursorPosition);
+    //   const previousPreviousLetter = checkPreviousLetter(this.state.textValue, this.state.cursorPosition - 1);
+    //   return this.updateState(DiacriticsFactory(previousLetter,previousPreviousLetter, this.state), "diacritic");
+    // }
 
-    if (isLetter(key)) {
-      this.updateState(LettersFactory(key, this.state), "letter");
-    }
+    // if (key === '-') {
+    //   const previousLetter = checkPreviousLetter(this.state.textValue, this.state.cursorPosition);
+    //   const previousPreviousLetter = checkPreviousLetter(this.state.textValue, this.state.cursorPosition - 1);
+    //   if (previousLetter === '-') {
+    //     return this.updateState(SpecialCharacterFactory(previousLetter, previousPreviousLetter, this.state), "special character");
+    //   }
+    // }
 
-    if (isDiacriticMark(key)) {
-      this.updateState(DiacriticsFactory(key, this.state), "diacritic second");
-    }
+    // if (isNumber(key)) {
+    //   this.updateState(NumbersFactory(key, this.state), "number");
+    // }
 
-    if (isArrowKey(key)) {
-      this.updateState(KeyboardNavigationFactory(key, this.state, this.textarea), "arrow")
-    }
+    // if (isLetter(key)) {
+    //   this.updateState(LettersFactory(key, this.state), "letter");
+    // }
 
-    if (isPunctuation(key)) {
-      this.updateState(PunctuationFactory(key, this.state, this.textarea), "punctuation");
-    }
+    // if (isDiacriticMark(key)) {
+    //   this.updateState(DiacriticsFactory(key, this.state), "diacritic second");
+    // }
+
+    // if (isArrowKey(key)) {
+    //   this.updateState(KeyboardNavigationFactory(key, this.state, this.textarea), "arrow")
+    // }
+
+    // if (isPunctuation(key)) {
+    //   this.updateState(PunctuationFactory(key, this.state, this.textarea), "punctuation");
+    // }
 
     this.handleAddActiveState(key);
     this.startPreviousKeyInterval();
-  }
-
-  handleButtonClick(event) {
-    event.preventDefault();
-    const key = event.target.value;
-    this.handleAddActiveState(`.button_${key}`);
-
-    if (key === "space") {
-      this.updateState(SpaceFactory(this.state));
-    }
-
-    if (isNumber(key)) {
-      this.updateState(NumbersFactory(key, this.state));
-    }
-
-    if (key === "Backspace") {
-      this.updateState(BackspaceFactory(key, this.state));
-    }
-
-    this.textarea.focus();
   }
 
   handlePaste(event, pastedTextFromKeyboard) {
@@ -448,7 +443,6 @@ class ArabicKeyboard extends LitElement {
                         type="button"
                         class="button button_${cryptedClass} ${button.modifierClass}"
                         title="${button.title}"
-                        @click="${this.handleButtonClick}"
                       >
                         <p class="button_shifted">${button.shifted}</p>
                         <p class="button_en">${button.label}</p>

@@ -1,11 +1,11 @@
-import * as Types from '../constants/types.js'
-import { deleteSelectedText } from "../utils.js";
+import * as Types from '../../constants/types.js'
+import { deleteSelectedText } from "../../utils";
 
 /**
- * Add space to text
+ * Add tab to text
  * @param {Types.State} state - current state of the keyboard
  */
-export const SpaceFactory = (state) => {
+export const TabFactory = (state) => {
   let _textValue = state.textValue;
 
   if (!!state.selectedText) {
@@ -13,7 +13,7 @@ export const SpaceFactory = (state) => {
   }
 
   const arr = _textValue.split('');
-  arr.splice(state.cursorPosition, 0, ' ');
+  arr.splice(state.cursorPosition, 0, '\t');
 
   const newHistory = [...state.history, state.textValue]
   return {

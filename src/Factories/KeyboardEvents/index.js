@@ -1,11 +1,11 @@
-import * as Types from '../constants/types.js'
+import * as Types from '../../constants/types.js'
 import {
   deleteSelectedText,
   isRightArrow,
   isLeftArrow,
   isUpArrow,
   isDownArrow
-} from '../utils.js/index.js'
+} from '../../utils/index.js'
 import { PasteFactory } from '../Paste/index.js'
 
 import { getNextLineStart, getLineStart, generateRowIndices, getCurrentRow } from './helpers/index.js'

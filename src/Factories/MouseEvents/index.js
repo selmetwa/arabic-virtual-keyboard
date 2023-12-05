@@ -1,6 +1,6 @@
-import * as Types from '../constants/types.js'
-import { deleteSelectedText } from '../utils.js/index.js';
-import { getSelectedText } from "../utils.js";
+import * as Types from '../../constants/types.js'
+import { deleteSelectedText } from '../../utils';
+import { getSelectedText } from "../../utils";
 
 /**
  * Function to update cutting text with the mouse

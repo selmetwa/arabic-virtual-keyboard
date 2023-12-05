@@ -1,5 +1,5 @@
-import * as Types from '../constants/types';
-import { isInputArabic, deleteSelectedText, convertNumberToArabic } from '../utils.js';
+import * as Types from '../../constants/types';
+import { isInputArabic, deleteSelectedText, convertNumberToArabic } from '../../utils';
 
 /**
  * convert string of english text to a string of arabic text

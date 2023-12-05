@@ -1,6 +1,6 @@
 import { assert } from '@esm-bundle/chai';
 import { handleDeleteText, BackspaceFactory } from '../index.js';
-import { isInputArabic } from '../../utils.js';
+import { isInputArabic } from '../../../utils/index.js';
 
 const assertObjectsEqual = (actual, expected, message) => {
   try {

@@ -1,4 +1,4 @@
-import { deleteSelectedText, getArabicPunctuation } from '../utils.js/index.js';
+import { deleteSelectedText, getArabicPunctuation } from '../../utils';
 
 const insertPunctuation = (specialCharacter, originalText, cursorPosition) => {
   const originalArray = originalText.split('');

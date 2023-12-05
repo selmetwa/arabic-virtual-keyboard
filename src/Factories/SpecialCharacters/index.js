@@ -2,7 +2,7 @@ const convertToSpecialCharacter = (key) => {
   const yaLetters = ['y', 'Y', 'e', 'E']
   const waLetters = ['w', 'W', 'u', 'U', 'o', 'O']
 
-  console.log({ key })
+  // console.log({ key })
   if (yaLetters.includes(key)) {
     return 'ئ'
   }
@@ -62,6 +62,4 @@ export const SpecialCharacterFactory = (previousKey, previousPreviousKey, state)
     previousKey: previousKey,
     selectedText: '',
   };
-
-  console.log({ specialChar, newText })
 }

@@ -1,5 +1,5 @@
-import * as Types from '../constants/types.js'
-import { deleteSelectedText } from "../utils.js";
+import * as Types from '../../constants/types.js'
+import { deleteSelectedText } from "../../utils/index.js";
 
 /**
  * Function to delete one character from text based on the cursor position.

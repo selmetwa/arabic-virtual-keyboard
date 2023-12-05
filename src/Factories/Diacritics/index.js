@@ -1,4 +1,4 @@
-import { diacritics } from "../constants/data";
+import { diacritics } from "../../constants/data";
 
 const convertValidKey = (previousKey, previousPreviousKey) => {
 
