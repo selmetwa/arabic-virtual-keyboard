@@ -1,4 +1,4 @@
-import { numbers, punctuation, letters, englishLetters, diacritics, diacriticsEnglishKeys } from "../constants/data.js";
+import { numbers, punctuation, letters, englishLetters, diacritics } from "../constants/data.js";
 
 /**
  * Function to check if the value is a letter.
@@ -7,15 +7,6 @@ import { numbers, punctuation, letters, englishLetters, diacritics, diacriticsEn
  */
 export const isLetter = (value) => {
   return englishLetters.includes(value);
-}
-
-/**
- * Function to check if the value is a diacritic mark.
- * @param {string} value - The value to be checked.
- * @returns {boolean} - True if the value is a diacritic mark, false otherwise.
- */
-export const isDiacriticMark = (value) => {
-  return diacriticsEnglishKeys.includes(value)
 }
 
 /**
@@ -188,16 +179,4 @@ export const checkPreviousLetter = (textValue, cursorPosition) => {
   const previousEnglishLetterObj = letters.find((obj) => obj.ar === previousLetter)
   const previousEnglishLetter = previousEnglishLetterObj && previousEnglishLetterObj.en;
   return previousEnglishLetter;
-}
-
-export const isKasra = (letter) => {
-  return ["i", "e", "y", "I", "E", "Y"].includes(letter);
-}
-
-export const isFatha = (letter) => {
-  return ["a", "A"].includes(letter);
-}
-
-export const isDamma = (letter) => {
-  return ["u", "o", 'w', "U", "O", "W"].includes(letter);
 }
