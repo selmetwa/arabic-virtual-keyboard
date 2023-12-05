@@ -41,7 +41,7 @@ export const TaskMaster = (key, state, textarea, handleAddActiveState) => {
     case isNumber(key):
       return NumbersFactory(key, state);
     case isArrowKey(key):
-      return KeyboardShortcutFactory(key, state, textarea);
+      return KeyboardNavigationFactory(key, state, textarea);
     case isPunctuation(key):
       return PunctuationFactory(key, state);
     case key === '-':
