@@ -1,34 +1,11 @@
 import { LitElement, html, css } from "lit";
 
 import * as Types from "./constants/types.js";
-import {
-  button_groups,
-  shifted_button_groups,
-} from "./constants/button_groups.js";
-
-import { 
-  isNumber, 
-  isArrowKey, 
-  crypt, 
-  isPunctuation, 
-  isLetter, 
-  checkPreviousLetter, 
-  isDiacriticMark,
-} from "./utils/index.js";
-
-import { NumbersFactory } from "./Factories/Numbers/index.js"
-import { BackspaceFactory } from "./Factories/Backspace/index.js";
+import { button_groups, shifted_button_groups } from "./constants/button_groups.js";
+import { crypt, checkPreviousLetter } from "./utils/index.js";
 import { MouseCutFactory, UpdateSelectedTextFactory, TextareaClickFactory } from "./Factories/MouseEvents/index.js";
 import { PasteFactory } from "./Factories/Paste/index.js";
-import { KeyboardShortcutFactory, KeyboardNavigationFactory } from "./Factories/KeyboardEvents/index.js";
-import { SpaceFactory } from "./Factories/Space/index.js";
-import { PunctuationFactory } from "./Factories/Punctuation/index.js";
-import { LettersFactory } from "./Factories/Letters/index.js";
-import { DiacriticsFactory } from "./Factories/Diacritics/index.js";
-import { TabFactory } from "./Factories/Tab/index.js";
-import { EnterFactory } from "./Factories/Enter/index.js";
-import { SpecialCharacterFactory } from "./Factories/SpecialCharacters/index.js";
-
+import { KeyboardShortcutFactory } from "./Factories/KeyboardEvents/index.js";
 import { TaskMaster } from "./Factories/index.js";
 
 class ArabicKeyboard extends LitElement {
@@ -224,8 +201,13 @@ class ArabicKeyboard extends LitElement {
    * Function to update the state of our keyboard
    * @param {Types.State} newState - new state of our keyboard
    */
-  updateState(newState, source) {
+  updateState(newState) {
     this.state = { ...this.state, ...newState };
+  }
+
+  handleToggleButtonGroups(groups) {
+    this.buttonGroups = groups;
+    this.requestUpdate();
   }
 
   handleAddActiveState(key) {
@@ -269,8 +251,7 @@ class ArabicKeyboard extends LitElement {
     })
 
     if (["CapsLock", "Shift"].includes(key)) {
-      this.buttonGroups = button_groups;
-      this.requestUpdate();
+      this.handleToggleButtonGroups(button_groups);
     }
   }
 
@@ -280,8 +261,7 @@ class ArabicKeyboard extends LitElement {
     const key = event.code === "Space" ? 'Space' : event.key;
 
     if (["CapsLock", "Shift"].includes(key)) {
-      this.buttonGroups = shifted_button_groups;
-      this.requestUpdate();
+      this.handleToggleButtonGroups(shifted_button_groups);
     }
 
     if (this.state.previousKey === "Meta") {
@@ -289,83 +269,8 @@ class ArabicKeyboard extends LitElement {
       return this.updateState(KeyboardShortcutFactory(key, this.state, this.textarea));
     }
 
-    const res = TaskMaster(
-      key, 
-      this.state, 
-      this.textarea,
-      this.handleAddActiveState.bind(this),
-    );
-
-    this.updateState(res, "task master");
-    console.log({ res })
-
-    // if (key === "Meta") {
-    //   this.handleAddActiveState("meta")
-    //   this.updateState({ previousKey: key }, "meta");
-    // }
-
-    // if (key === 'Enter') {
-    //   this.updateState(EnterFactory(this.state, this.textarea), "enter");
-    // }
-
-    // if (key === 'Tab') {
-    //   this.updateState(TabFactory(this.state), "tab");
-    // }
-
-    // if (key === "Backspace") {
-    //   this.updateState(BackspaceFactory(key, this.state), "backspace");
-    // }
-
-    // if (key === "Space") {
-    //   this.handleAddActiveState("space")
-    //   this.updateState(SpaceFactory(this.state), "space");
-    // }
-
-    // if (key === "'") {
-    //   const previousLetter = checkPreviousLetter(this.state.textValue, this.state.cursorPosition);
-    //   if (['d', 'g', 's', 't', 'h', 'H'].includes(previousLetter)) {
-    //     const newKey = previousLetter + "'";
-    //     this.updateState(BackspaceFactory(key, this.state));
-    //     this.handleAddActiveState(newKey)
-    //     return this.updateState(LettersFactory(newKey, this.state), "letter");
-    //   } else {
-    //     return
-    //   }
-    // }
-
-    // if (key === "=") {
-    //   const previousLetter = checkPreviousLetter(this.state.textValue, this.state.cursorPosition);
-    //   const previousPreviousLetter = checkPreviousLetter(this.state.textValue, this.state.cursorPosition - 1);
-    //   return this.updateState(DiacriticsFactory(previousLetter,previousPreviousLetter, this.state), "diacritic");
-    // }
-
-    // if (key === '-') {
-    //   const previousLetter = checkPreviousLetter(this.state.textValue, this.state.cursorPosition);
-    //   const previousPreviousLetter = checkPreviousLetter(this.state.textValue, this.state.cursorPosition - 1);
-    //   if (previousLetter === '-') {
-    //     return this.updateState(SpecialCharacterFactory(previousLetter, previousPreviousLetter, this.state), "special character");
-    //   }
-    // }
-
-    // if (isNumber(key)) {
-    //   this.updateState(NumbersFactory(key, this.state), "number");
-    // }
-
-    // if (isLetter(key)) {
-    //   this.updateState(LettersFactory(key, this.state), "letter");
-    // }
-
-    // if (isDiacriticMark(key)) {
-    //   this.updateState(DiacriticsFactory(key, this.state), "diacritic second");
-    // }
-
-    // if (isArrowKey(key)) {
-    //   this.updateState(KeyboardNavigationFactory(key, this.state, this.textarea), "arrow")
-    // }
-
-    // if (isPunctuation(key)) {
-    //   this.updateState(PunctuationFactory(key, this.state, this.textarea), "punctuation");
-    // }
+    const updatedState = TaskMaster(key, this.state, this.textarea, this.handleAddActiveState.bind(this));
+    this.updateState(updatedState);
 
     this.handleAddActiveState(key);
     this.startPreviousKeyInterval();
@@ -389,20 +294,14 @@ class ArabicKeyboard extends LitElement {
   handleCopy(event) {
     event.preventDefault();
     document.execCommand("copy");
-    event.clipboardData.setData(
-      "text/plain",
-      this.state.selectedText.toString()
-    );
+    event.clipboardData.setData("text/plain", this.state.selectedText.toString());
     this.updateState({ copiedText: this.state.selectedText });
   }
 
   handleCut(event) {
     event.preventDefault();
     document.execCommand("copy");
-    event.clipboardData.setData(
-      "text/plain",
-      this.state.selectedText.toString()
-    );
+    event.clipboardData.setData("text/plain", this.state.selectedText.toString());
     this.updateState(MouseCutFactory(this.state));
   }
 

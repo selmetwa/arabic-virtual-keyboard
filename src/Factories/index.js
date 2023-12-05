@@ -1,18 +1,14 @@
 import {
   isNumber,
   isArrowKey,
-  crypt,
   isPunctuation,
   isLetter,
   checkPreviousLetter,
-  isDiacriticMark,
 } from "../utils/index.js";
 
 import { NumbersFactory } from "./Numbers/index.js"
 import { BackspaceFactory } from "./Backspace/index.js";
-import { MouseCutFactory, UpdateSelectedTextFactory, TextareaClickFactory } from "./MouseEvents/index.js";
-import { PasteFactory } from "./Paste/index.js";
-import { KeyboardShortcutFactory, KeyboardNavigationFactory } from "./KeyboardEvents/index.js";
+import { KeyboardNavigationFactory } from "./KeyboardEvents/index.js";
 import { SpaceFactory } from "./Space/index.js";
 import { PunctuationFactory } from "./Punctuation/index.js";
 import { LettersFactory } from "./Letters/index.js";
