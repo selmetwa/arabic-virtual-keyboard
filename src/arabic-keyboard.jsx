@@ -60,7 +60,6 @@ class ArabicKeyboard extends LitElement {
       flex-direction: column;
       align-items: center;
       border-radius: var(--border-radius);
-      border: 1px solid var(--background-color);
       padding: 4px;
       gap: 4px;
     }
