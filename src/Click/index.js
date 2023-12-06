@@ -39,6 +39,11 @@ export const ClickFactory = (key, state, textarea) => {
   if (key === 'Enter') {
     return EnterFactory(state, textarea)
   }
+
+  if (key === 'space') {
+    return SpaceFactory(state)
+  }
+
   const { newText, newCursorPosition } = insertIntoText(key, _textValue, state.cursorPosition);
   const newHistory = [...state.history, state.textValue]
 
