@@ -21,7 +21,6 @@ class ArabicKeyboard extends LitElement {
     super();
     this.textarea = null;
     this.buttonGroups = button_groups;
-    this.englishTextValue = "",
     this.state = {
       textValue: "",
       historyIndex: 0,
@@ -127,6 +126,10 @@ class ArabicKeyboard extends LitElement {
     button > * {
       pointer-events: none;
     }
+    .button:active {
+      background-color: var(--active-background-color)!important;
+      border: var(--active-border)!important;
+    }
     .button {
       font-size: var(--font-size);
       border-radius: var(--border-radius);
@@ -139,6 +142,7 @@ class ArabicKeyboard extends LitElement {
 
     .button:hover {
       background-color: var(--hover-background-color);
+      border: var(--active-border);
     }
 
     .button_value {
@@ -223,6 +227,17 @@ class ArabicKeyboard extends LitElement {
     })
   }
 
+  handleRemoveActiveState(key) {
+    const cryptedClassname = crypt("salt", key);
+    const target = `.button_${cryptedClassname}`;
+    const keysPressed = this.shadowRoot.querySelectorAll(target);
+    const nodes = Array.from(keysPressed);
+
+    nodes.forEach((node) => {
+      node && node.classList.remove("active");
+    })
+  }
+
   handleKeyUp(event) {
     let key;
     if (event.key === "'") {
@@ -242,15 +257,7 @@ class ArabicKeyboard extends LitElement {
       key = event.key;
     }
 
-    console.log("keyup", { key })
-    const cryptedClassname = crypt("salt", key);
-    const target = `.button_${cryptedClassname}`;
-    const keysPressed = this.shadowRoot.querySelectorAll(target);
-    const nodes = Array.from(keysPressed);
-
-    nodes.forEach((node) => {
-      node && node.classList.remove("active");
-    })
+    this.handleRemoveActiveState(key)
 
     if (["CapsLock", "Shift"].includes(key)) {
       this.handleToggleButtonGroups(button_groups);
@@ -261,6 +268,15 @@ class ArabicKeyboard extends LitElement {
     event.preventDefault();
     this.clearPreviousKeyInterval();
     const key = event.code === "Space" ? 'Space' : event.key;
+
+    if (["CapsLock", "Shift"].includes(key)) {
+      if (this.buttonGroups === shifted_button_groups) {
+        this.handleToggleButtonGroups(button_groups);
+        this.handleRemoveActiveState(key);
+        this.handleRemoveActiveState("CapsLock");
+        return 
+      }
+    }
 
     if (["CapsLock", "Shift"].includes(key)) {
       this.handleToggleButtonGroups(shifted_button_groups);
@@ -308,8 +324,25 @@ class ArabicKeyboard extends LitElement {
   }
 
   handleClick(event) {
-    const value = event.target.value;
-    this.updateState(ClickFactory(value, this.state))
+    const key = event.target.value;
+
+    if (["Shift", "meta"].includes(key)) {
+      return 
+    }
+  
+    if (["CapsLock"].includes(key)) {
+      if (this.buttonGroups === shifted_button_groups) {
+        this.handleToggleButtonGroups(button_groups);
+        this.handleRemoveActiveState(key);
+        return 
+      }
+
+      this.handleToggleButtonGroups(shifted_button_groups);
+      this.handleAddActiveState(key);
+      return 
+    }
+
+    this.updateState(ClickFactory(key, this.state, this.textarea))
   }
 
   render() {
@@ -365,7 +398,6 @@ class ArabicKeyboard extends LitElement {
       </section>
       <div>
         <ul>
-          <li>english textValue: ${this.englishTextValue}</li>
           <li>textValue: ${this.state.textValue}</li>
           <li>historyIndex: ${this.state.historyIndex}</li>
           <li>selectedText: ${this.state.selectedText}</li>
