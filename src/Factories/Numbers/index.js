@@ -26,7 +26,7 @@ export const insertEnglishNumberIntoArabic = (englishNumber, originalText, curso
 };
 
 /**
- * @param {string} char - key pressed 
+ * @param {string} key - key pressed 
  * @param {Types.State} state - current state of the keyboard
  */
 export const NumbersFactory = (key, state) => {

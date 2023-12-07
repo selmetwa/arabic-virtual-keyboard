@@ -7,11 +7,10 @@ import {
   isDownArrow
 } from '../../utils/index.js'
 import { PasteFactory } from '../Paste/index.js'
-
 import { getNextLineStart, getLineStart, generateRowIndices, getCurrentRow } from './helpers/index.js'
 
 /**
- * asd
+ * Handle keyboard shortcuts after pressing meta key
  * @param {string} key 
  * @param {Types.state} state 
  * @param {Element} textarea 
@@ -75,7 +74,7 @@ export const KeyboardShortcutFactory = (key, state, textarea) => {
 }
 
 /**
- * Updates cursor position based on left and right arrow keys
+ * Updates cursor position based on left,right,down,up arrow keys
  * @param {string} key - key that was pressed
  * @param {Types.State} state - current state of the keyboard
  * @param {Element} textarea 

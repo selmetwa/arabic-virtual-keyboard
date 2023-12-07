@@ -52,7 +52,7 @@ class ArabicKeyboard extends LitElement {
     .wrapper {
       margin: auto;
       max-width: 800px;
-      font-family: sans-serif;
+      font-family: 'Arial', sans-serif; /* Change to a font that supports Arabic characters well */
     }
 
     .keyboard {
@@ -102,7 +102,7 @@ class ArabicKeyboard extends LitElement {
       grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     }
     .keyboard_row.fifth_row {
-      grid-template-columns: 2fr 12fr;
+      grid-template-columns: 2fr 10fr 1fr 1fr;
     }
 
     .button_wrapper {
@@ -176,6 +176,17 @@ class ArabicKeyboard extends LitElement {
       background-color: var(--active-background-color);
       border: var(--active-border);
     }
+
+    .diacritic .button_value {
+      font-size: 40px;
+      // color: orange;
+      position: absolute;
+      top: 0;
+      right: 20px;
+    }
+    .diacritic .button_en {
+      font-size: 14px!important;
+    }
   `;
 
   firstUpdated() {
@@ -238,6 +249,21 @@ class ArabicKeyboard extends LitElement {
     })
   }
 
+  removeDiacriticActiveState() {
+    const keys = ['=', 'a=', 'an=', 'u=', 'un=', 'i=', 'in=', 'h=', 's=', 'A=', 'AN=', 'U=', 'UN=', 'I=', 'IN=', 'H=', 'S='];
+    keys.forEach((key) => {
+      const cryptedClassname = crypt("salt", key);
+      console.log({ cryptedClassname })
+      const target = `.button_${cryptedClassname}`;
+      const keysPressed = this.shadowRoot.querySelectorAll(target);
+      const nodes = Array.from(keysPressed);
+  
+      nodes.forEach((node) => {
+        node && node.classList.remove("active");
+      })
+    })
+  }
+
   handleKeyUp(event) {
     let key;
     if (event.key === "'") {
@@ -248,6 +274,9 @@ class ArabicKeyboard extends LitElement {
       } else {
         key = event.key;
       }
+    }
+    else if (event.key === "=") {
+      return this.removeDiacriticActiveState()
     }
     else if (event.key === "Meta") {
       key = "meta"

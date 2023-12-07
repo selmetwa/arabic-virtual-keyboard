@@ -51,7 +51,7 @@ export const TaskMaster = (key, state, textarea, handleAddActiveState) => {
       return LettersFactory(key, state);
 
     case key === '=':
-      return DiacriticsFactory(previousLetter, previousPreviousLetter, state);
+      return DiacriticsFactory(previousLetter, previousPreviousLetter, state, handleAddActiveState);
     case key === "'":
       if (['d', 'g', 's', 't', 'h', 'H'].includes(previousLetter)) {
         const newKey = previousLetter + "'";

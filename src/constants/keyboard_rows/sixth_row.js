@@ -4,7 +4,7 @@ export const sixth_row = [{
     "en": "a=",
     "label": ["a="],
     "title": "Fatha",
-    "shifted": '\u064E'
+    "modifierClass": "diacritic"
   },
   {
     "type": 'diacritic',
@@ -12,7 +12,7 @@ export const sixth_row = [{
     "en": "an=",
     "label": ["an="],
     "title": "Fathatan",
-    "shifted": '\u064B'
+    "modifierClass": "diacritic"
   },
   {
     "type": 'diacritic',
@@ -20,7 +20,7 @@ export const sixth_row = [{
     "en": "u=",
     "label": ["u="],
     "title": "Damma",
-    "shifted": '\u064F'
+    "modifierClass": "diacritic"
   },
   {
     "type": 'diacritic',
@@ -28,7 +28,7 @@ export const sixth_row = [{
     "en": "un=",
     "label": ["un="],
     "title": "Dammatan",
-    "shifted": '\u064C'
+    "modifierClass": "diacritic"
   },
   {
     "type": 'diacritic',
@@ -36,7 +36,7 @@ export const sixth_row = [{
     "en": "i=",
     "label": ["i="],
     "title": "Kasra",
-    "shifted": '\u0650'
+    "modifierClass": "diacritic"
   },
   {
     "type": 'diacritic',
@@ -44,7 +44,7 @@ export const sixth_row = [{
     "en": "in=",
     "label": ["in="],
     "title": "Kasratan",
-    "shifted": '\u064D'
+    "modifierClass": "diacritic"
   },
   {
     "type": 'diacritic',
@@ -52,7 +52,7 @@ export const sixth_row = [{
     "en": "h=",
     "label": ["h="],
     "title": "Sukun",
-    "shifted": '\u0652'
+    "modifierClass": "diacritic"
   },
   {
     "type": 'diacritic',
@@ -60,7 +60,7 @@ export const sixth_row = [{
     "en": "s=",
     "label": ["s="],
     "title": "Shadda",
-    "shifted": '\u0651'
+    "modifierClass": "diacritic"
   },
   {
     "type": "special_char",
@@ -94,7 +94,7 @@ export const shifted_sixth_row = [{
     "en": "A=",
     "label": ["A="],
     "title": "Fatha",
-    "shifted": '\u064E'
+    "modifierClass": "diacritic"
   },
   {
     "type": 'diacritic',
@@ -102,7 +102,7 @@ export const shifted_sixth_row = [{
     "en": "AN=",
     "label": ["AN="],
     "title": "Fathatan",
-    "shifted": '\u064B'
+    "modifierClass": "diacritic"
   },
   {
     "type": 'diacritic',
@@ -110,7 +110,7 @@ export const shifted_sixth_row = [{
     "en": "U=",
     "label": ["U="],
     "title": "Damma",
-    "shifted": '\u064F'
+    "modifierClass": "diacritic"
   },
   {
     "type": 'diacritic',
@@ -118,7 +118,7 @@ export const shifted_sixth_row = [{
     "en": "UN=",
     "label": ["UN="],
     "title": "Dammatan",
-    "shifted": '\u064C'
+    "modifierClass": "diacritic"
   },
   {
     "type": 'diacritic',
@@ -126,7 +126,7 @@ export const shifted_sixth_row = [{
     "en": "I=",
     "label": ["I="],
     "title": "Kasra",
-    "shifted": '\u0650'
+    "modifierClass": "diacritic"
   },
   {
     "type": 'diacritic',
@@ -134,7 +134,7 @@ export const shifted_sixth_row = [{
     "en": "IN=",
     "label": ["IN="],
     "title": "Kasratan",
-    "shifted": '\u064D'
+    "modifierClass": "diacritic"
   },
   {
     "type": 'diacritic',
@@ -142,7 +142,7 @@ export const shifted_sixth_row = [{
     "en": "H=",
     "label": ["H="],
     "title": "Sukun",
-    "shifted": '\u0652'
+    "modifierClass": "diacritic"
   },
   {
     "type": 'diacritic',
@@ -150,7 +150,7 @@ export const shifted_sixth_row = [{
     "en": "S=",
     "label": ["S="],
     "title": "Shadda",
-    "shifted": '\u0651'
+    "modifierClass": "diacritic"
   },
   {
     "type": "special_char",
@@ -170,7 +170,7 @@ export const shifted_sixth_row = [{
   },
   {
     "type": "special_char",
-    "ar": 'أ', //'أ'
+    "ar": 'أ',
     "en": 'A--',
     "label": ["A--"],
     "title": "Alif, with Hamza below",

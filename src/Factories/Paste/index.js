@@ -1,5 +1,8 @@
 import * as Types from '../../constants/types';
 import { isInputArabic, deleteSelectedText, convertNumberToArabic } from '../../utils';
+import { letters, punctuation, numbers, diacritics } from "../../constants/data.js"
+
+const allKeys = [].concat(letters, punctuation, numbers, diacritics)
 
 /**
  * convert string of english text to a string of arabic text
@@ -10,8 +13,9 @@ function convertToArabic(text) {
   let output = '';
   for (let i = 0; i < text.length; i++) {
     const char = text[i];
-    const arabicChar = convertNumberToArabic(char);
-    output += arabicChar;
+    const button = allKeys.find(button => button.en === char)
+    const arabic = button && button.ar || char;
+    output += arabic
   }
 
   return output;

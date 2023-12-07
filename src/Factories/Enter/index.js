@@ -5,6 +5,7 @@ import { deleteSelectedText } from "../../utils";
  * Break text to new line
  * @param {Types.State} state - current state of the keyboard
  * @param {Element} textarea
+ * @returns {Types.State} - new state of the keyboard
  */
 export const EnterFactory = (state, textarea) => {
   let _textValue = state.textValue;

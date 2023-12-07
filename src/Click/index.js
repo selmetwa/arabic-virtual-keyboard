@@ -1,5 +1,5 @@
 import { deleteSelectedText } from '../utils/index.js';
-import { letters, englishLetters, punctuation, numbers, diacritics } from "../constants/data.js"
+import { letters, punctuation, numbers, diacritics } from "../constants/data.js"
 import { BackspaceFactory } from '../Factories/Backspace/index.js';
 import { TabFactory } from '../Factories/Tab/index.js';
 import { EnterFactory } from '../Factories/Enter/index.js';
@@ -7,10 +7,15 @@ import { SpaceFactory } from '../Factories/Space/index.js';
 
 const allKeys = [].concat(letters, punctuation, numbers, diacritics)
 
+/**
+ * @param {string} key 
+ * @param {string} originalText 
+ * @param {number} cursorPosition 
+ * @returns {object} - new text and cursor position
+ */
 export const insertIntoText = (key, originalText, cursorPosition) => {
   const originalArray = originalText.split('');
   const button = allKeys.find(button => button.en === key)
-  console.log({ button })
   const arabic = button.ar
 
   originalArray.splice(cursorPosition, 0, arabic);
@@ -20,8 +25,14 @@ export const insertIntoText = (key, originalText, cursorPosition) => {
   return { newText, newCursorPosition };
 };
 
+/**
+ * Handles clicks on buttons
+ * @param {string} key - Key pressed
+ * @param {Types.State} state - current state of the keyboard
+ * @param {HTMLTextAreaElement} textarea - textarea element
+ * @returns {Types.State} - new state of the keyboard
+ */
 export const ClickFactory = (key, state, textarea) => {
-  console.log({ key, state, allKeys })
   let _textValue = state.textValue;
 
   if (!!state.selectedText) {

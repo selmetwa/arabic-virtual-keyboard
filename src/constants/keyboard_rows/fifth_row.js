@@ -10,5 +10,17 @@ export const fifth_row = [{
     'en': 'space',
     'title': 'Space',
     'modifierClass': 'space'
+  },
+  {
+    "type": 'audio',
+    "ar": '\u{1f50a}',
+    "en": 'audio',
+    "title": 'Click to hear the audio',
+  },
+  {
+    "type": 'information',
+    "ar": '\u24D8',
+    "en": 'information',
+    "title": 'Click for more information',
   }
 ]
