@@ -60,11 +60,16 @@ class ArabicKeyboard extends LitElement {
     .keyboard_wrapper {
       margin: auto;
       max-width: var(--keyboard-width);
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
       font-family: 'Arial', sans-serif; /* Change to a font that supports Arabic characters well */
     }
 
     .keyboard {
       display: flex;
+      width: 100%;
       flex-direction: column;
       align-items: center;
       border-radius: var(--border-radius);
@@ -84,8 +89,6 @@ class ArabicKeyboard extends LitElement {
       text-align: right;
       font-size: var(--font-size);
       font-weight: 500;
-      box-sizing: border-box; /* Include padding and border in the total width */
-      padding: 0;
     }
 
     .keyboard_row {
@@ -234,23 +237,10 @@ class ArabicKeyboard extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    this.startPreviousKeyInterval();
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    this.clearPreviousKeyInterval();
-  }
-
-  clearPreviousKeyInterval() {
-    clearInterval(this.previousKeyIntervalId);
-  }
-
-  startPreviousKeyInterval() {
-    this.previousKeyIntervalId = setInterval(() => {
-      this.updateState({ previousKey: "" });
-      this.requestUpdate();
-    }, 250);
   }
 
   /**
@@ -288,6 +278,21 @@ class ArabicKeyboard extends LitElement {
     })
   }
 
+  removeSpecialCharacterActiveState() {
+    const keys = ['-', 'y--', 'w--', 'a--', 'Y--', 'W--', 'A--'];
+    keys.forEach((key) => {
+      const cryptedClassname = crypt("salt", key);
+      console.log({ cryptedClassname })
+      const target = `.button_${cryptedClassname}`;
+      const keysPressed = this.shadowRoot.querySelectorAll(target);
+      const nodes = Array.from(keysPressed);
+
+      nodes.forEach((node) => {
+        node && node.classList.remove("active");
+      })
+    })
+  }
+
   removeDiacriticActiveState() {
     const keys = ['=', 'a=', 'an=', 'u=', 'un=', 'i=', 'in=', 'h=', 's=', 'A=', 'AN=', 'U=', 'UN=', 'I=', 'IN=', 'H=', 'S='];
     keys.forEach((key) => {
@@ -317,6 +322,9 @@ class ArabicKeyboard extends LitElement {
     else if (event.key === "=") {
       return this.removeDiacriticActiveState()
     }
+    else if (event.key === "-") {
+      return this.removeSpecialCharacterActiveState()
+    }
     else if (event.key === "Meta") {
       key = "meta"
     } else if (event.code === "Space") {
@@ -334,8 +342,17 @@ class ArabicKeyboard extends LitElement {
 
   handleKeyDown(event) {
     event.preventDefault();
-    this.clearPreviousKeyInterval();
+
     const key = event.code === "Space" ? 'Space' : event.key;
+
+    if (event.metaKey) {
+      this.handleAddActiveState("meta");
+      this.handleAddActiveState(key);
+      this.updateState(KeyboardShortcutFactory(key, this.state, this.textarea));
+      return setTimeout(() => {
+        this.handleRemoveActiveState(key)
+      }, 100)
+    }
 
     if (["CapsLock", "Shift"].includes(key)) {
       if (this.buttonGroups === shifted_button_groups) {
@@ -350,16 +367,10 @@ class ArabicKeyboard extends LitElement {
       this.handleToggleButtonGroups(shifted_button_groups);
     }
 
-    if (this.state.previousKey === "Meta") {
-      this.startPreviousKeyInterval();
-      return this.updateState(KeyboardShortcutFactory(key, this.state, this.textarea));
-    }
-
     const updatedState = TaskMaster(key, this.state, this.textarea, this.handleAddActiveState.bind(this));
     this.updateState(updatedState);
 
     this.handleAddActiveState(key);
-    this.startPreviousKeyInterval();
   }
 
   handlePaste(event, pastedTextFromKeyboard) {
@@ -393,7 +404,6 @@ class ArabicKeyboard extends LitElement {
 
   handleClick(event) {
     const key = event.target.value;
-    console.log({ key })
 
     if (key === "information") {
       return this.openDialog()
@@ -431,8 +441,8 @@ class ArabicKeyboard extends LitElement {
       <noscript>
         <p>Please enable JavaScript to use this application.</p>
       </noscript>
-      <main class="wrapper">
-      <section class="keyboard_wrapper" lang="ar">
+      <main class="wrapper" lang="ar">
+      <section class="keyboard_wrapper">
         <dialog class="dialog">
           <header class="dialog_header">
             <h3>Arabic Virtual Keyboard</h3>

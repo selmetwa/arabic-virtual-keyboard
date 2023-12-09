@@ -41,11 +41,11 @@ export const TaskMaster = (key, state, textarea, handleAddActiveState) => {
     case isPunctuation(key):
       return PunctuationFactory(key, state);
     case key === '-':
-      if (previousLetter === '-') {
-        return SpecialCharacterFactory(previousLetter, previousPreviousLetter, state);
-      } else {
-        return LettersFactory(key, state);
+      if (previousLetter === '-' && !!previousPreviousLetter && previousPreviousLetter !== '-') {
+        return SpecialCharacterFactory(previousLetter, previousPreviousLetter, state, handleAddActiveState);
       }
+
+      return LettersFactory(key, state);
 
     case isLetter(key):
       return LettersFactory(key, state);

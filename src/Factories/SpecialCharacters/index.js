@@ -1,8 +1,9 @@
+import { specialCharacters } from "../../constants/data"
+
 const convertToSpecialCharacter = (key) => {
   const yaLetters = ['y', 'Y', 'e', 'E']
   const waLetters = ['w', 'W', 'u', 'U', 'o', 'O']
 
-  // console.log({ key })
   if (yaLetters.includes(key)) {
     return 'ئ'
   }
@@ -43,9 +44,15 @@ export const insertSpecialCharIntoArabic = (mark, originalText, cursorPosition) 
   return { newText, newCursorPosition: cursorPosition - 1 };
 }
 
-export const SpecialCharacterFactory = (previousKey, previousPreviousKey, state) => {
+export const SpecialCharacterFactory = (previousKey, previousPreviousKey, state, handleAddActiveState) => {
   const specialChar = convertToSpecialCharacter(previousPreviousKey)
 
+  if (specialChar) {
+    const englishChar = specialCharacters.find(char => char.ar === specialChar)
+    handleAddActiveState(englishChar.en)
+  }
+
+  console.log({ specialChar })
   if (!specialChar) {
     return state
   }
