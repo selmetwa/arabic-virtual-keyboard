@@ -1,5 +1,5 @@
 ### TODO
-- [] move css to separate file
-- [] audio
+- [x] move css to separate file
+- [x] audio
 - [] tests
 - [] mobile
