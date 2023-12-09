@@ -1,11 +1,11 @@
 import { deleteSelectedText } from '../utils/index.js';
-import { letters, punctuation, numbers, diacritics } from "../constants/data.js"
+import { letters, punctuation, numbers, diacritics, specialCharacters } from "../constants/data.js"
 import { BackspaceFactory } from '../Factories/Backspace/index.js';
 import { TabFactory } from '../Factories/Tab/index.js';
 import { EnterFactory } from '../Factories/Enter/index.js';
 import { SpaceFactory } from '../Factories/Space/index.js';
 
-const allKeys = [].concat(letters, punctuation, numbers, diacritics)
+const allKeys = [].concat(letters, punctuation, numbers, diacritics, specialCharacters)
 
 /**
  * @param {string} key 

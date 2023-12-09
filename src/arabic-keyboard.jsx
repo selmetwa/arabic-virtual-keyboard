@@ -37,6 +37,8 @@ class ArabicKeyboard extends LitElement {
       --gap: 4px;
       --font-size: 18px;
       --width: 50px;
+      --keyboard-width: 800px;
+      --main-width: 100%;
       --row-height: 50px;
       --border-radius: 4px;
       --background-color: #ececec;
@@ -50,8 +52,14 @@ class ArabicKeyboard extends LitElement {
     }
 
     .wrapper {
+      position: relative;
+      margin: 0;
+      padding: 0;
+    }
+
+    .keyboard_wrapper {
       margin: auto;
-      max-width: 800px;
+      max-width: var(--keyboard-width);
       font-family: 'Arial', sans-serif; /* Change to a font that supports Arabic characters well */
     }
 
@@ -60,7 +68,6 @@ class ArabicKeyboard extends LitElement {
       flex-direction: column;
       align-items: center;
       border-radius: var(--border-radius);
-      padding: 4px;
       gap: 4px;
     }
 
@@ -77,6 +84,8 @@ class ArabicKeyboard extends LitElement {
       text-align: right;
       font-size: var(--font-size);
       font-weight: 500;
+      box-sizing: border-box; /* Include padding and border in the total width */
+      padding: 0;
     }
 
     .keyboard_row {
@@ -179,13 +188,43 @@ class ArabicKeyboard extends LitElement {
 
     .diacritic .button_value {
       font-size: 40px;
-      // color: orange;
       position: absolute;
       top: 0;
       right: 20px;
     }
     .diacritic .button_en {
       font-size: 14px!important;
+    }
+
+    .dialog {
+      width: var(--keyboard-width);
+      z-index: 1;
+      height: 100%;
+      margin-left: 0;
+      border: 1px solid #000;
+      background-color: #000;
+      color: #fff;
+    }
+    .dialog_header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .dialog p {
+      font-size: 18px;
+    }
+
+    .dialog_letter_en {
+      color: #00B4D8;
+      font-weight: bold;
+    }
+    .dialog_letter_ar {
+      color: red;
+      font-weight: bold;
+    }
+    .dialog .dialog_mark {
+      font-size: 40px;
+      color: red;
     }
   `;
 
@@ -257,7 +296,7 @@ class ArabicKeyboard extends LitElement {
       const target = `.button_${cryptedClassname}`;
       const keysPressed = this.shadowRoot.querySelectorAll(target);
       const nodes = Array.from(keysPressed);
-  
+
       nodes.forEach((node) => {
         node && node.classList.remove("active");
       })
@@ -303,7 +342,7 @@ class ArabicKeyboard extends LitElement {
         this.handleToggleButtonGroups(button_groups);
         this.handleRemoveActiveState(key);
         this.handleRemoveActiveState("CapsLock");
-        return 
+        return
       }
     }
 
@@ -354,32 +393,62 @@ class ArabicKeyboard extends LitElement {
 
   handleClick(event) {
     const key = event.target.value;
+    console.log({ key })
 
-    if (["Shift", "meta"].includes(key)) {
-      return 
+    if (key === "information") {
+      return this.openDialog()
     }
-  
+    if (["Shift", "meta"].includes(key)) {
+      return
+    }
+
     if (["CapsLock"].includes(key)) {
       if (this.buttonGroups === shifted_button_groups) {
         this.handleToggleButtonGroups(button_groups);
         this.handleRemoveActiveState(key);
-        return 
+        return
       }
 
       this.handleToggleButtonGroups(shifted_button_groups);
       this.handleAddActiveState(key);
-      return 
+      return
     }
 
     this.updateState(ClickFactory(key, this.state, this.textarea))
   }
 
+  openDialog() {
+    const dialog = this.shadowRoot.querySelector('.dialog');
+    dialog.showModal();
+  }
+
+  closeDialog() {
+    const dialog = this.shadowRoot.querySelector('.dialog');
+    dialog.close();
+  }
   render() {
     return html`
       <noscript>
         <p>Please enable JavaScript to use this application.</p>
       </noscript>
-      <section class="wrapper" lang="ar">
+      <main class="wrapper">
+      <section class="keyboard_wrapper" lang="ar">
+        <dialog class="dialog">
+          <header class="dialog_header">
+            <h3>Arabic Virtual Keyboard</h3>
+            <button @click="${this.closeDialog}" class="button">Close</button>
+          </header>
+          <p>
+            This virtual arabic keyboard is a tool to help native english speakers to type in arabic.
+          </p>
+          <p>
+            Most keys are mapped to their phonetic equivalent in arabic. For example, the letter <span class="dialog_letter_en">b</span> is mapped to the arabic letter <span class="dialog_letter_ar">ب</span>.
+            The letter <span class="dialog_letter_en">t</span> is mapped to the arabic letter <span class="dialog_letter_ar">ت</span>. The letter <span class="dialog_letter_en">a</span> is mapped to the arabic letter <span class="dialog_letter_ar">ا</span>.
+          </p>
+          <p>
+            For the emphatic arabic letters you can simply capitalize the closest english letter. For example to get the letter <span class="dialog_letter_ar">ط</span> you can type <span class="dialog_letter_en">T</span>, to get the letter <span class="dialog_letter_ar">ض</span> you can type <span class="dialog_letter_en">D</span>.
+          </p>
+        </dialog>
         <textarea
           contenteditable="true"
           aria-label="Text Area"
@@ -400,13 +469,13 @@ class ArabicKeyboard extends LitElement {
         </textarea>
         <div class="keyboard">
           ${this.buttonGroups.map((buttonGroup) => {
-            const { buttons, name } = buttonGroup;
-            return html`
+      const { buttons, name } = buttonGroup;
+      return html`
               <div class="keyboard_row ${name}">
                 ${buttons.map(
-                  (button) => {
-                    const cryptedClass = crypt("salt", button.en);
-                    return html`<button
+        (button) => {
+          const cryptedClass = crypt("salt", button.en);
+          return html`<button
                         value="${button.en}"
                         type="button"
                         class="button button_${cryptedClass} ${button.modifierClass}"
@@ -418,13 +487,14 @@ class ArabicKeyboard extends LitElement {
                         <p class="button_value">${button.ar}</p>
                       </button>
                     </div>`
-                  }
-                )}
+        }
+      )}
               </div>
             `;
-          })}
+    })}
         </div>
       </section>
+        </main>
       <div>
         <ul>
           <li>textValue: ${this.state.textValue}</li>
