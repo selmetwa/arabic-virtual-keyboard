@@ -4,6 +4,8 @@ import * as Types from "./constants/types.js";
 import {
   desktop_button_groups,
   shifted_desktop_button_groups,
+  mobile_button_groups,
+  shifted_mobile_button_groups
 } from "./constants/button_groups.js";
 
 import { crypt, checkPreviousLetter } from "./utils/index.js";
@@ -56,24 +58,24 @@ class ArabicKeyboard extends LitElement {
 
   updated(changedProperties) {
     if (changedProperties.has('keyboard_width')) {
-      if (this.keyboard_width < 550) {
+      if (this.keyboard_width < 600) {
         this.isMobile = true;
-        this.buttonGroups = []
+        this.buttonGroups = mobile_button_groups
       } else {
-        if (this.buttonGroups.length === 0) {
           this.isMobile = false;
           this.buttonGroups = desktop_button_groups
-        }
       }
     }
   }
 
   connectedCallback() {
     super.connectedCallback();
+    window.addEventListener('resize', this.updateElementWidth.bind(this));
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
+    window.removeEventListener('resize', this.updateElementWidth.bind(this));
   }
 
   /**
@@ -86,8 +88,10 @@ class ArabicKeyboard extends LitElement {
 
   updateElementWidth() {
     const element = this.shadowRoot.querySelector('.keyboard_wrapper');
+    const width = element.offsetWidth;
     if (element) {
       this.keyboard_width = element.offsetWidth;
+      this.requestUpdate();
     }
   }
 
@@ -122,7 +126,6 @@ class ArabicKeyboard extends LitElement {
     const keys = ["-", "y--", "w--", "a--", "Y--", "W--", "A--"];
     keys.forEach((key) => {
       const cryptedClassname = crypt("salt", key);
-      console.log({ cryptedClassname });
       const target = `.button_${cryptedClassname}`;
       const keysPressed = this.shadowRoot.querySelectorAll(target);
       const nodes = Array.from(keysPressed);
@@ -155,7 +158,6 @@ class ArabicKeyboard extends LitElement {
     ];
     keys.forEach((key) => {
       const cryptedClassname = crypt("salt", key);
-      console.log({ cryptedClassname });
       const target = `.button_${cryptedClassname}`;
       const keysPressed = this.shadowRoot.querySelectorAll(target);
       const nodes = Array.from(keysPressed);
@@ -174,7 +176,10 @@ class ArabicKeyboard extends LitElement {
         this.state.cursorPosition
       );
       if (["d'", "g'", "s'", "t'", "h'", "H'"].includes(previousLetter)) {
-        this.shadowRoot.querySelector(".button_2d").classList.remove("active");
+        const nodeToRemoveActiveState = this.shadowRoot.querySelector(".button_2d")
+        if (nodeToRemoveActiveState) {
+          nodeToRemoveActiveState.classList.remove("active");
+        }
         key = previousLetter;
       } else {
         key = event.key;
@@ -193,7 +198,12 @@ class ArabicKeyboard extends LitElement {
 
     this.handleRemoveActiveState(key);
 
+
     if (["CapsLock", "Shift"].includes(key)) {
+      if (this.isMobile) {
+          this.handleToggleButtonGroups(mobile_button_groups);
+          return;
+      }
       this.handleToggleButtonGroups(desktop_button_groups);
     }
   }
@@ -216,16 +226,23 @@ class ArabicKeyboard extends LitElement {
     }
 
     if (["CapsLock", "Shift"].includes(key)) {
+      if (this.isMobile) {
+        if (this.buttonGroups === shifted_mobile_button_groups) {
+          this.handleToggleButtonGroups(mobile_button_groups);
+          return;
+        } else {
+            return this.handleToggleButtonGroups(shifted_mobile_button_groups);
+        }
+      }
+
       if (this.buttonGroups === shifted_desktop_button_groups) {
         this.handleToggleButtonGroups(desktop_button_groups);
         this.handleRemoveActiveState(key);
-        this.handleRemoveActiveState("CapsLock");
-        return;
+        return this.handleRemoveActiveState("CapsLock");
+      } else {
+        this.handleToggleButtonGroups(shifted_desktop_button_groups);
+        return this.handleAddActiveState(key);
       }
-    }
-
-    if (["CapsLock", "Shift"].includes(key)) {
-      this.handleToggleButtonGroups(shifted_desktop_button_groups);
     }
 
     const updatedState = TaskMaster(
@@ -235,7 +252,6 @@ class ArabicKeyboard extends LitElement {
       this.handleAddActiveState.bind(this)
     );
     this.updateState(updatedState);
-
     this.handleAddActiveState(key);
   }
 
@@ -278,7 +294,12 @@ class ArabicKeyboard extends LitElement {
 
   handleClick(event) {
     const key = event.target.value;
-
+    if (key === 'toggle_numbers') {
+      return this.handleToggleButtonGroups(shifted_mobile_button_groups);
+    }
+    if (key === 'toggle_letters') {
+      return this.handleToggleButtonGroups(mobile_button_groups);
+    }
     if (key === "information") {
       return this.openDialog();
     }
@@ -404,7 +425,7 @@ class ArabicKeyboard extends LitElement {
       </p>
       <p>
         ${this.isMobile ? "Mobile" : "Desktop"}
-        </p>
+      </p>
     `;
   }
 }

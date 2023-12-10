@@ -52,7 +52,6 @@ export const SpecialCharacterFactory = (previousKey, previousPreviousKey, state,
     handleAddActiveState(englishChar.en)
   }
 
-  console.log({ specialChar })
   if (!specialChar) {
     return state
   }

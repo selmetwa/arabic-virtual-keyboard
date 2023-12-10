@@ -62,6 +62,24 @@ export const keyboardStyles = css `
     height: var(--row-height);
   }
 
+  .keyboard_row.first_row_mobile {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  }
+  .keyboard_row.second_row_mobile {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  }
+  .keyboard_row.second_row_mobile_shifted {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  }
+  .keyboard_row.third_row_mobile_shifted {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 2fr;
+  }
+  .keyboard_row.third_row_mobile {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 2fr;
+  }
+  .keyboard_row.fourth_row_mobile {
+    grid-template-columns: 1fr 4fr 1fr;
+  }
   .keyboard_row.first_row {
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 2fr;
   }
