@@ -2,9 +2,10 @@ import { LitElement, html } from "lit";
 
 import * as Types from "./constants/types.js";
 import {
-  button_groups,
-  shifted_button_groups,
+  desktop_button_groups,
+  shifted_desktop_button_groups,
 } from "./constants/button_groups.js";
+
 import { crypt, checkPreviousLetter } from "./utils/index.js";
 import {
   MouseCutFactory,
@@ -22,14 +23,17 @@ class ArabicKeyboard extends LitElement {
   static get properties() {
     return {
       state: { type: Object },
-      button_groups: { type: Array },
+      desktop_button_groups: { type: Array },
+      keyboard_width: { type: Number },
     };
   }
 
   constructor() {
     super();
     this.textarea = null;
-    this.buttonGroups = button_groups;
+    this.keyboard_width = 0;
+    this.buttonGroups = desktop_button_groups;
+    this.isMobile = false;
     this.state = {
       textValue: "",
       historyIndex: 0,
@@ -45,6 +49,23 @@ class ArabicKeyboard extends LitElement {
 
   firstUpdated() {
     this.textarea = this.shadowRoot.querySelector("textarea");
+
+    this.updateElementWidth();
+    window.addEventListener('resize', this.updateElementWidth.bind(this));
+  }
+
+  updated(changedProperties) {
+    if (changedProperties.has('keyboard_width')) {
+      if (this.keyboard_width < 550) {
+        this.isMobile = true;
+        this.buttonGroups = []
+      } else {
+        if (this.buttonGroups.length === 0) {
+          this.isMobile = false;
+          this.buttonGroups = desktop_button_groups
+        }
+      }
+    }
   }
 
   connectedCallback() {
@@ -61,6 +82,13 @@ class ArabicKeyboard extends LitElement {
    */
   updateState(newState) {
     this.state = { ...this.state, ...newState };
+  }
+
+  updateElementWidth() {
+    const element = this.shadowRoot.querySelector('.keyboard_wrapper');
+    if (element) {
+      this.keyboard_width = element.offsetWidth;
+    }
   }
 
   handleToggleButtonGroups(groups) {
@@ -166,7 +194,7 @@ class ArabicKeyboard extends LitElement {
     this.handleRemoveActiveState(key);
 
     if (["CapsLock", "Shift"].includes(key)) {
-      this.handleToggleButtonGroups(button_groups);
+      this.handleToggleButtonGroups(desktop_button_groups);
     }
   }
 
@@ -188,8 +216,8 @@ class ArabicKeyboard extends LitElement {
     }
 
     if (["CapsLock", "Shift"].includes(key)) {
-      if (this.buttonGroups === shifted_button_groups) {
-        this.handleToggleButtonGroups(button_groups);
+      if (this.buttonGroups === shifted_desktop_button_groups) {
+        this.handleToggleButtonGroups(desktop_button_groups);
         this.handleRemoveActiveState(key);
         this.handleRemoveActiveState("CapsLock");
         return;
@@ -197,7 +225,7 @@ class ArabicKeyboard extends LitElement {
     }
 
     if (["CapsLock", "Shift"].includes(key)) {
-      this.handleToggleButtonGroups(shifted_button_groups);
+      this.handleToggleButtonGroups(shifted_desktop_button_groups);
     }
 
     const updatedState = TaskMaster(
@@ -264,13 +292,13 @@ class ArabicKeyboard extends LitElement {
     }
 
     if (["CapsLock"].includes(key)) {
-      if (this.buttonGroups === shifted_button_groups) {
-        this.handleToggleButtonGroups(button_groups);
+      if (this.buttonGroups === shifted_desktop_button_groups) {
+        this.handleToggleButtonGroups(desktop_button_groups);
         this.handleRemoveActiveState(key);
         return;
       }
 
-      this.handleToggleButtonGroups(shifted_button_groups);
+      this.handleToggleButtonGroups(shifted_desktop_button_groups);
       this.handleAddActiveState(key);
       return;
     }
@@ -293,72 +321,67 @@ class ArabicKeyboard extends LitElement {
       ? this.state.selectedText
       : this.state.textValue;
     const utterance = new SpeechSynthesisUtterance(textToRead);
-    utterance.lang = "ar-SA"; // Set the language code for Arabic (Saudi Arabia)
+    utterance.lang = "ar-SA";
 
     speechSynthesis.speak(utterance);
   }
 
   render() {
     return html`
-      <noscript>
-        <p>Please enable JavaScript to use this application.</p>
-      </noscript>
-      <main class="wrapper" lang="ar">
-        <section class="keyboard_wrapper">
-          <dialog class="dialog">
-            <header class="dialog_header">
-              <h3>Arabic Virtual Keyboard</h3>
-              <button @click="${this.closeDialog}" class="button">Close</button>
-            </header>
-            <p>
-              This virtual arabic keyboard is a tool to help native english
-              speakers to type in arabic.
-            </p>
-            <p>
-              Most keys are mapped to their phonetic equivalent in arabic. For
-              example, the letter <span class="dialog_letter_en">b</span> is
-              mapped to the arabic letter
-              <span class="dialog_letter_ar">ب</span>. The letter
-              <span class="dialog_letter_en">t</span> is mapped to the arabic
-              letter <span class="dialog_letter_ar">ت</span>. The letter
-              <span class="dialog_letter_en">a</span> is mapped to the arabic
-              letter <span class="dialog_letter_ar">ا</span>.
-            </p>
-            <p>
-              For the emphatic arabic letters you can simply capitalize the
-              closest english letter. For example to get the letter
-              <span class="dialog_letter_ar">ط</span> you can type
-              <span class="dialog_letter_en">T</span>, to get the letter
-              <span class="dialog_letter_ar">ض</span> you can type
-              <span class="dialog_letter_en">D</span>.
-            </p>
-          </dialog>
-          <textarea
-            contenteditable="true"
-            aria-label="Text Area"
-            type="text"
-            class="textarea"
-            lang="ar"
-            rows="5"
-            cols="10"
-            @keydown="${this.handleKeyDown}"
-            @keyup="${this.handleKeyUp}"
-            @select="${this.updateSelectedText}"
-            @paste="${this.handlePaste}"
-            @copy="${this.handleCopy}"
-            @cut="${this.handleCut}"
-            @click="${this.handleTextareaClick}"
-            .value=${this.state.textValue}
-          >
-          </textarea>
-          <div class="keyboard">
-            ${this.buttonGroups.map((buttonGroup) => {
-              const { buttons, name } = buttonGroup;
-              return html`
-                <div class="keyboard_row ${name}">
-                  ${buttons.map((button) => {
-                    const cryptedClass = crypt("salt", button.en);
-                    return html`<button
+      <section class="keyboard_wrapper">
+        <dialog class="dialog">
+          <header class="dialog_header">
+            <h3>Arabic Virtual Keyboard</h3>
+            <button @click="${this.closeDialog}" class="button">Close</button>
+          </header>
+          <p>
+            This virtual arabic keyboard is a tool to help native english
+            speakers to type in arabic.
+          </p>
+          <p>
+            Most keys are mapped to their phonetic equivalent in arabic. For
+            example, the letter <span class="dialog_letter_en">b</span> is
+            mapped to the arabic letter <span class="dialog_letter_ar">ب</span>.
+            The letter <span class="dialog_letter_en">t</span> is mapped to the
+            arabic letter <span class="dialog_letter_ar">ت</span>. The letter
+            <span class="dialog_letter_en">a</span> is mapped to the arabic
+            letter <span class="dialog_letter_ar">ا</span>.
+          </p>
+          <p>
+            For the emphatic arabic letters you can simply capitalize the
+            closest english letter. For example to get the letter
+            <span class="dialog_letter_ar">ط</span> you can type
+            <span class="dialog_letter_en">T</span>, to get the letter
+            <span class="dialog_letter_ar">ض</span> you can type
+            <span class="dialog_letter_en">D</span>.
+          </p>
+        </dialog>
+        <textarea
+          contenteditable="true"
+          aria-label="Text Area"
+          type="text"
+          class="textarea"
+          lang="ar"
+          rows="5"
+          cols="10"
+          @keydown="${this.handleKeyDown}"
+          @keyup="${this.handleKeyUp}"
+          @select="${this.updateSelectedText}"
+          @paste="${this.handlePaste}"
+          @copy="${this.handleCopy}"
+          @cut="${this.handleCut}"
+          @click="${this.handleTextareaClick}"
+          .value=${this.state.textValue}
+        >
+        </textarea>
+        <div class="keyboard">
+          ${this.buttonGroups.map((buttonGroup) => {
+            const { buttons, name } = buttonGroup;
+            return html`
+              <div class="keyboard_row ${name}">
+                ${buttons.map((button) => {
+                  const cryptedClass = crypt("salt", button.en);
+                  return html`<button
                         value="${button.en}"
                         type="button"
                         class="button button_${cryptedClass} ${button.modifierClass}"
@@ -370,13 +393,18 @@ class ArabicKeyboard extends LitElement {
                         <p class="button_value">${button.ar}</p>
                       </button>
                     </div>`;
-                  })}
-                </div>
-              `;
-            })}
-          </div>
-        </section>
-      </main>
+                })}
+              </div>
+            `;
+          })}
+        </div>
+      </section>
+      <p>
+        keyboard width: ${this.keyboard_width}
+      </p>
+      <p>
+        ${this.isMobile ? "Mobile" : "Desktop"}
+        </p>
     `;
   }
 }

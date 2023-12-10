@@ -5,7 +5,7 @@ import { fourth_row, shifted_fourth_row } from "./keyboard_rows/fourth_row"
 import { fifth_row } from "./keyboard_rows/fifth_row"
 import { sixth_row, shifted_sixth_row } from "./keyboard_rows/sixth_row"
 
-export const button_groups = [{
+export const desktop_button_groups = [{
     buttons: first_row,
     name: 'first_row'
   },
@@ -31,7 +31,7 @@ export const button_groups = [{
   }
 ]
 
-export const shifted_button_groups = [{
+export const shifted_desktop_button_groups = [{
     buttons: shifted_first_row,
     name: 'first_row'
   },

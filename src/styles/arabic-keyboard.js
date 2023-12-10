@@ -19,19 +19,14 @@ export const keyboardStyles = css `
     --hover-background-color: #e0e0e0;
   }
 
-  .wrapper {
-    position: relative;
-    margin: 0;
-    padding: 0;
-  }
-
   .keyboard_wrapper {
-    margin: auto;
     max-width: var(--keyboard-width);
+    width: 100%;
     align-items: center;
     display: flex;
     flex-direction: column;
     gap: 4px;
+    position: relative;
     font-family: "Arial", sans-serif;
     /* Change to a font that supports Arabic characters well */
   }
