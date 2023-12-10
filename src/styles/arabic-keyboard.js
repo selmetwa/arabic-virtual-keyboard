@@ -101,7 +101,7 @@ export const keyboardStyles = css `
   }
 
   .keyboard_row.fifth_row {
-    grid-template-columns: 2fr 10fr 1fr 1fr;
+    grid-template-columns: 2fr 9fr 1fr;
   }
 
   .button_wrapper {
@@ -188,40 +188,5 @@ export const keyboardStyles = css `
 
   .diacritic .button_en {
     font-size: 14px !important;
-  }
-
-  .dialog {
-    width: var(--keyboard-width);
-    z-index: 1;
-    height: 100%;
-    margin-left: 0;
-    border: 1px solid #000;
-    background-color: #000;
-    color: #fff;
-  }
-
-  .dialog_header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .dialog p {
-    font-size: 18px;
-  }
-
-  .dialog_letter_en {
-    color: #00b4d8;
-    font-weight: bold;
-  }
-
-  .dialog_letter_ar {
-    color: red;
-    font-weight: bold;
-  }
-
-  .dialog .dialog_mark {
-    font-size: 40px;
-    color: red;
   }
 `;

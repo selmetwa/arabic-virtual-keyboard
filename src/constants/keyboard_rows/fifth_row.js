@@ -17,10 +17,4 @@ export const fifth_row = [{
     "en": 'audio',
     "title": 'Click to hear the audio',
   },
-  {
-    "type": 'information',
-    "ar": '\u24D8',
-    "en": 'information',
-    "title": 'Click for more information',
-  }
 ]

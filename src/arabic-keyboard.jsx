@@ -65,6 +65,8 @@ class ArabicKeyboard extends LitElement {
           this.isMobile = false;
           this.buttonGroups = desktop_button_groups
       }
+
+      return this.requestUpdate();
     }
   }
 
@@ -88,10 +90,8 @@ class ArabicKeyboard extends LitElement {
 
   updateElementWidth() {
     const element = this.shadowRoot.querySelector('.keyboard_wrapper');
-    const width = element.offsetWidth;
     if (element) {
       this.keyboard_width = element.offsetWidth;
-      this.requestUpdate();
     }
   }
 
@@ -327,16 +327,6 @@ class ArabicKeyboard extends LitElement {
     this.updateState(ClickFactory(key, this.state, this.textarea));
   }
 
-  openDialog() {
-    const dialog = this.shadowRoot.querySelector(".dialog");
-    dialog.showModal();
-  }
-
-  closeDialog() {
-    const dialog = this.shadowRoot.querySelector(".dialog");
-    dialog.close();
-  }
-
   speakText() {
     let textToRead = this.state.selectedText
       ? this.state.selectedText
@@ -350,33 +340,6 @@ class ArabicKeyboard extends LitElement {
   render() {
     return html`
       <section class="keyboard_wrapper">
-        <dialog class="dialog">
-          <header class="dialog_header">
-            <h3>Arabic Virtual Keyboard</h3>
-            <button @click="${this.closeDialog}" class="button">Close</button>
-          </header>
-          <p>
-            This virtual arabic keyboard is a tool to help native english
-            speakers to type in arabic.
-          </p>
-          <p>
-            Most keys are mapped to their phonetic equivalent in arabic. For
-            example, the letter <span class="dialog_letter_en">b</span> is
-            mapped to the arabic letter <span class="dialog_letter_ar">ب</span>.
-            The letter <span class="dialog_letter_en">t</span> is mapped to the
-            arabic letter <span class="dialog_letter_ar">ت</span>. The letter
-            <span class="dialog_letter_en">a</span> is mapped to the arabic
-            letter <span class="dialog_letter_ar">ا</span>.
-          </p>
-          <p>
-            For the emphatic arabic letters you can simply capitalize the
-            closest english letter. For example to get the letter
-            <span class="dialog_letter_ar">ط</span> you can type
-            <span class="dialog_letter_en">T</span>, to get the letter
-            <span class="dialog_letter_ar">ض</span> you can type
-            <span class="dialog_letter_en">D</span>.
-          </p>
-        </dialog>
         <textarea
           contenteditable="true"
           aria-label="Text Area"

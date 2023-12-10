@@ -3,7 +3,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "web-test-runner \"src/*/__tests__/index.test.js\" --node-resolve"
+    "test": "web-test-runner \"src/**/*.test.js\" --node-resolve"
   },
   "dependencies": {
     "lit": "^3.0.0",
