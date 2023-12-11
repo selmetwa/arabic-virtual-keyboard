@@ -290,7 +290,6 @@ class ArabicKeyboard extends LitElement {
                 ${buttons.map((button) => {
                   const cryptedClass = crypt("salt", button.en);
                   return html`<button
-                        tabindex="0"
                         value="${button.en}"
                         type="button"
                         class="button button_${cryptedClass} ${button.modifierClass}"
@@ -309,7 +308,6 @@ class ArabicKeyboard extends LitElement {
           })}
         </div>
       </section>
-      <div>${JSON.stringify(this.state)}</div>
     `;
   }
 }

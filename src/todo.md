@@ -3,6 +3,6 @@
 - [x] audio
 - [x] mobile
 - [x] tests
-- [] cleanup
-- [] accessibility
+- [x] cleanup
+- [x] accessibility
 - [] publish

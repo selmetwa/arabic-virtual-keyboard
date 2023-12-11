@@ -17,7 +17,6 @@ import { getNextLineStart, getLineStart, generateRowIndices, getCurrentRow } fro
  */
 export const KeyboardShortcutFactory = (key, state, textarea) => {
   const currentLineStart = getLineStart(state.cursorPosition, state.textValue);
-  console.log('key', key)
 
   switch (key) {
     case 'a': // select all
