@@ -72,7 +72,6 @@ describe('NumbersFactory', () => {
       historyIndex: 0,
       history: ['١٢٣'],
       cursorPosition: 1,
-      previousKey: key,
       selectedText: '',
     });
   });
@@ -93,7 +92,6 @@ describe('NumbersFactory', () => {
       historyIndex: 0,
       history: [''],
       cursorPosition: 1,
-      previousKey: key,
       selectedText: '',
     });
   });
@@ -114,7 +112,6 @@ describe('NumbersFactory', () => {
       historyIndex: 0,
       history: ['٥٥٥٥٥'],
       cursorPosition: 4,
-      previousKey: key,
       selectedText: '',
     });
   });
@@ -135,7 +132,6 @@ describe('NumbersFactory', () => {
       historyIndex: 0,
       history: ['١٢٣٥٥'],
       cursorPosition: 1,
-      previousKey: key,
       selectedText: '',
     });
   });

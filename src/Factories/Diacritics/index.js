@@ -107,7 +107,6 @@ export const DiacriticsFactory = (previousKey, previousPreviousKey, state, handl
     historyIndex: newHistory.length - 1,
     history: newHistory,
     cursorPosition: newCursorPosition,
-    previousKey: previousKey,
     selectedText: '',
   };
 }

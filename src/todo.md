@@ -2,7 +2,7 @@
 - [x] move css to separate file
 - [x] audio
 - [x] mobile
-- [] tests
+- [x] tests
 - [] cleanup
 - [] accessibility
 - [] publish

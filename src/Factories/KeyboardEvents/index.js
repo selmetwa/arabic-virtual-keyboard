@@ -17,6 +17,7 @@ import { getNextLineStart, getLineStart, generateRowIndices, getCurrentRow } fro
  */
 export const KeyboardShortcutFactory = (key, state, textarea) => {
   const currentLineStart = getLineStart(state.cursorPosition, state.textValue);
+  console.log('key', key)
 
   switch (key) {
     case 'a': // select all
@@ -60,16 +61,16 @@ export const KeyboardShortcutFactory = (key, state, textarea) => {
       const currentRowIndex = getCurrentRow(state.textValue, state.cursorPosition) - 1;
       const currentLineEnd = currentLineStart + rows[currentRowIndex].length;
       textarea.setSelectionRange(currentLineEnd, currentLineEnd)
-      return { cursorPosition: currentLineEnd, previousKey: key, selectedText: '' }
+      return { cursorPosition: currentLineEnd, selectedText: '' }
     case 'ArrowRight':
       textarea.setSelectionRange(currentLineStart, currentLineStart)
-      return { cursorPosition: currentLineStart, previousKey: key, selectedText: '' }
+      return { cursorPosition: currentLineStart, selectedText: '' }
     case 'ArrowUp':
       textarea.setSelectionRange(0, 0)
-      return { cursorPosition: 0, previousKey: key, selectedText: '' }
+      return { cursorPosition: 0, selectedText: '' }
     case 'ArrowDown':
       textarea.setSelectionRange(state.textValue.length, state.textValue.length)
-      return { cursorPosition: state.textValue.length, previousKey: key, selectedText: '' }
+      return { cursorPosition: state.textValue.length, selectedText: '' }
   }
 }
 
@@ -83,12 +84,12 @@ export const KeyboardShortcutFactory = (key, state, textarea) => {
 export const KeyboardNavigationFactory = (key, state, textarea) => {
   if (isLeftArrow(key) && state.cursorPosition < state.textValue.length) {
     textarea.setSelectionRange(state.cursorPosition + 1, state.cursorPosition + 1)
-    return { cursorPosition: state.cursorPosition + 1, previousKey: key, selectedText: '' };
+    return { cursorPosition: state.cursorPosition + 1, selectedText: '' };
   }
 
   if (isRightArrow(key) && state.cursorPosition > 0) {
     textarea.setSelectionRange(state.cursorPosition - 1, state.cursorPosition - 1)
-    return { cursorPosition: state.cursorPosition - 1, previousKey: key, selectedText: '' };
+    return { cursorPosition: state.cursorPosition - 1, selectedText: '' };
   }
 
   if (isUpArrow(key)) {
@@ -106,11 +107,11 @@ export const KeyboardNavigationFactory = (key, state, textarea) => {
 
     if (newCursorPosition !== undefined) {
       textarea.setSelectionRange(newCursorPosition, newCursorPosition)
-      return { cursorPosition: newCursorPosition, previousKey: key, selectedText: '' };
+      return { cursorPosition: newCursorPosition, selectedText: '' };
     }
 
     textarea.setSelectionRange(currentLineStart - 1, currentLineStart - 1)
-    return { cursorPosition: currentLineStart - 1, previousKey: key, selectedText: '' }
+    return { cursorPosition: currentLineStart - 1, selectedText: '' }
   }
 
   if (isDownArrow(key)) {
@@ -131,14 +132,13 @@ export const KeyboardNavigationFactory = (key, state, textarea) => {
     const newCursorPosition = nextRowIndices[(nextRowIndices.length - 1) - indexOfPositionInCurrentRow] || nextLineEnd;
 
     textarea.setSelectionRange(newCursorPosition, newCursorPosition);
-    return { cursorPosition: newCursorPosition, previousKey: key, selectedText: '' };
+    return { cursorPosition: newCursorPosition, selectedText: '' };
   }
 
   textarea.setSelectionRange(state.cursorPosition, state.cursorPosition)
 
   return {
     cursorPosition: state.cursorPosition,
-    previousKey: key,
     selectedText: ''
   }
 }

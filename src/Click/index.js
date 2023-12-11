@@ -63,7 +63,6 @@ export const ClickFactory = (key, state, textarea) => {
     historyIndex: newHistory.length - 1,
     history: newHistory,
     cursorPosition: newCursorPosition,
-    previousKey: key,
     selectedText: '',
   };
 }

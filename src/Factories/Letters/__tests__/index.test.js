@@ -36,7 +36,6 @@ describe('LettersFactory', () => {
       cursorPosition: 0,
       history: [],
       historyIndex: 0,
-      previousKey: '',
       selectedText: '',
     };
 
@@ -54,7 +53,6 @@ describe('LettersFactory', () => {
       cursorPosition: 0,
       history: [],
       historyIndex: 0,
-      previousKey: '',
       selectedText: 'مرحبًا',
     };
 

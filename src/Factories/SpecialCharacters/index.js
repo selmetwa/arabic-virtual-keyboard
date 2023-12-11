@@ -65,7 +65,6 @@ export const SpecialCharacterFactory = (previousKey, previousPreviousKey, state,
     historyIndex: newHistory.length - 1,
     history: newHistory,
     cursorPosition: newCursorPosition,
-    previousKey: previousKey,
     selectedText: '',
   };
 }

@@ -23,8 +23,7 @@ export const TaskMaster = (key, state, textarea, handleAddActiveState) => {
 
   switch (true) {
     case key === 'Meta':
-      handleAddActiveState("meta")
-      return { previousKey: key }
+      return handleAddActiveState("meta")
     case key === 'Backspace':
       return BackspaceFactory(key, state);
     case key === 'Enter':

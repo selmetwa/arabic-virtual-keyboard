@@ -65,7 +65,7 @@ export const third_row = [{
     'ar': 'غ',
     'en': "g'",
     'label': ["g'"],
-    'title': 'Ayn',
+    'title': 'Ghayn',
     'shifted': 'غ'
   },
   {

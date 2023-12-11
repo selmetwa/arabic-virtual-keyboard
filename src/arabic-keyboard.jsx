@@ -5,10 +5,10 @@ import {
   desktop_button_groups,
   shifted_desktop_button_groups,
   mobile_button_groups,
-  shifted_mobile_button_groups
+  shifted_mobile_button_groups,
 } from "./constants/button_groups.js";
 
-import { crypt, checkPreviousLetter } from "./utils/index.js";
+import { crypt } from "./utils/index.js";
 import {
   MouseCutFactory,
   UpdateSelectedTextFactory,
@@ -18,7 +18,7 @@ import { PasteFactory } from "./Factories/Paste/index.js";
 import { KeyboardShortcutFactory } from "./Factories/KeyboardEvents/index.js";
 import { TaskMaster } from "./Factories/index.js";
 import { ClickFactory } from "./Click/index.js";
-
+import { RemoveActiveClassFactory } from "./Factories/RemoveActiveClass/index.js";
 import { keyboardStyles } from "./styles/arabic-keyboard.js";
 
 class ArabicKeyboard extends LitElement {
@@ -42,7 +42,6 @@ class ArabicKeyboard extends LitElement {
       history: [],
       selectedText: "",
       copiedText: "",
-      previousKey: "",
       cursorPosition: 0,
     };
   }
@@ -53,17 +52,17 @@ class ArabicKeyboard extends LitElement {
     this.textarea = this.shadowRoot.querySelector("textarea");
 
     this.updateElementWidth();
-    window.addEventListener('resize', this.updateElementWidth.bind(this));
+    window.addEventListener("resize", this.updateElementWidth.bind(this));
   }
 
   updated(changedProperties) {
-    if (changedProperties.has('keyboard_width')) {
+    if (changedProperties.has("keyboard_width")) {
       if (this.keyboard_width < 600) {
         this.isMobile = true;
-        this.buttonGroups = mobile_button_groups
+        this.buttonGroups = mobile_button_groups;
       } else {
-          this.isMobile = false;
-          this.buttonGroups = desktop_button_groups
+        this.isMobile = false;
+        this.buttonGroups = desktop_button_groups;
       }
 
       return this.requestUpdate();
@@ -72,12 +71,12 @@ class ArabicKeyboard extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    window.addEventListener('resize', this.updateElementWidth.bind(this));
+    window.addEventListener("resize", this.updateElementWidth.bind(this));
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    window.removeEventListener('resize', this.updateElementWidth.bind(this));
+    window.removeEventListener("resize", this.updateElementWidth.bind(this));
   }
 
   /**
@@ -89,7 +88,7 @@ class ArabicKeyboard extends LitElement {
   }
 
   updateElementWidth() {
-    const element = this.shadowRoot.querySelector('.keyboard_wrapper');
+    const element = this.shadowRoot.querySelector(".keyboard_wrapper");
     if (element) {
       this.keyboard_width = element.offsetWidth;
     }
@@ -122,90 +121,15 @@ class ArabicKeyboard extends LitElement {
     });
   }
 
-  removeSpecialCharacterActiveState() {
-    const keys = ["-", "y--", "w--", "a--", "Y--", "W--", "A--"];
-    keys.forEach((key) => {
-      const cryptedClassname = crypt("salt", key);
-      const target = `.button_${cryptedClassname}`;
-      const keysPressed = this.shadowRoot.querySelectorAll(target);
-      const nodes = Array.from(keysPressed);
-
-      nodes.forEach((node) => {
-        node && node.classList.remove("active");
-      });
-    });
-  }
-
-  removeDiacriticActiveState() {
-    const keys = [
-      "=",
-      "a=",
-      "an=",
-      "u=",
-      "un=",
-      "i=",
-      "in=",
-      "h=",
-      "s=",
-      "A=",
-      "AN=",
-      "U=",
-      "UN=",
-      "I=",
-      "IN=",
-      "H=",
-      "S=",
-    ];
-    keys.forEach((key) => {
-      const cryptedClassname = crypt("salt", key);
-      const target = `.button_${cryptedClassname}`;
-      const keysPressed = this.shadowRoot.querySelectorAll(target);
-      const nodes = Array.from(keysPressed);
-
-      nodes.forEach((node) => {
-        node && node.classList.remove("active");
-      });
-    });
-  }
-
   handleKeyUp(event) {
-    let key;
-    if (event.key === "'") {
-      const previousLetter = checkPreviousLetter(
-        this.state.textValue,
-        this.state.cursorPosition
-      );
-      if (["d'", "g'", "s'", "t'", "h'", "H'"].includes(previousLetter)) {
-        const nodeToRemoveActiveState = this.shadowRoot.querySelector(".button_2d")
-        if (nodeToRemoveActiveState) {
-          nodeToRemoveActiveState.classList.remove("active");
-        }
-        key = previousLetter;
-      } else {
-        key = event.key;
-      }
-    } else if (event.key === "=") {
-      return this.removeDiacriticActiveState();
-    } else if (event.key === "-") {
-      return this.removeSpecialCharacterActiveState();
-    } else if (event.key === "Meta") {
-      key = "meta";
-    } else if (event.code === "Space") {
-      key = "space";
-    } else {
-      key = event.key;
-    }
-
-    this.handleRemoveActiveState(key);
-
-
-    if (["CapsLock", "Shift"].includes(key)) {
-      if (this.isMobile) {
-          this.handleToggleButtonGroups(mobile_button_groups);
-          return;
-      }
-      this.handleToggleButtonGroups(desktop_button_groups);
-    }
+    RemoveActiveClassFactory(
+      event,
+      this.state,
+      this.isMobile,
+      this.shadowRoot,
+      this.handleToggleButtonGroups.bind(this),
+      this.handleRemoveActiveState.bind(this)
+    );
   }
 
   handleKeyDown(event) {
@@ -231,7 +155,7 @@ class ArabicKeyboard extends LitElement {
           this.handleToggleButtonGroups(mobile_button_groups);
           return;
         } else {
-            return this.handleToggleButtonGroups(shifted_mobile_button_groups);
+          return this.handleToggleButtonGroups(shifted_mobile_button_groups);
         }
       }
 
@@ -294,10 +218,10 @@ class ArabicKeyboard extends LitElement {
 
   handleClick(event) {
     const key = event.target.value;
-    if (key === 'toggle_numbers') {
+    if (key === "toggle_numbers") {
       return this.handleToggleButtonGroups(shifted_mobile_button_groups);
     }
-    if (key === 'toggle_letters') {
+    if (key === "toggle_letters") {
       return this.handleToggleButtonGroups(mobile_button_groups);
     }
     if (key === "information") {
@@ -366,10 +290,12 @@ class ArabicKeyboard extends LitElement {
                 ${buttons.map((button) => {
                   const cryptedClass = crypt("salt", button.en);
                   return html`<button
+                        tabindex="0"
                         value="${button.en}"
                         type="button"
                         class="button button_${cryptedClass} ${button.modifierClass}"
                         title="${button.title}"
+                        aria-label="${button.title}"
                         @click="${this.handleClick}"
                       >
                         <p class="button_shifted">${button.shifted}</p>

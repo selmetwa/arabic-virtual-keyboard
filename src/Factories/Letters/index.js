@@ -39,7 +39,6 @@ export const LettersFactory = (key, state) => {
     historyIndex: newHistory.length - 1,
     history: newHistory,
     cursorPosition: newCursorPosition,
-    previousKey: key,
     selectedText: '',
   };
 }

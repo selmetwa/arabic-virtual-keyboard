@@ -43,7 +43,6 @@ export const BackspaceFactory = (key, state) => {
     historyIndex: newHistory.length - 1,
     history: newHistory,
     cursorPosition: newCursorPosition >= 0 ? newCursorPosition : 0,
-    previousKey: key,
     selectedText: "",
   };
 }

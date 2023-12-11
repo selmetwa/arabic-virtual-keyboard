@@ -56,7 +56,6 @@ describe('BackspaceFactory', () => {
       textValue: 'أبج١٢٣',
       history: [],
       historyIndex: 0,
-      previousKey: '',
     };
 
     assert.isTrue(isInputArabic(state.textValue), 'Input text is valid Arabic');
@@ -68,7 +67,6 @@ describe('BackspaceFactory', () => {
       history: ['أبج١٢٣'],
       historyIndex: 1,
       cursorPosition: 2,
-      previousKey: 'Backspace',
       selectedText: '',
     };
 
@@ -83,7 +81,6 @@ describe('BackspaceFactory', () => {
       textValue: '',
       history: [],
       historyIndex: 0,
-      previousKey: '',
     };
 
     assert.isFalse(isInputArabic(state.textValue), 'Input text is valid Arabic');
@@ -103,7 +100,6 @@ describe('BackspaceFactory', () => {
       textValue: 'أبج١٢٣د',
       history: [],
       historyIndex: 0,
-      previousKey: '',
     };
 
     assert.isTrue(isInputArabic(state.textValue), 'Input text is valid Arabic');
@@ -115,7 +111,6 @@ describe('BackspaceFactory', () => {
       history: ['أبج١٢٣د'],
       historyIndex: 1,
       cursorPosition: 3,
-      previousKey: 'Backspace',
       selectedText: '',
     };
 
