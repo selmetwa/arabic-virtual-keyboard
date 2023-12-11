@@ -1,5 +1,6 @@
 import { assert } from '@esm-bundle/chai';
 import { KeyboardNavigationFactory } from '../index';
+import { getNextLineStart, getLineStart, generateRowIndices, getCurrentRow } from '../helpers';
 
 describe('KeyboardNavigationFactory', () => {
   it('should handle left arrow key when cursor is not at the end', () => {
@@ -36,4 +37,65 @@ describe('KeyboardNavigationFactory', () => {
     const result = KeyboardNavigationFactory('ArrowRight', state, textarea);
     assert.deepStrictEqual(result, { cursorPosition: 0, previousKey: 'ArrowRight', selectedText: '' });
   });
+});
+
+describe('getCurrentRow', () => {
+  it('should return the correct row for a given cursor position', () => {
+    const text = 'This is a sample\nmultiline\ntext.';
+    const cursorPosition = 17; // Cursor position within the second line
+
+    const result = getCurrentRow(text, cursorPosition);
+
+    assert.strictEqual(result, 2);
+  });
+
+  it('should handle cursor position at the beginning of the text', () => {
+    const text = 'First line\nSecond line\nThird line';
+    const cursorPosition = 0; // Cursor at the beginning
+
+    const result = getCurrentRow(text, cursorPosition);
+
+    assert.strictEqual(result, 1);
+  });
+
+  // Add more test cases as needed
+});
+
+describe('generateRowIndices', () => {
+  it('should generate row indices correctly', () => {
+    const start = 2;
+    const end = 6;
+
+    const result = generateRowIndices(start, end);
+
+    assert.deepStrictEqual(result, [6, 3, 4, 5, 2]);
+  });
+
+  // Add more test cases as needed
+});
+
+describe('getLineStart', () => {
+  it('should return the index of the start of the line', () => {
+    const cursorPosition = 12; // Cursor position within the second line
+    const value = 'This is a sample\nmultiline\ntext.';
+
+    const result = getLineStart(cursorPosition, value);
+
+    assert.strictEqual(result, 0); // Start of the second line
+  });
+
+  // Add more test cases as needed
+});
+
+describe('getNextLineStart', () => {
+  it('should return the index of the start of the next line', () => {
+    const cursorPosition = 12; // Cursor position within the second line
+    const value = 'This is a sample\nmultiline\ntext.';
+
+    const result = getNextLineStart(cursorPosition, value);
+
+    assert.strictEqual(result, 17); // Start of the third line
+  });
+
+  // Add more test cases as needed
 });

@@ -1,7 +1,7 @@
 ### TODO
 - [x] move css to separate file
 - [x] audio
-- [] mobile
+- [x] mobile
 - [] tests
 - [] cleanup
 - [] accessibility

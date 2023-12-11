@@ -37,7 +37,7 @@ export const getSelectedText = (textarea) => {
   const end = textarea.selectionEnd;
 
   if (start !== end) {
-    return textarea.value.substring(start, end);
+    return textarea.value.substring(start, end) || '';
   }
 
   return ""

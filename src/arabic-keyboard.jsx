@@ -383,12 +383,7 @@ class ArabicKeyboard extends LitElement {
           })}
         </div>
       </section>
-      <p>
-        keyboard width: ${this.keyboard_width}
-      </p>
-      <p>
-        ${this.isMobile ? "Mobile" : "Desktop"}
-      </p>
+      <div>${JSON.stringify(this.state)}</div>
     `;
   }
 }

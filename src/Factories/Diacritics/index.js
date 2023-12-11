@@ -38,6 +38,8 @@ export const convertValidKey = (previousKey, previousPreviousKey) => {
   if (['a', 'A'].includes(previousKey)) {
     return "a="
   }
+
+  return ''
 }
 
 /**

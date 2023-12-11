@@ -1,5 +1,5 @@
 import * as Types from '../../constants/types';
-import { isInputArabic, deleteSelectedText, convertNumberToArabic } from '../../utils';
+import { isInputArabic, deleteSelectedText } from '../../utils';
 import { letters, punctuation, numbers, diacritics } from "../../constants/data.js"
 
 const allKeys = [].concat(letters, punctuation, numbers, diacritics)
