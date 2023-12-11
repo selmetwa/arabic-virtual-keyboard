@@ -1,6 +1,6 @@
 {
   "author": "Sherif Elmetwally (https://github.com/selmetwa)",
-  "name": "virtual-arabic-keyboard",
+  "name": "arabic-virtual-keyboard",
   "version": "0.1.0",
   "type": "module",
   "description": "Virtual Arabic Keyboard for English speakers learning Arabic.",
