@@ -24,6 +24,8 @@ import { keyboardStyles } from "./styles/arabic-keyboard.js";
 class ArabicKeyboard extends LitElement {
   static get properties() {
     return {
+      showShiftedValue: { type: String },
+      showEnglishValue: { type: String },
       state: { type: Object },
       desktop_button_groups: { type: Array },
       keyboard_width: { type: Number },
@@ -261,6 +263,22 @@ class ArabicKeyboard extends LitElement {
     speechSynthesis.speak(utterance);
   }
 
+  getShiftedValue(button) {
+    if (this.showShiftedValue === 'true') {
+      return html`<p class="button_shifted">${button.shifted}</p>`;
+    }
+
+    return null;
+  }
+
+  getEnglishValue(button) {
+    if (this.showEnglishValue === 'true') {
+      return html`<p class="button_en">${button.label}</p>`;
+    }
+
+    return null;
+  }
+
   render() {
     return html`
       <section class="keyboard_wrapper">
@@ -289,19 +307,20 @@ class ArabicKeyboard extends LitElement {
               <div class="keyboard_row ${name}">
                 ${buttons.map((button) => {
                   const cryptedClass = crypt("salt", button.en);
-                  return html`<button
-                        value="${button.en}"
-                        type="button"
-                        class="button button_${cryptedClass} ${button.modifierClass}"
-                        title="${button.title}"
-                        aria-label="${button.title}"
-                        @click="${this.handleClick}"
-                      >
-                        <p class="button_shifted">${button.shifted}</p>
-                        <p class="button_en">${button.label}</p>
-                        <p class="button_value">${button.ar}</p>
-                      </button>
-                    </div>`;
+                  return html`
+                  <button
+                    value="${button.en}"
+                    type="button"
+                    class="button button_${cryptedClass} ${button.modifierClass}"
+                    title="${button.title}"
+                    aria-label="${button.title}"
+                    @click="${this.handleClick}"
+                  >
+                  ${this.getShiftedValue(button)}
+                  ${this.getEnglishValue(button)}
+                  <p class="button_value">${button.ar}</p>
+                </button>
+              </div>`;
                 })}
               </div>
             `;

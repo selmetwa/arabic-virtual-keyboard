@@ -2,25 +2,25 @@ import { css } from "lit";
 
 export const keyboardStyles = css `
   :host {
-    --gap: 4px;
+    --keyboard-row-gap: 4px;
     --font-size: 18px;
-    --width: 50px;
-    --keyboard-width: 800px;
-    --main-width: 100%;
+    --max-keyboard-width: 800px;
     --row-height: 50px;
     --border-radius: 4px;
-    --background-color: #ececec;
+    --button-background-color: #ececec;
     --border: 1px solid #999999;
-    --active-background-color: #d6d6d6;
-    --active-border: 1px solid #8f8f8f;
+    --button-active-background-color: #d6d6d6;
+    --button-active-border: 1px solid #8f8f8f;
     --button-padding: 4px;
     --button-color: #000000;
     --button-shifted-color: #ff0000;
-    --hover-background-color: #e0e0e0;
+    --button-eng-color: #0000ff;
+    --button-hover-background-color: #e0e0e0;
+    --textarea-background-color: #ffffff;
   }
 
   .keyboard_wrapper {
-    max-width: var(--keyboard-width);
+    max-width: var(--max-keyboard-width);
     width: 100%;
     align-items: center;
     display: flex;
@@ -53,11 +53,12 @@ export const keyboardStyles = css `
     text-align: right;
     font-size: var(--font-size);
     font-weight: 500;
+    background-color: var(--textarea-background-color);
   }
 
   .keyboard_row {
     display: grid;
-    gap: var(--gap);
+    gap: var(--keyboard-row-gap);
     width: 100%;
     height: var(--row-height);
   }
@@ -128,23 +129,22 @@ export const keyboardStyles = css `
   }
 
   .button:active {
-    background-color: var(--active-background-color) !important;
-    border: var(--active-border) !important;
+    background-color: var(--button-active-background-color) !important;
+    border: var(--button-active-border) !important;
   }
 
   .button {
     font-size: var(--font-size);
     border-radius: var(--border-radius);
-    background-color: var(--background-color);
+    background-color: var(--button-background-color);
     border: var(--border);
-    height: var(--width);
     height: 100%;
     padding: 0;
   }
 
   .button:hover {
-    background-color: var(--hover-background-color);
-    border: var(--active-border);
+    background-color: var(--button-hover-background-color);
+    border: var(--button-active-border);
   }
 
   .button_value {
@@ -171,12 +171,12 @@ export const keyboardStyles = css `
     padding: 0;
     margin: 0;
     font-size: 14px;
-    color: blue;
+    color: var(--button-eng-color);
   }
 
   .active {
-    background-color: var(--active-background-color);
-    border: var(--active-border);
+    background-color: var(--button-active-background-color);
+    border: var(--button-active-border);
   }
 
   .diacritic .button_value {

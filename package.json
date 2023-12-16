@@ -1,11 +1,11 @@
 {
   "author": "Sherif Elmetwally (https://github.com/selmetwa)",
   "name": "arabic-virtual-keyboard",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "description": "Virtual Arabic Keyboard for English speakers learning Arabic.",
-  "main": "arabic-keyboard.js",
-  "module": "arabic-keyboard.js",
+  "main": "src/arabic-keyboard.js",
+  "module": "src/arabic-keyboard.js",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
