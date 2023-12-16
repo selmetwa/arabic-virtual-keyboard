@@ -17,6 +17,7 @@ export const keyboardStyles = css `
     --button-eng-color: #0000ff;
     --button-hover-background-color: #e0e0e0;
     --textarea-background-color: #ffffff;
+    --font-family: "Arial", sans-serif;
   }
 
   .keyboard_wrapper {
@@ -27,8 +28,7 @@ export const keyboardStyles = css `
     flex-direction: column;
     gap: 4px;
     position: relative;
-    font-family: "Arial", sans-serif;
-    /* Change to a font that supports Arabic characters well */
+    font-family: var(--font-family);
   }
 
   .keyboard {
