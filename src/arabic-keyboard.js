@@ -28,14 +28,12 @@ class ArabicKeyboard extends LitElement {
       showEnglishValue: { type: String },
       state: { type: Object },
       desktop_button_groups: { type: Array },
-      keyboard_width: { type: Number },
     };
   }
 
   constructor() {
     super();
     this.textarea = null;
-    this.keyboard_width = 0;
     this.buttonGroups = desktop_button_groups;
     this.isMobile = false;
     this.state = {
@@ -53,32 +51,31 @@ class ArabicKeyboard extends LitElement {
   firstUpdated() {
     this.textarea = this.shadowRoot.querySelector("textarea");
 
-    this.updateElementWidth();
-    window.addEventListener("resize", this.updateElementWidth.bind(this));
+    const keyboardWrapper = this.shadowRoot.querySelector(".keyboard_wrapper");
+      if (keyboardWrapper) {
+        const resizeObserver = new ResizeObserver(this.handleResize.bind(this));
+        resizeObserver.observe(keyboardWrapper);
+      }
   }
 
-  updated(changedProperties) {
-    if (changedProperties.has("keyboard_width")) {
-      if (this.keyboard_width < 600) {
-        this.isMobile = true;
-        this.buttonGroups = mobile_button_groups;
-      } else {
-        this.isMobile = false;
-        this.buttonGroups = desktop_button_groups;
-      }
-
-      return this.requestUpdate();
+  handleResize(entries) {
+    const { width } = entries[0].contentRect;
+    if (width < 600) {
+      this.isMobile = true;
+      this.buttonGroups = mobile_button_groups;
+    } else {
+      this.isMobile = false;
+      this.buttonGroups = desktop_button_groups;
     }
+    this.requestUpdate();
   }
 
   connectedCallback() {
     super.connectedCallback();
-    window.addEventListener("resize", this.updateElementWidth.bind(this));
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    window.removeEventListener("resize", this.updateElementWidth.bind(this));
   }
 
   /**
@@ -87,13 +84,6 @@ class ArabicKeyboard extends LitElement {
    */
   updateState(newState) {
     this.state = { ...this.state, ...newState };
-  }
-
-  updateElementWidth() {
-    const element = this.shadowRoot.querySelector(".keyboard_wrapper");
-    if (element) {
-      this.keyboard_width = element.offsetWidth;
-    }
   }
 
   handleToggleButtonGroups(groups) {
