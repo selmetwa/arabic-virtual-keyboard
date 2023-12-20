@@ -1,10 +1,8 @@
 # Arabic Virtual Keyboard
 
-Inline-style: 
-![Image of Keyboard]("./src/public/keyboard.png")
+![Image of Keyboard]("src/public/keyboard.png")
 
 ## About
-
 Arabic Virtual Keyboard is a tool that helps english speakers write in Arabic without having a dedicated arabic keyboard.
 
 The keyboard is fully featured and contains support for all letters, numbers, special characters, diacritical marks, and text to speech.
@@ -28,7 +26,6 @@ You can use arabic-virtual-keyboard as a <script> tag from a CDN, or install it 
 ## Usage
 
 `
-
   <div>
     <arabic-keyboard></arabic-keyboard>
   </div>
@@ -47,7 +44,6 @@ You can use arabic-virtual-keyboard as a <script> tag from a CDN, or install it 
 ## Usage With Attributes
 
 `
-
   <body>
     <arabic-keyboard 
       showEnglishValue="true" 
