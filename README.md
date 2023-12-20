@@ -25,9 +25,9 @@ You can use arabic-virtual-keyboard as a <script> tag from a CDN, or install it 
 
 ## Usage
 
-`<div>
-    <arabic-keyboard></arabic-keyboard>
-  </div>`
+<div>
+  <arabic-keyboard></arabic-keyboard>
+</div>
 
 ## Attributes
 
@@ -40,17 +40,12 @@ You can use arabic-virtual-keyboard as a <script> tag from a CDN, or install it 
 | showShiftedValue |  false  |
 
 ## Usage With Attributes
-
-`<body>
-    <arabic-keyboard 
-      showEnglishValue="true" 
-      showShiftedValue="true"
-    >
-    </arabic-keyboard>
-  </body>`
+<div>
+  <arabic-keyboard showEnglishValue="true" showShiftedValue="true">
+  </arabic-keyboard>
+</div>
 
 ## Styling
-
 Restyle the keyboard by utilizing css custom properties
 
 | Property                         | Default             |
