@@ -1,6 +1,6 @@
 # Arabic Virtual Keyboard
 
-![Image of Keyboard]("src/public/keyboard.png")
+<img width="811" alt="keyboard" src="https://github.com/selmetwa/arabic-virtual-keyboard/assets/46908343/d7a6f2a9-018f-4930-93a5-18ed0b4b87eb">
 
 ## About
 Arabic Virtual Keyboard is a tool that helps english speakers write in Arabic without having a dedicated arabic keyboard.
