@@ -7,7 +7,7 @@ Arabic Virtual Keyboard is a tool that helps english speakers write in Arabic wi
 
 The keyboard is fully featured and contains support for all letters, numbers, special characters, diacritical marks, and text to speech.
 
-[View Demo Here](https://www.google.com)
+[View Demo Here](https://selmetwa.github.io/arabic-virtual-keyboard-demo/)
 
 ## Documentation
 
