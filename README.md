@@ -16,12 +16,15 @@ This keyboard was built as a web component and is fully compatiable with your JS
 You can use arabic-virtual-keyboard as a <script> tag from a CDN, or install it from npm.
 
 ## Installation Via NPM
-
-`npm i arabic-virtual-keyboard`
+```
+npm i arabic-virtual-keyboard
+```
 
 ## Installation Via CDN
 
-`<script type="module" src="https://cdn.skypack.dev/arabic-virtual-keyboard"></script>`
+```
+<script type="module" src="https://cdn.skypack.dev/arabic-virtual-keyboard"></script>
+```
 
 ## Usage
 
