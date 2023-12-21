@@ -1,5 +1,4 @@
 import { LitElement, html, css } from "lit";
-import {createComponent} from '@lit/react';
 
 import * as Types from "./constants/types.js";
 import {
@@ -511,9 +510,3 @@ class ArabicKeyboard extends LitElement {
 }
 
 customElements.define("arabic-keyboard", ArabicKeyboard);
-
-export const ArabicVirtualKeyboard = createComponent({
-  tagName: 'arabic-virtual-keyboard',
-  elementClass: ArabicKeyboard,
-  react: React,
-});
