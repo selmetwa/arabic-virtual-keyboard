@@ -20,7 +20,7 @@ import { TaskMaster } from "./Factories/index.js";
 import { ClickFactory } from "./Click/index.js";
 import { RemoveActiveClassFactory } from "./Factories/RemoveActiveClass/index.js";
 
-class ArabicKeyboard extends LitElement {
+export class ArabicKeyboard extends LitElement {
   static get properties() {
     return {
       showShiftedValue: { type: String },
