@@ -34,6 +34,32 @@ npm i arabic-virtual-keyboard
 </div>
 ```
 
+## Usage in React
+This requires use of the @lit/react package
+```
+npm install @lit/react
+
+import React from 'react';
+
+import { ArabicKeyboard as ArabicKeyboardWC } from 'arabic-virtual-keyboard'
+import {createComponent} from '@lit/react';
+
+const ArabicKeyboard = createComponent({
+  tagName: 'arabic-keyboard',
+  elementClass: ArabicKeyboardWC,
+  react: React,
+});
+
+function App() {
+  return (
+    <div>
+      <ArabicKeyboard showEnglishValue="true" showShiftedValue="true"></ArabicKeyboard>
+    </div>
+  )
+}
+
+export default App
+```
 
 ## Attributes
 
