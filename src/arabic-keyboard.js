@@ -510,3 +510,5 @@ class ArabicKeyboard extends LitElement {
 }
 
 customElements.define("arabic-keyboard", ArabicKeyboard);
+
+export { ArabicKeyboard }
