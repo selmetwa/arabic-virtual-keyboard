@@ -457,6 +457,10 @@ export class ArabicKeyboard extends LitElement {
     return null;
   }
 
+  getTextAreaValue() {
+    return this.state.textValue;
+  }
+
   render() {
     return html`
       <section class="keyboard_wrapper">
