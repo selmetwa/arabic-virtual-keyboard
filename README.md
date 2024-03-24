@@ -23,7 +23,7 @@ npm i arabic-virtual-keyboard
 ## Installation Via CDN
 
 ```
-<script type="module" src="https://cdn.skypack.dev/arabic-virtual-keyboard"></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/arabic-virtual-keyboard/+esm"></script>
 ```
 
 ## Usage
