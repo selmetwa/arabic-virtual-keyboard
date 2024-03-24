@@ -1,7 +1,7 @@
 {
   "author": "Sherif Elmetwally (https://github.com/selmetwa)",
   "name": "arabic-virtual-keyboard",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "type": "module",
   "description": "Virtual Arabic Keyboard for English speakers learning Arabic.",
   "main": "src/arabic-keyboard.js",
@@ -16,7 +16,7 @@
     "@lit-labs/react": "^2.1.2",
     "@lit/react": "^1.0.2",
     "lit": "^3.1.2",
-    "vite": "^4.5.0"
+    "vite": "^4.5.2"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4-fix.0",
