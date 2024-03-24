@@ -461,6 +461,16 @@ export class ArabicKeyboard extends LitElement {
     return this.state.textValue;
   }
 
+  resetValue() {
+    this.updateState({ 
+      textValue: "",
+      historyIndex: 0,
+      history: [],
+      selectedText: "",
+      copiedText: "",
+      cursorPosition: 0,
+  });
+  }
   render() {
     return html`
       <section class="keyboard_wrapper">
