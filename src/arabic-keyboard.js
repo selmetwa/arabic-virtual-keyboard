@@ -62,6 +62,7 @@ export class ArabicKeyboard extends LitElement {
     --button-eng-color: #0000ff;
     --button-hover-background-color: #e0e0e0;
     --textarea-background-color: #ffffff;
+    --textarea-input-color: #000;
     --font-family: "Arial", sans-serif;
   }
 
@@ -98,6 +99,7 @@ export class ArabicKeyboard extends LitElement {
     text-align: right;
     font-size: var(--font-size);
     font-weight: 500;
+    color: var(--textarea-input-color);
     background-color: var(--textarea-background-color);
   }
 
