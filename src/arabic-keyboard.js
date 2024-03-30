@@ -197,6 +197,7 @@ export class ArabicKeyboard extends LitElement {
   .button_value {
     color: var(--button-color);
     font-size: 16px;
+    font-weight: bold;
     padding: 0;
     margin: 0;
   }
