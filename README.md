@@ -1,6 +1,7 @@
 # Arabic Virtual Keyboard
-
 <img width="811" alt="keyboard" src="https://github.com/selmetwa/arabic-virtual-keyboard/assets/46908343/d7a6f2a9-018f-4930-93a5-18ed0b4b87eb">
+
+[![](https://data.jsdelivr.com/v1/package/npm/arabic-virtual-keyboard/badge)](https://www.jsdelivr.com/package/npm/arabic-virtual-keyboard)
 
 ## About
 Arabic Virtual Keyboard is a tool that helps english speakers write in Arabic without having a dedicated arabic keyboard.
